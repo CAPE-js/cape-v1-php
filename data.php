@@ -5,6 +5,7 @@
 $CONFIG_FILE = "config.json";
 $DATA_DIR = "data";
 
+ini_set("auto_detect_line_endings", "1");
 header( "Content-type: text/json" );
 
 # read configuration

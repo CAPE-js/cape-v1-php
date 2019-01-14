@@ -119,7 +119,8 @@
             <h1>Music in the Second Empire Theatre</h1>
             <div id="results">
                 <div v-if="sourceData.status == 'ERROR'">
-                    Error loading data: {{ sourceData.error_message }}
+                    <h2>Unable to load data</h2>
+                    <p>An error has occurred. The error was: {{ sourceData.error_message }}.</p>
                 </div>
                 <div v-if="sourceData.status == 'LOADING'">
                     Please wait while the data loads.
@@ -217,15 +218,12 @@
         created: function () {
             // GET /someUrl
             this.$http.get('/example-data.json').then(response => {
-
                 // get body data
                 this.sourceData = response.body;
-
-
             }, response => {
                 // error callback
                 this.sourceData.status = "ERROR"
-                this.sourceData.error_message = "Error message goes here..."
+                this.sourceData.error_message = "Error loading data over network";
             })
         },
 
