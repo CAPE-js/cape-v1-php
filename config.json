@@ -33,8 +33,8 @@
 					"multiple":true,
 					"source_format":"repeated",
 					"type":"text",
-					"source_heading":"Author 1",
-					"label":"Author 1",
+					"source_heading":"Author",
+					"label":"Author",
 					"description":""
 				},
 				{
@@ -77,8 +77,8 @@
 					"multiple":true,
 					"source_format":"repeated",
 					"type":"text",
-					"source_heading":"Female 1",
-					"label":"Female 1",
+					"source_heading":"Female",
+					"label":"Female",
 					"description":""
 				},
 				{
@@ -114,8 +114,8 @@
 					"multiple":true,
 					"source_format":"repeated",
 					"type":"text",
-					"source_heading":"Male 1",
-					"label":"Male 1",
+					"source_heading":"Male",
+					"label":"Male",
 					"description":""
 				},
 				{
