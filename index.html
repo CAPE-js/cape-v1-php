@@ -2,35 +2,81 @@
 <html>
 <head lang="en">
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Welcome to Vue</title>
   <script src="js/vue.js"></script>
   <script src="js/vue-router.js"></script>
-  <link type="text/javascript" src="css/site.css" />
+
+  <link href="css/bootstrap-4.0.0/bootstrap.css" rel="stylesheet">
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="./js/html5shiv.min.js"></script>
+  <script src="./js/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="./js/jquery.min.js"></script>
+
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="./js/bootstrap-4.0.0/bootstrap.min.js"></script>
+  <link rel="stylesheet" src="./css/site.css" />
+
+  <style>
+    body {
+      background-color: #E5E5E5;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #app {
+      border:1px solid black;
+      max-width: 900px;
+      margin-top: 40px;
+      margin-bottom: 15px;
+    }
+
+    #header {
+      width:100%;
+      padding: 0;
+      border:1px solid red;
+    }
+
+    #header img {
+      width: 100%;
+      height: 100%;
+    }
+
+    #navigation {
+      padding: 0;
+      margin: 0;
+    }
+
+    #navigation li {
+      list-style: none;
+      width: 20%;
+      float:left;
+    }
+
+    #navigation li a {
+
+    }
+
+  </style>
+
 </head>
 <body>
-  <div id="app">
-    <img src="https://vuejs.org/images/logo.png" alt="Vue logo">
-    <h1>{{ greeting }}</h1>
-    <ul>
-      <li>
-        To learn more about Vue, visit
-        <a :href="docsURL" target="_blank">
-          {{ humanizeURL(docsURL) }}
-        </a>
-      </li>
-      <li>
-        For live help with simple questions, check out
-        <a :href="discordURL" target="_blank">
-          the Discord chat
-        </a>
-      </li>
-      <li>
-        For more complex questions, post to
-        <a :href="forumURL" target="_blank">
-          the forum
-        </a>
-      </li>
-    </ul>
+  <div id="app" class="container">
+    <div class="row">
+      <div class="col col1"><a href="/" class="navlinks">FMC Home</a></div>
+      <div class="col col2"><a href="/project-description" class="navlinks"> Project Description</a></div>
+      <div class="col col3"><a href="/collections" class="navlinks">Collections</a></div>
+      <div class="col col4"><a href="http://search.fmc.ac.uk/" class="navlinks">Search Collections</a></div>
+      <div class="col col5"><a href="http://search.fmc.ac.uk/#m-columnbrowser@||m-informationcontrol@url=html/help.php" class="navlinks m-href">Help</a></div>
+    </div>
+    <div class="row" id="header">
+      <img src="./assets/new-fmc-logo.jpg" alt="Header image" />
+    </div>
   </div>
 
   <script>
