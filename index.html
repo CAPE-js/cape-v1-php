@@ -8,6 +8,8 @@
 
     <script src="js/vue.js"></script>
     <script src="js/vue-router.js"></script>
+    <script src="js/vue-resource-1.5.1.js"></script>
+
     <link href="css/bootstrap-4.0.0/bootstrap.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -90,6 +92,11 @@
             font-weight: bold;
         }
 
+        h2 {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
     </style>
 
 </head>
@@ -110,9 +117,32 @@
     <div id="content" class="row">
         <div>
             <h1>Music in the Second Empire Theatre</h1>
-            <p>{{ greeting }}</p>
+            <div id="results">
+                <div v-if="sourceData.status == 'ERROR'">
+                    Error loading data: {{ sourceData.error_message }}
+                </div>
+                <div v-if="sourceData.status == 'LOADING'">
+                    Please wait while the data loads.
+                </div>
+                <div v-if="sourceData.status == 'OK'">
+                    <p>
+                        <router-link to="/">Dataset home</router-link>
+                        <router-link to="/data">Dataset schema and download</router-link>
+                    </p>
+
+                    <router-view>
+
+                    </router-view>
+
+
+                </div>
+
+
+            </div>
         </div>
     </div>
+
+
     <div class="row" id="footer">
         <div class="col-sm-6"><img src="./assets/soton.png" alt="University of Southampton logo"/></div>
         <div class="col-sm-6"><img src="./assets/cam.png" alt="University of Cambridge logo"/></div>
@@ -120,13 +150,100 @@
 </div>
 </div>
 
+<script type="text/x-template" id="templateHome">
+<div>
+    Home template....
+
+    <!--<div v-for="record in getResults()">-->
+    <!--{{ record.title }}-->
+    <!--</div>-->
+</div>
+
+</script>
+
+<script type="text/x-template" id="templateData">
+    <div>
+    <h2>About the data</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque eget libero vel dignissim. Nam tristique ipsum quis neque elementum, eu suscipit leo feugiat. Fusce viverra vel tellus id maximus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce id est sed erat hendrerit venenatis. Donec auctor ut felis eget tincidunt. Nam purus felis, congue id diam eu, ultricies eleifend felis.</p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Field id</th>
+            <th scope="col">Field name</th>
+            <th scope="col">Field type</th>
+            <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr v-for="field in getConfigFields()">
+                <td>{{ field.id }}</td>
+                <td>{{ field.label }}</td>
+                <td>{{ field.type }} <span v-if="field.multiple"> list</span></td>
+                <td>{{ field.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</script>
+
+
 <script>
+
+    var Home = { template: "#templateHome", };
+    var Data = {
+        template: "#templateData",
+        methods: {getConfigFields() {
+            console.log(this);
+
+            if (this.$parent.sourceData.status == "OK") {
+                return this.$parent.sourceData.datasets[0].config.fields;
+            }
+
+            return [];
+
+        }
+    }};
+
+
+
     var app = new Vue({
         el: '#app',
         data: {
-            greeting: 'Welcome to your Vue.js app!'
+            sourceData: {
+                status: "LOADING"
+            },
+
         },
-        methods: {}
+        created: function () {
+            // GET /someUrl
+            this.$http.get('/example-data.json').then(response => {
+
+                // get body data
+                this.sourceData = response.body;
+
+
+            }, response => {
+                // error callback
+                this.sourceData.status = "ERROR"
+                this.sourceData.error_message = "Error message goes here..."
+            })
+        },
+
+        methods: {
+            getResults() {
+
+                if (this.sourceData.status == "OK") {
+                    return this.sourceData.datasets[0].records;
+                }
+
+                return [];
+            }
+        },
+
+        router: new VueRouter({ routes: [
+                { path: '/', component: Home},
+                { path: '/data', component: Data},
+            ]})
 
     })
 </script>
