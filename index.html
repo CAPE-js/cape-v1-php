@@ -36,10 +36,34 @@
       margin-bottom: 15px;
     }
 
+    #navigation {
+      background-color: #666;
+    }
+
+    #navigation .col {
+      list-style: none;
+      text-align: center;
+      color:white;
+    }
+
+    #navigation .col:hover {
+      background-color: #E1E1E1;
+    }
+
+    #navigation .col:hover a {
+      color: #333;
+    }
+
+    #navigation .col a {
+      font-size: 0.8em;
+      font-weight: bold;
+      color:white;
+      text-decoration: none;
+    }
+
     #header {
-      width:100%;
-      padding: 0;
-      border:1px solid red;
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
     }
 
     #header img {
@@ -47,19 +71,9 @@
       height: 100%;
     }
 
-    #navigation {
-      padding: 0;
-      margin: 0;
-    }
-
-    #navigation li {
-      list-style: none;
-      width: 20%;
-      float:left;
-    }
-
-    #navigation li a {
-
+    #content {
+      padding: 10px;
+      background-color: white;
     }
 
   </style>
@@ -67,7 +81,7 @@
 </head>
 <body>
   <div id="app" class="container">
-    <div class="row">
+    <div class="row" id="navigation">
       <div class="col col1"><a href="/" class="navlinks">FMC Home</a></div>
       <div class="col col2"><a href="/project-description" class="navlinks"> Project Description</a></div>
       <div class="col col3"><a href="/collections" class="navlinks">Collections</a></div>
@@ -76,6 +90,9 @@
     </div>
     <div class="row" id="header">
       <img src="./assets/new-fmc-logo.jpg" alt="Header image" />
+    </div>
+    <div class="row" id="content">
+      {{ greeting }}
     </div>
   </div>
 
