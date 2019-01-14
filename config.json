@@ -15,21 +15,21 @@
 			},
 			"fields":[
 				{
-					"field":"acts",
+					"id":"acts",
 					"type":"integer",
 					"source_heading":"Acts",
 					"label":"Acts",
 					"description":""
 				},
 				{
-					"field":"artists",
+					"id":"artists",
 					"type":"text",
 					"source_heading":"Artists",
 					"label":"Artists",
 					"description":""
 				},
 				{
-					"field":"author",
+					"id":"author",
 					"multiple":true,
 					"source_format":"repeated",
 					"type":"text",
@@ -38,42 +38,42 @@
 					"description":""
 				},
 				{
-					"field":"censors_libretto",
+					"id":"censors_libretto",
 					"type":"text",
 					"source_heading":"Censors' Libretto",
 					"label":"Censors' Libretto",
 					"description":""
 				},
 				{
-					"field":"composer",
+					"id":"composer",
 					"type":"text",
 					"source_heading":"Composer",
 					"label":"Composer",
 					"description":""
 				},
 				{
-					"field":"dance_number",
+					"id":"dance_number",
 					"type":"text",
 					"source_heading":"Dance Number",
 					"label":"Dance Number",
 					"description":""
 				},
 				{
-					"field":"date",
+					"id":"date",
 					"type":"date",
 					"source_heading":"Date",
 					"label":"Date",
 					"description":""
 				},
 				{
-					"field":"emplois_listed_in_vs",
+					"id":"emplois_listed_in_vs",
 					"type":"text",
 					"source_heading":"Emplois listed in VS?",
 					"label":"Emplois listed in VS?",
 					"description":""
 				},
 				{
-					"field":"female",
+					"id":"female",
 					"multiple":true,
 					"source_format":"repeated",
 					"type":"text",
@@ -82,35 +82,35 @@
 					"description":""
 				},
 				{
-					"field":"genre",
+					"id":"genre",
 					"type":"enum",
 					"source_heading":"Genre",
 					"label":"Genre",
 					"description":""
 				},
 				{
-					"field":"institution",
+					"id":"institution",
 					"type":"text",
 					"source_heading":"Institution",
 					"label":"Institution",
 					"description":""
 				},
 				{
-					"field":"libretto_publisher",
+					"id":"libretto_publisher",
 					"type":"text",
 					"source_heading":"Libretto Publisher",
 					"label":"Libretto Publisher",
 					"description":""
 				},
 				{
-					"field":"libretto_total_pages",
+					"id":"libretto_total_pages",
 					"type":"integer",
 					"source_heading":"Libretto Total pages",
 					"label":"Libretto Total pages",
 					"description":""
 				},
 				{
-					"field":"male",
+					"id":"male",
 					"multiple":true,
 					"source_format":"repeated",
 					"type":"text",
@@ -119,98 +119,98 @@
 					"description":""
 				},
 				{
-					"field":"melodrame",
+					"id":"melodrame",
 					"type":"text",
 					"source_heading":"Mélodrame",
 					"label":"Mélodrame",
 					"description":""
 				},
 				{
-					"field":"metteur_en_scene",
+					"id":"metteur_en_scene",
 					"type":"text",
 					"source_heading":"Metteur en scène",
 					"label":"Metteur en scène",
 					"description":""
 				},
 				{
-					"field":"numbers_act_1",
+					"id":"numbers_act_1",
 					"type":"integer",
 					"source_heading":"Numbers Act 1",
 					"label":"Numbers Act 1",
 					"description":""
 				},
 				{
-					"field":"numbers_act_2",
+					"id":"numbers_act_2",
 					"type":"integer",
 					"source_heading":"Numbers Act 2",
 					"label":"Numbers Act 2",
 					"description":""
 				},
 				{
-					"field":"numbers_act_3",
+					"id":"numbers_act_3",
 					"type":"integer",
 					"source_heading":"Numbers Act 3",
 					"label":"Numbers Act 3",
 					"description":""
 				},
 				{
-					"field":"original_date",
+					"id":"original_date",
 					"type":"text",
 					"source_heading":"Original Date",
 					"label":"Original Date",
 					"description":""
 				},
 				{
-					"field":"original_institution",
+					"id":"original_institution",
 					"type":"text",
 					"source_heading":"Original Institution",
 					"label":"Original Institution",
 					"description":""
 				},
 				{
-					"field":"printed_libretto",
+					"id":"printed_libretto",
 					"type":"text",
 					"source_heading":"Printed Libretto",
 					"label":"Printed Libretto",
 					"description":""
 				},
 				{
-					"field":"printed_score",
+					"id":"printed_score",
 					"type":"text",
 					"source_heading":"Printed Score",
 					"label":"Printed Score",
 					"description":""
 				},
 				{
-					"field":"title",
+					"id":"title",
 					"type":"text",
 					"source_heading":"Title",
 					"label":"Title",
 					"description":""
 				},
 				{
-					"field":"total_numbers",
+					"id":"total_numbers",
 					"type":"integer",
 					"source_heading":"Total Numbers",
 					"label":"Total Numbers",
 					"description":""
 				},
 				{
-					"field":"vs_arranger",
+					"id":"vs_arranger",
 					"type":"text",
 					"source_heading":"VS Arranger",
 					"label":"VS Arranger",
 					"description":""
 				},
 				{
-					"field":"vs_publisher",
+					"id":"vs_publisher",
 					"type":"text",
 					"source_heading":"VS Publisher",
 					"label":"VS Publisher",
 					"description":""
 				},
 				{
-					"field":"vs_total_pages",
+					"id":"vs_total_pages",
 					"type":"integer",
 					"source_heading":"VS Total Pages",
 					"label":"VS Total Pages",
