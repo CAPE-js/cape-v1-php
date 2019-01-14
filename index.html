@@ -1,118 +1,134 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome to Vue</title>
-  <script src="js/vue.js"></script>
-  <script src="js/vue-router.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Music in the Second Empire Theatre</title>
 
-  <link href="css/bootstrap-4.0.0/bootstrap.css" rel="stylesheet">
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="./js/html5shiv.min.js"></script>
-  <script src="./js/respond.min.js"></script>
-  <![endif]-->
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+    <link href="css/bootstrap-4.0.0/bootstrap.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5shiv.min.js"></script>
+    <script src="./js/respond.min.js"></script>
+    <![endif]-->
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="./js/jquery.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="./js/jquery.min.js"></script>
 
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="./js/bootstrap-4.0.0/bootstrap.min.js"></script>
-  <link rel="stylesheet" src="./css/site.css" />
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./js/bootstrap-4.0.0/bootstrap.min.js"></script>
+    <link rel="stylesheet" src="./css/site.css"/>
 
-  <style>
-    body {
-      background-color: #E5E5E5;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+    <style>
+        body {
+            background-color: #E5E5E5;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-    #app {
-      border:1px solid black;
-      max-width: 900px;
-      margin-top: 40px;
-      margin-bottom: 15px;
-    }
+        #app {
+            border: 1px solid black;
+            max-width: 900px;
+            margin-top: 40px;
+            margin-bottom: 15px;
+        }
 
-    #navigation {
-      background-color: #666;
-    }
+        #navigation {
+            background-color: #666;
+        }
 
-    #navigation .col {
-      list-style: none;
-      text-align: center;
-      color:white;
-    }
+        #navigation .col {
+            list-style: none;
+            text-align: center;
+            color: white;
+        }
 
-    #navigation .col:hover {
-      background-color: #E1E1E1;
-    }
+        #navigation .col:hover {
+            background-color: #E1E1E1;
+        }
 
-    #navigation .col:hover a {
-      color: #333;
-    }
+        #navigation .col:hover a {
+            color: #333;
+        }
 
-    #navigation .col a {
-      font-size: 0.8em;
-      font-weight: bold;
-      color:white;
-      text-decoration: none;
-    }
+        #navigation .col a {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
 
-    #header {
-      border-top: 1px solid black;
-      border-bottom: 1px solid black;
-    }
+        #header {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
 
-    #header img {
-      width: 100%;
-      height: 100%;
-    }
+        #header img {
+            width: 100%;
+            height: 100%;
+        }
 
-    #content {
-      padding: 10px;
-      background-color: white;
-    }
+        #content {
+            background-color: white;
+            padding: 10px;
+        }
 
-  </style>
+        #footer {
+            margin: 2em 0;
+
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #900;
+        }
+
+        h1 {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+    </style>
 
 </head>
 <body>
-  <div id="app" class="container">
+<div id="app" class="container">
     <div class="row" id="navigation">
-      <div class="col col1"><a href="/" class="navlinks">FMC Home</a></div>
-      <div class="col col2"><a href="/project-description" class="navlinks"> Project Description</a></div>
-      <div class="col col3"><a href="/collections" class="navlinks">Collections</a></div>
-      <div class="col col4"><a href="http://search.fmc.ac.uk/" class="navlinks">Search Collections</a></div>
-      <div class="col col5"><a href="http://search.fmc.ac.uk/#m-columnbrowser@||m-informationcontrol@url=html/help.php" class="navlinks m-href">Help</a></div>
+        <div class="col col1"><a href="/" class="navlinks">FMC Home</a></div>
+        <div class="col col2"><a href="/project-description" class="navlinks"> Project Description</a></div>
+        <div class="col col3"><a href="/collections" class="navlinks">Collections</a></div>
+        <div class="col col4"><a href="http://search.fmc.ac.uk/" class="navlinks">Search Collections</a></div>
+        <div class="col col5"><a
+                href="http://search.fmc.ac.uk/#m-columnbrowser@||m-informationcontrol@url=html/help.php"
+                class="navlinks m-href">Help</a></div>
     </div>
     <div class="row" id="header">
-      <img src="./assets/new-fmc-logo.jpg" alt="Header image" />
+        <img src="./assets/new-fmc-logo.jpg" alt="Header image"/>
     </div>
-    <div class="row" id="content">
-      {{ greeting }}
+    <div id="content" class="row">
+        <div>
+            <h1>This is a heading</h1>
+            <p>{{ greeting }}</p>
+        </div>
     </div>
-  </div>
+    <div class="row" id="footer">
+        <div class="col-sm-6"><img src="./assets/soton.png" alt="University of Southampton logo"/></div>
+        <div class="col-sm-6"><img src="./assets/cam.png" alt="University of Cambridge logo"/></div>
+    </div>
+</div>
+</div>
 
-  <script>
+<script>
     var app = new Vue({
-      el: '#app',
-      data: {
-        greeting: 'Welcome to your Vue.js app!',
-        docsURL: 'http://vuejs.org/guide/',
-        discordURL: 'https://chat.vuejs.org',
-        forumURL: 'http://forum.vuejs.org/'
-      },
-      methods: {
-        humanizeURL: function (url) {
-          return url
-            .replace(/^https?:\/\//, '')
-            .replace(/\/$/, '')
-        }
-      }
+        el: '#app',
+        data: {
+            greeting: 'Welcome to your Vue.js app!'
+        },
+        methods: {}
+
     })
-  </script>
+</script>
 </body>
 </html>
