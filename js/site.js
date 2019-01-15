@@ -1,6 +1,12 @@
 
 var HomePage = Vue.component("home-page", {
-    data: function() { return this.$root.defaultDataset; },
+    data: function() {
+        return this.$root.defaultDataset; },
+    methods: {
+        getResults: function() {
+            return this.records;
+        }
+    },
     template: "#templateHome",
 });
 
@@ -27,14 +33,18 @@ Vue.component("index-card",{
     props: ["record"],
     template: "#templateIndexCard" } );
 
+Vue.component("summary-card", {
+    props: ["record"],
+    template: "#templateSummaryCard"
+});
+
 Vue.component("field-value",{
     props: ["typedValue"],
     render: function(createElement) {
         var rendered_value;
-        var classes = ["field-value"]; 
+        
         if( !this.typedValue.value ) {
-            rendered_value = "unspecified";
-            classes.push( "field-null" );
+            rendered_value = "/NULL/"; // TODO
         } else {
             if( this.typedValue.field.multiple===true ) {
                 rendered_value = [];
@@ -47,7 +57,7 @@ Vue.component("field-value",{
                 rendered_value = this.typedValue.value;
             }
         }
-        return createElement("div",{class:classes},rendered_value);
+        return createElement("div",{class:"field-value"},rendered_value);
     }});
 
 Vue.component("field-label-and-value",{
@@ -108,7 +118,7 @@ var app = new Vue({
                             field: field }
                     }
                     dataset.recordsById[source_record[dataset.config.id_field]] = record;
-                    dataset.records.push( record ); 
+                    dataset.records.push(record);
                 }
 
 		// add dataset to our dataset collection
@@ -127,13 +137,7 @@ var app = new Vue({
     },
 
     methods: {
-        getResults() {
-            if (this.sourceData.status == "OK") {
-                return this.sourceData.datasets[0].records;
-            }
 
-            return [];
-        }
     },
 
     router: new VueRouter({ routes: [

@@ -92,11 +92,9 @@
 <script type="text/x-template" id="templateHome">
 <div class="row">
 <div class="col">
-    Home template....
-
-    <!--<div v-for="record in getResults()">-->
-    <!--{{ record.title }}-->
-    <!--</div>-->
+    <div v-for="result in getResults()">
+        <summary-card v-bind:record="result"></summary-card>
+    </div>
 </div>
 </div>
 
@@ -148,6 +146,23 @@
       <div class="field-label">{{ typedValue.field.label }}</div>
       <field-value v-bind:typedValue="typedValue"></field-value>
    </div>
+</script>
+
+<script type="text/x-template" id="templateSummaryCard">
+    <div class="card index-card">
+        <div class="card-body">
+            <h5 class="card-title"><field-value v-bind:typedValue="record.title"></field-value></h5>
+            <div class="row">
+                <div class="col-sm-10">
+                    <field-label-and-value v-bind:typedValue="record.composer"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.author"></field-label-and-value>
+                </div>
+                <div class="col-sm-2">
+                    <field-label-and-value v-bind:typedValue="record.date"></field-label-and-value>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script type="text/x-template" id="templateIndexCard">

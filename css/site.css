@@ -13,6 +13,7 @@ body {
     max-width: 900px;
     margin-top: 40px;
     margin-bottom: 15px;
+    font-size:0.9em;
 }
 
 #navigation {
@@ -80,6 +81,7 @@ h2 {
 
 .index-card {
     border: solid 1px black;
+    margin-bottom: 1em;
 }
 
 /* end of index cards */
