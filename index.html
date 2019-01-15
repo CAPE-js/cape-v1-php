@@ -56,13 +56,17 @@
     <div>
     <template v-if="sourceData.status == 'ERROR'">
         <div class="row">
+        <div class="col">
             <h2>Unable to load data</h2>
             <p>An error has occurred. The error was: {{ sourceData.error_message }}.</p>
+        </div>
         </div>
     </template>
     <template v-if="sourceData.status == 'LOADING'">
         <div class="row">
+        <div class="col">
             Please wait while the data loads.
+        </div>
         </div>
     </template>
     <template v-if="sourceData.status == 'OK'">

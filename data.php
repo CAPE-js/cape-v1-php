@@ -11,7 +11,7 @@ header( "Content-type: text/json" );
 # read configuration
 $config = json_decode( file_get_contents( $CONFIG_FILE ), true );
 if( !$config ) {
-	exit_with_error( "Failed to read JSON config file." );
+	exit_with_error( "Failed to read JSON config file" );
 }
 
 # read source file(s)

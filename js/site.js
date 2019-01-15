@@ -67,7 +67,16 @@ var app = new Vue({
         // GET /someUrl
         this.$http.get('/example-data.json').then(response => {
             // get body data
+            if( !isObject( response.body )) {
+                this.sourceData.status = "ERROR";
+                this.sourceData.error_message = "Downloaded data is not a JSON object";
+                return;
+            }
+
             this.sourceData = response.body;
+            if( this.sourceData.status == "ERROR" ) {
+                return;
+            }
             this.datasetsById = {};
             // populate records by ID. Nb. This is using the wrong ID data for now. TODO
             for( ds_i=0; ds_i<this.sourceData.datasets.length; ++ds_i ) {
@@ -131,3 +140,7 @@ var app = new Vue({
         ]})
 
 }); // end of app
+
+function isObject (value) {
+    return value && typeof value === 'object' && value.constructor === Object;
+}
