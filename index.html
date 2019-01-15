@@ -97,6 +97,31 @@
             font-weight: bold;
         }
 
+
+        /* index cards */
+
+        .index-card {
+            background-color: yellow;
+            border: solid 1px black;
+        }
+
+        /* values and labels */
+
+        .field-value-and-label { 
+        }
+
+        .field-value { 
+            display: inline-block;
+        }
+
+        .field-label { 
+            display: inline-block;
+            font-weight: bold;
+        }
+        .field-label:after { 
+            content: ':';
+            margin-right: 0.5em;
+        }
     </style>
 
 </head>
@@ -115,34 +140,31 @@
         <img src="./assets/new-fmc-logo.jpg" alt="Header image"/>
     </div>
     <div id="content" class="row">
-        <div>
-            <h1>Music in the Second Empire Theatre</h1>
-            <div id="results">
-                <div v-if="sourceData.status == 'ERROR'">
-                    <h2>Unable to load data</h2>
-                    <p>An error has occurred. The error was: {{ sourceData.error_message }}.</p>
-                </div>
-                <div v-if="sourceData.status == 'LOADING'">
-                    Please wait while the data loads.
-                </div>
-                <div v-if="sourceData.status == 'OK'">
-                    <p>
-                        <router-link to="/">Dataset home</router-link>
-                        <router-link to="/data">Dataset schema and download</router-link>
-                    </p>
-
-                    <router-view>
-
-                    </router-view>
-
-
-                </div>
-
-
-            </div>
-        </div>
+        <h1>Music in the Second Empire Theatre</h1>
     </div>
 
+    <template v-if="sourceData.status == 'ERROR'">
+        <div class="row">
+            <h2>Unable to load data</h2>
+            <p>An error has occurred. The error was: {{ sourceData.error_message }}.</p>
+        </div>
+    </template>
+    <template v-if="sourceData.status == 'LOADING'">
+        <div class="row">
+            Please wait while the data loads.
+        </div>
+    </template>
+    <template v-if="sourceData.status == 'OK'">
+        <nav class="row">
+            <p>
+                <router-link to="/">Dataset home</router-link> | 
+                <router-link to="/data">Dataset schema and download</router-link>
+            </p>
+         </nav>
+
+         <router-view></router-view>
+
+    </template>
 
     <div class="row" id="footer">
         <div class="col-sm-6"><img src="./assets/soton.png" alt="University of Southampton logo"/></div>
@@ -163,7 +185,8 @@
 </script>
 
 <script type="text/x-template" id="templateData">
-    <div>
+    <div class="row">
+    <div class="col">
     <h2>About the data</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque eget libero vel dignissim. Nam tristique ipsum quis neque elementum, eu suscipit leo feugiat. Fusce viverra vel tellus id maximus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce id est sed erat hendrerit venenatis. Donec auctor ut felis eget tincidunt. Nam purus felis, congue id diam eu, ultricies eleifend felis.</p>
     <table class="table">
@@ -185,16 +208,133 @@
         </tbody>
     </table>
     </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateRecord">
+    <div>
+    <div class="row">
+    <div class="col">
+        <h2>Single index card</h2>
+    </div>
+    </div>
+    <index-card-or-error v-bind:record="this.$parent.getRecord( $route.params.dataset, $route.params.id )"></index-card-or-error>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateIndexCardOrError">
+    <div>
+      <index-card v-if="record" v-bind:record="record"></index-card>
+      <div v-else>
+         NO SUCH RECORD
+      </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateIndexCard">
+    <div class="row index-card">
+        <div class="col-md">
+          <h2><field-value v-bind:record="record" fieldid="title"></field-value></h2>
+          <field-label-and-value v-bind:record="record" fieldid="acts"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="artists"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="author"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="censors_libretto"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="composer"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="dance_number"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="date"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="emplois_listed_in_vs"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="female"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="genre"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="institution"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="libretto_publisher"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="libretto_total_pages"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="male"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="melodrame"></field-label-and-value>
+        </div>
+        <div class="col-md">
+          <field-label-and-value v-bind:record="record" fieldid="metteur_en_scene"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="numbers_act_1"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="numbers_act_2"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="numbers_act_3"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="original_date"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="original_institution"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="printed_libretto"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="printed_score"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="title"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="total_numbers"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="vs_arranger"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="vs_publisher"></field-label-and-value>
+          <field-label-and-value v-bind:record="record" fieldid="vs_total_pages"></field-label-and-value>
+        </div>
+    </div>
 </script>
 
 
 <script>
+    Vue.component("index-card-or-error",{
+        props: ["record"],
+        template: "#templateIndexCardOrError" } );
+    Vue.component("index-card",{
+        props: ["record"],
+        template: "#templateIndexCard" } );
+    // a function so we can call it from multiple places
+    function renderValue( createElement, record, fieldid ) {
+            var rendered_value;
+            if( !record ) {
+                rendered_value = "[FV:No record]";
+            } else {
+                var field = record._dataset.fieldsById[fieldid];
+                if( !field ) {
+                    rendered_value = "[FV:No field:"+fieldid+"]";
+                } else {
+                    var value = record[fieldid];
+                    if( !value ) {
+                        rendered_value = "/NULL/"; // TODO
+                    } else {
+                        if( field.multiple===true ) {
+                            rendered_value = [];
+                            for( var i=0; i<value.length; ++i ) {
+                                single_value = value[i];
+                                if( rendered_value.length ) { rendered_value.push( ", " ); }
+                                rendered_value.push( single_value );
+                            }
+                        } else {
+                            rendered_value = value;
+                        }
+                    }
+                }
+            }
+ 
+            return  createElement("div",{class:"field-value"},rendered_value);
+    }
+    Vue.component("field-value",{
+        props: ["record","fieldid"],
+        render: function(createElement) {
+            return renderValue( createElement, this.record, this.fieldid );
+        }});
+
+    Vue.component("field-label-and-value",{
+        props: ["record","fieldid"],
+        render: function(createElement) {
+            if( !this.record ) {
+                return createElement("div",{"class":"field-value-and-label"},"[FV:No record]");
+            }
+            var field = this.record._dataset.fieldsById[this.fieldid];
+            if( !field ) {
+                return createElement("div",{"class":"field-value-and-label"},"[FV:No field:"+this.fieldid+"]");
+            }
+            return createElement("div",{"class":"field-value-and-label"},[
+                createElement("div",{"class":"field-label"},field.label),
+                renderValue( createElement, this.record, this.fieldid )
+            ]);
+        }
+    });
+
 
     var Home = { template: "#templateHome", };
     var Data = {
         template: "#templateData",
         methods: {getConfigFields() {
-            console.log(this);
 
             if (this.$parent.sourceData.status == "OK") {
                 return this.$parent.sourceData.datasets[0].config.fields;
@@ -204,6 +344,11 @@
 
         }
     }};
+    var Record = { 
+        template: "#templateRecord", 
+        methods: {
+        }
+    };
 
 
 
@@ -213,13 +358,38 @@
             sourceData: {
                 status: "LOADING"
             },
-
+            recordsById: []
         },
         created: function () {
             // GET /someUrl
             this.$http.get('/example-data.json').then(response => {
                 // get body data
                 this.sourceData = response.body;
+                this.datasetsById = {};
+                // populate records by ID. Nb. This is using the wrong ID data for now. TODO
+                for( ds_i=0; ds_i<this.sourceData.datasets.length; ++ds_i ) {
+                    var dataset = this.sourceData.datasets[ds_i];
+                    this.datasetsById[dataset.config.id] = dataset;
+                    dataset.recordsById = {};
+                    dataset.fieldsById = {};
+
+                    // create a lookup table for record by id
+                    dataset.recordsById[dataset.config.id] = {};
+                    for( record_i=0; record_i<dataset.records.length; ++record_i ) {
+                        dataset.recordsById[record_i] = dataset.records[record_i];
+                    }
+
+                    // add a look table table for field config by id
+                    dataset.fieldsById[dataset.config.id] = {};
+                    for( field_i=0; field_i<dataset.config.fields.length; ++field_i ) {
+                        dataset.fieldsById[ dataset.config.fields[field_i].id ] = dataset.config.fields[field_i];
+                    }
+
+                    // add a link to the dataset to each record
+                    for( record_i=0; record_i<dataset.records.length; ++record_i ) {
+                        dataset.records[record_i]._dataset = dataset;
+                    }
+                }
             }, response => {
                 // error callback
                 this.sourceData.status = "ERROR"
@@ -229,18 +399,22 @@
 
         methods: {
             getResults() {
-
                 if (this.sourceData.status == "OK") {
                     return this.sourceData.datasets[0].records;
                 }
 
                 return [];
+            },
+            getRecord( dataset_id, record_id ) {
+                if( !this.datasetsById[dataset_id] ) { return null; }
+                return this.datasetsById[dataset_id].recordsById[record_id];
             }
         },
 
         router: new VueRouter({ routes: [
                 { path: '/', component: Home},
                 { path: '/data', component: Data},
+                { path: '/record/:dataset/:id', component: Record},
             ]})
 
     })
