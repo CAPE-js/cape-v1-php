@@ -94,12 +94,49 @@
 <div class="col">
     Home template....
 
+    <filter-form v-bind:filters="filters"></filter-form>
+
     <!--<div v-for="record in getResults()">-->
     <!--{{ record.title }}-->
     <!--</div>-->
 </div>
 </div>
 
+</script>
+
+<script type="text/x-template" id="templateFilterForm">
+<div class='filter-form'>
+  <p>This is a first stab at generating search form fields.</p>
+  <div v-for="filter in filters" class="form-row">
+    <div class="col-sm-2 text-sm-right" >{{filter.field.label}}</div>
+    <template v-if="filter.field.type=='text'">
+      <div class="col-sm-2">
+          <select><option value="is">is</option><option value="contains">contains</option></select> 
+      </div>
+      <div class="col-sm-8">
+          <input v-model="filter.value" />
+      </div>
+    </template>
+    <template v-else-if="filter.field.type=='integer' || filter.field.type=='date'">
+      <div class="col-sm-2">
+          <select v-model="filter.mode"><option value="is">is</option><option value="between">is between</option></select> 
+      </div>
+      <div class="col-sm-8">
+          <template v-if="filter.mode=='is'">
+              <input v-model="filter.value" />
+          </template>
+          <template v-if="filter.mode=='between'">
+              <input v-model="filter.value" /> and <input v-model="filter.value2" />
+          </template>
+       </div>
+    </template>
+    <template v-else>
+      <div class="col-sm-10"> 
+        Not sure how to render {{ filter.field }}
+      </div>
+    </template>
+  </div>
+</div>
 </script>
 
 <script type="text/x-template" id="templateData">
@@ -187,6 +224,11 @@
           <field-label-and-value v-bind:typedValue="record.vs_publisher"></field-label-and-value>
           <field-label-and-value v-bind:typedValue="record.vs_total_pages"></field-label-and-value>
           <field-label-and-value v-bind:typedValue="record.record_number"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.arranger"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.original_author"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.original_composer"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.original_title"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.tableaux"></field-label-and-value>
         </div>
     </div>
   </div>

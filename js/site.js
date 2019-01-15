@@ -23,6 +23,12 @@ Vue.component("dataset", {
     props: ["dataset"]
 });
 
+Vue.component("filter-form",{
+    data: function() { return { filter: this.$root.defaultDataset.filter }; },
+    props: ["filters"],
+    template: "#templateFilterForm",
+});
+
 Vue.component("index-card",{
     props: ["record"],
     template: "#templateIndexCard" } );
@@ -83,17 +89,27 @@ var app = new Vue({
             for( ds_i=0; ds_i<this.sourceData.datasets.length; ++ds_i ) {
                 var dataset = {};
 
-		var source = this.sourceData.datasets[ds_i];
+                var source = this.sourceData.datasets[ds_i];
 
                 // add config to dataset
                 dataset.config = source.config;
 
-                // add fields mapped by ID
+                // add fields mapped by ID, and populate the filter object
                 dataset.fieldsById = {};
+                dataset.filtersById = {};
+                dataset.filters = [];
                 for( field_i=0; field_i<source.config.fields.length; ++field_i ) {
                     var field = source.config.fields[field_i];
                     dataset.fieldsById[ field.id ] = field;
+                    var filter_item = { value: "", mode: "is", field: field };
+                    if( field.type=="date" || field.type=="integer" ) {
+                        filter_item.mode = "between"; 
+                        filter_item.value2 = "";
+                    }
+                    dataset.filtersById[ field.id ] = filter_item;
+                    dataset.filters.push( filter_item );
                 }
+
 
                 // create a lookup table for record by id
                 dataset.recordsById = {};
@@ -111,7 +127,7 @@ var app = new Vue({
                     dataset.records.push( record ); 
                 }
 
-		// add dataset to our dataset collection
+                // add dataset to our dataset collection
                 this.datasetsById[dataset.config.id] = dataset;
 
                 // first dataset becomes the default
