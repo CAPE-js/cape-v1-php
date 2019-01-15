@@ -13,7 +13,7 @@
 				"url":"http://totl.net",
 				"name":"CopyName"
 			},
-        		"id_field":"Record Number",
+        		"id_field":"record_number",
 			"fields":[
 				{
 					"id":"acts",

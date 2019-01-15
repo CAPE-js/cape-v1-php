@@ -64,6 +64,13 @@
         </div>
     </template>
     <template v-if="sourceData.status == 'OK'">
+        <dataset v-bind:dataset="defaultDataset"></dataset>
+    </template>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateDataset">
+<div>
         <nav class="row">
             <p>
                 <router-link to="/">Dataset home</router-link> | 
@@ -71,8 +78,7 @@
             </p>
          </nav>
          <router-view></router-view>
-    </template>
-    </div>
+</div>
 </script>
 
 <script type="text/x-template" id="templateHome">
@@ -118,57 +124,51 @@
     <div class="row">
     <div class="col">
         <h2>Single index card</h2>
-        <index-card-or-error v-bind:record="this.$parent.getRecord( $route.params.dataset, $route.params.id )"></index-card-or-error>
+        <index-card v-if="recordsById[ $route.params.id ]" v-bind:record="recordsById[ $route.params.id ]"></index-card>
+        <div v-else>
+           <p>NO SUCH RECORD</p>
+        </div>
     </div>
     </div>
-    </div>
-</script>
-
-<script type="text/x-template" id="templateIndexCardOrError">
-    <div>
-      <index-card v-if="record" v-bind:record="record"></index-card>
-      <div v-else>
-         NO SUCH RECORD
-      </div>
     </div>
 </script>
 
 <script type="text/x-template" id="templateIndexCard">
   <div class="card index-card">
   <div class="card-body">
-    <h5 class="card-title"><field-value v-bind:record="record" fieldid="title"></field-value></h5>
+    <h5 class="card-title"><field-value v-bind:typedValue="record.title"></field-value></h5>
   <div class="row">
         <div class="col-md">
-          <field-label-and-value v-bind:record="record" fieldid="acts"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="artists"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="author"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="censors_libretto"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="composer"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="dance_number"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="date"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="emplois_listed_in_vs"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="female"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="genre"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="institution"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="libretto_publisher"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="libretto_total_pages"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="male"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="melodrame"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.acts"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.artists"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.author"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.censors_libretto"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.composer"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.dance_number"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.date"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.emplois_listed_in_vs"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.female"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.genre"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.institution"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.libretto_publisher"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.libretto_total_pages"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.male"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.melodrame"></field-label-and-value>
         </div>
         <div class="col-md">
-          <field-label-and-value v-bind:record="record" fieldid="metteur_en_scene"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="numbers_act_1"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="numbers_act_2"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="numbers_act_3"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="original_date"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="original_institution"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="printed_libretto"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="printed_score"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="title"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="total_numbers"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="vs_arranger"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="vs_publisher"></field-label-and-value>
-          <field-label-and-value v-bind:record="record" fieldid="vs_total_pages"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.metteur_en_scene"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.numbers_act_1"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.numbers_act_2"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.numbers_act_3"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.original_date"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.original_institution"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.printed_libretto"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.printed_score"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.title"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.total_numbers"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.vs_arranger"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.vs_publisher"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.vs_total_pages"></field-label-and-value>
         </div>
     </div>
   </div>

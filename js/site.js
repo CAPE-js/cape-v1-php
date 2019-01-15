@@ -1,86 +1,63 @@
 
 var HomePage = Vue.component("home-page", {
+    data: function() { return this.$root.defaultDataset; },
     template: "#templateHome",
-    data: function() { return this.sourceData.datasets[0]; },
 });
 
 var DataPage = Vue.component("data-page", {
+    data: function() { return this.$root.defaultDataset; },
     template: "#templateData",
-    data: function() { return this.sourceData.datasets[0]; },
     methods: {
-        getDataset: function() { return this.sourceData.datasets[0]; },
         getConfigFields: function() {
-            if (this.$parent.sourceData.status == "OK") {
-                return this.$parent.sourceData.datasets[0].config.fields;
-            }
-    
-            return [];
+            return this.config.fields;
         }
 }});
 
 var RecordPage = Vue.component("record-page",{ 
-    data: function() { return this.sourceData.datasets[0]; },
+    data: function() { return this.$root.defaultDataset; },
     template: "#templateRecord" 
 });
 
-
-Vue.component("index-card-or-error",{
-    props: ["record"],
-    template: "#templateIndexCardOrError" } );
+Vue.component("dataset", {
+    template: "#templateDataset",
+    props: ["dataset"]
+});
 
 Vue.component("index-card",{
     props: ["record"],
     template: "#templateIndexCard" } );
 
 Vue.component("field-value",{
-    props: ["record","fieldid"],
+    props: ["typedValue"],
     render: function(createElement) {
         var rendered_value;
-        if( !this.record ) {
-            rendered_value = "[FV:No record]";
+        
+        if( !this.typedValue.value ) {
+            rendered_value = "/NULL/"; // TODO
         } else {
-            var field = this.record._dataset.fieldsById[this.fieldid];
-            if( !field ) {
-                rendered_value = "[FV:No field:"+this.fieldid+"]";
-            } else {
-                var value = this.record[this.fieldid];
-                if( !value ) {
-                    rendered_value = "/NULL/"; // TODO
-                } else {
-                    if( field.multiple===true ) {
-                        rendered_value = [];
-                        for( var i=0; i<value.length; ++i ) {
-                            single_value = value[i];
-                            if( rendered_value.length ) { rendered_value.push( ", " ); }
-                            rendered_value.push( single_value );
-                        }
-                    } else {
-                        rendered_value = value;
-                    }
+            if( this.typedValue.field.multiple===true ) {
+                rendered_value = [];
+                for( var i=0; i<this.typedValue.value.length; ++i ) {
+                    single_value = this.typedValue.value[i];
+                    if( rendered_value.length ) { rendered_value.push( ", " ); }
+                    rendered_value.push( single_value );
                 }
+            } else {
+                rendered_value = this.typedValue.value;
             }
         }
- 
-        return  createElement("div",{class:"field-value"},rendered_value);
+        return createElement("div",{class:"field-value"},rendered_value);
     }});
 
 Vue.component("field-label-and-value",{
-    props: ["record","fieldid"],
+    props: ["typedValue"],
     render: function(createElement) {
-        if( !this.record ) {
-            return createElement("div",{"class":"field-value-and-label"},"[FLV:No record]");
-        }
-        var field = this.record._dataset.fieldsById[this.fieldid];
-        if( !field ) {
-            return createElement("div",{"class":"field-value-and-label"},"[FLV:No field:"+this.fieldid+"]");
-        }
         return createElement("div",{"class":"field-value-and-label"},[
-            createElement("div",{"class":"field-label"},field.label),
-            createElement("field-value",{"props":{"record":this.record, "fieldid":this.fieldid}})
+            createElement("div",{"class":"field-label"},this.typedValue.field.label),
+            createElement("field-value",{"props":{"typedValue":this.typedValue}})
         ]);
     }
 });
-
 
 
 var app = new Vue({
@@ -100,27 +77,42 @@ var app = new Vue({
             this.datasetsById = {};
             // populate records by ID. Nb. This is using the wrong ID data for now. TODO
             for( ds_i=0; ds_i<this.sourceData.datasets.length; ++ds_i ) {
-                var dataset = this.sourceData.datasets[ds_i];
-                this.datasetsById[dataset.config.id] = dataset;
+                var dataset = {};
+
+		var source = this.sourceData.datasets[ds_i];
+
+                // add config to dataset
+                dataset.config = source.config;
+
+                // add fields mapped by ID
+                dataset.fieldsById = {};
+                for( field_i=0; field_i<source.config.fields.length; ++field_i ) {
+                    var field = source.config.fields[field_i];
+                    dataset.fieldsById[ field.id ] = field;
+                }
 
                 // create a lookup table for record by id
                 dataset.recordsById = {};
-                for( record_i=0; record_i<dataset.records.length; ++record_i ) {
-                    dataset.recordsById[record_i] = dataset.records[record_i];
+                for( record_i=0; record_i<source.records.length; ++record_i ) {
+                    var source_record = source.records[record_i];
+                    var record = {};
+                    for( field_i=0; field_i<source.config.fields.length; ++field_i ) {
+                        var field = source.config.fields[field_i];
+                        record[ field.id ] = {
+                            value: source_record[ field.id ],
+                            field: field }
+                    }
+                    dataset.recordsById[source_record[dataset.config.id_field]] = record;
                 }
 
-                // add a look table table for field config by id
-                dataset.fieldsById = {};
-                for( field_i=0; field_i<dataset.config.fields.length; ++field_i ) {
-                    dataset.fieldsById[ dataset.config.fields[field_i].id ] = dataset.config.fields[field_i];
-                }
+		// add dataset to our dataset collection
+                this.datasetsById[dataset.config.id] = dataset;
 
-                // add a link to the dataset to each record
-                for( record_i=0; record_i<dataset.records.length; ++record_i ) {
-                    dataset.records[record_i]._dataset = dataset;
+                // first dataset becomes the default
+                if( ds_i == 0 ) {
+                    this.defaultDataset = dataset;
                 }
             }
-            this.defaultDataset = this.sourceData.datasets[0];
         }, response => {
             // error callback
             this.sourceData.status = "ERROR"
