@@ -24,7 +24,7 @@
 
 </head>
 <body>
-<div id="app" class="container">
+<div class="container">
     <div class="row" id="navigation">
         <div class="col col1"><a href="/" class="navlinks">FMC Home</a></div>
         <div class="col col2"><a href="/project-description" class="navlinks"> Project Description</a></div>
@@ -41,6 +41,17 @@
         <h1>Music in the Second Empire Theatre</h1>
     </div>
 
+    <div id="app"></div>
+
+    <div class="row" id="footer">
+        <div class="col-sm-6"><img src="./assets/soton.png" alt="University of Southampton logo"/></div>
+        <div class="col-sm-6"><img src="./assets/cam.png" alt="University of Cambridge logo"/></div>
+    </div>
+</div>
+</div>
+
+<script type="text/x-template" id="templateApp">
+    <div>
     <template v-if="sourceData.status == 'ERROR'">
         <div class="row">
             <h2>Unable to load data</h2>
@@ -59,17 +70,10 @@
                 <router-link to="/data">Dataset schema and download</router-link>
             </p>
          </nav>
-
          <router-view></router-view>
-
     </template>
-
-    <div class="row" id="footer">
-        <div class="col-sm-6"><img src="./assets/soton.png" alt="University of Southampton logo"/></div>
-        <div class="col-sm-6"><img src="./assets/cam.png" alt="University of Cambridge logo"/></div>
     </div>
-</div>
-</div>
+</script>
 
 <script type="text/x-template" id="templateHome">
 <div>

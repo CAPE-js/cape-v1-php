@@ -1,4 +1,29 @@
 
+var HomePage = Vue.component("home-page", {
+    template: "#templateHome",
+    data: function() { return this.sourceData.datasets[0]; },
+});
+
+var DataPage = Vue.component("data-page", {
+    template: "#templateData",
+    data: function() { return this.sourceData.datasets[0]; },
+    methods: {
+        getDataset: function() { return this.sourceData.datasets[0]; },
+        getConfigFields: function() {
+            if (this.$parent.sourceData.status == "OK") {
+                return this.$parent.sourceData.datasets[0].config.fields;
+            }
+    
+            return [];
+        }
+}});
+
+var RecordPage = Vue.component("record-page",{ 
+    data: function() { return this.sourceData.datasets[0]; },
+    template: "#templateRecord" 
+});
+
+
 Vue.component("index-card-or-error",{
     props: ["record"],
     template: "#templateIndexCardOrError" } );
@@ -57,26 +82,6 @@ Vue.component("field-label-and-value",{
 });
 
 
-var Home = { template: "#templateHome", };
-var Data = {
-    template: "#templateData",
-    methods: {getConfigFields() {
-
-        if (this.$parent.sourceData.status == "OK") {
-            return this.$parent.sourceData.datasets[0].config.fields;
-        }
-
-        return [];
-
-    }
-}};
-var Record = { 
-    template: "#templateRecord", 
-    methods: {
-    }
-};
-
-
 
 var app = new Vue({
     el: '#app',
@@ -86,6 +91,7 @@ var app = new Vue({
         },
         recordsById: []
     },
+    template: "#templateApp",
     created: function () {
         // GET /someUrl
         this.$http.get('/example-data.json').then(response => {
@@ -114,6 +120,7 @@ var app = new Vue({
                     dataset.records[record_i]._dataset = dataset;
                 }
             }
+            this.defaultDataset = this.sourceData.datasets[0];
         }, response => {
             // error callback
             this.sourceData.status = "ERROR"
@@ -128,17 +135,13 @@ var app = new Vue({
             }
 
             return [];
-        },
-        getRecord( dataset_id, record_id ) {
-            if( !this.datasetsById[dataset_id] ) { return null; }
-            return this.datasetsById[dataset_id].recordsById[record_id];
         }
     },
 
     router: new VueRouter({ routes: [
-            { path: '/', component: Home},
-            { path: '/data', component: Data},
-            { path: '/record/:dataset/:id', component: Record},
+            { path: '/', component: HomePage},
+            { path: '/data', component: DataPage},
+            { path: '/record/:id', component: RecordPage },
         ]})
 
 }); // end of app
