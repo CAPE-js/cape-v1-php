@@ -13,6 +13,7 @@
 				"url":"http://totl.net",
 				"name":"CopyName"
 			},
+        		"id_field":"Record Number",
 			"fields":[
 				{
 					"id":"acts",
@@ -214,6 +215,48 @@
 					"type":"integer",
 					"source_heading":"VS Total Pages",
 					"label":"VS Total Pages",
+					"description":""
+				},
+				{
+					"id":"record_number",
+					"type":"integer",
+					"source_heading":"Record Number",
+					"label":"Record Number",
+					"description":""
+				},
+				{
+					"id":"arranger",
+					"type":"string",
+					"source_heading":"Arranger",
+					"label":"Arranger",
+					"description":""
+				},
+				{
+					"id":"original_author",
+					"type":"string",
+					"source_heading":"Original Author",
+					"label":"Original Author",
+					"description":""
+				},
+				{
+					"id":"original_composer",
+					"type":"string",
+					"source_heading":"Original Composer",
+					"label":"Original Composer",
+					"description":""
+				},
+				{
+					"id":"original_title",
+					"type":"string",
+					"source_heading":"Original Title",
+					"label":"Original Title",
+					"description":""
+				},
+				{
+					"id":"tableaux",
+					"type":"integer",
+					"source_heading":"Tableaux",
+					"label":"Tableaux",
 					"description":""
 				}
 			]
