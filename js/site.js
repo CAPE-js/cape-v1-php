@@ -31,9 +31,10 @@ Vue.component("field-value",{
     props: ["typedValue"],
     render: function(createElement) {
         var rendered_value;
-        
+        var classes = ["field-value"]; 
         if( !this.typedValue.value ) {
-            rendered_value = "/NULL/"; // TODO
+            rendered_value = "unspecified";
+            classes.push( "field-null" );
         } else {
             if( this.typedValue.field.multiple===true ) {
                 rendered_value = [];
@@ -46,7 +47,7 @@ Vue.component("field-value",{
                 rendered_value = this.typedValue.value;
             }
         }
-        return createElement("div",{class:"field-value"},rendered_value);
+        return createElement("div",{class:classes},rendered_value);
     }});
 
 Vue.component("field-label-and-value",{

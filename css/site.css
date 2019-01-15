@@ -92,14 +92,16 @@ h2 {
 .field-value { 
     display: inline-block;
 }
-
+.field-null { 
+    color: #ccc;
+    font-size: small;
+}
 .field-label { 
     display: inline-block;
     font-weight: bold;
 }
 .field-label:after { 
     content: ':';
-    margin-right: 0.5em;
 }
 
 /* end of values and labels */
