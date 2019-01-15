@@ -97,6 +97,7 @@ var app = new Vue({
 
                 // create a lookup table for record by id
                 dataset.recordsById = {};
+                dataset.records = [];
                 for( record_i=0; record_i<source.records.length; ++record_i ) {
                     var source_record = source.records[record_i];
                     var record = {};
@@ -107,6 +108,7 @@ var app = new Vue({
                             field: field }
                     }
                     dataset.recordsById[source_record[dataset.config.id_field]] = record;
+                    dataset.records.push( record ); 
                 }
 
 		// add dataset to our dataset collection
