@@ -51,13 +51,7 @@ Vue.component("field-value",{
 
 Vue.component("field-label-and-value",{
     props: ["typedValue"],
-    render: function(createElement) {
-        return createElement("div",{"class":"field-value-and-label"},[
-            createElement("div",{"class":"field-label"},this.typedValue.field.label),
-            createElement("field-value",{"props":{"typedValue":this.typedValue}})
-        ]);
-    }
-});
+    template: "#templateFieldLabelAndValue" } );
 
 
 var app = new Vue({

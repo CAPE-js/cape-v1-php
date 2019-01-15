@@ -133,6 +133,13 @@
     </div>
 </script>
 
+<script type="text/x-template" id="templateFieldLabelAndValue">
+   <div class="field-label-and-value"> 
+      <div class="field-label">{{ typedValue.field.label }}</div>
+      <field-value v-bind:typedValue="typedValue"></field-value>
+   </div>
+</script>
+
 <script type="text/x-template" id="templateIndexCard">
   <div class="card index-card">
   <div class="card-body">
@@ -169,6 +176,7 @@
           <field-label-and-value v-bind:typedValue="record.vs_arranger"></field-label-and-value>
           <field-label-and-value v-bind:typedValue="record.vs_publisher"></field-label-and-value>
           <field-label-and-value v-bind:typedValue="record.vs_total_pages"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.record_number"></field-label-and-value>
         </div>
     </div>
   </div>
