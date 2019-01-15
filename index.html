@@ -101,7 +101,6 @@
         /* index cards */
 
         .index-card {
-            background-color: yellow;
             border: solid 1px black;
         }
 
@@ -216,9 +215,9 @@
     <div class="row">
     <div class="col">
         <h2>Single index card</h2>
+        <index-card-or-error v-bind:record="this.$parent.getRecord( $route.params.dataset, $route.params.id )"></index-card-or-error>
     </div>
     </div>
-    <index-card-or-error v-bind:record="this.$parent.getRecord( $route.params.dataset, $route.params.id )"></index-card-or-error>
     </div>
 </script>
 
@@ -232,9 +231,11 @@
 </script>
 
 <script type="text/x-template" id="templateIndexCard">
-    <div class="row index-card">
+  <div class="card index-card">
+  <div class="card-body">
+    <h5 class="card-title"><field-value v-bind:record="record" fieldid="title"></field-value></h5>
+  <div class="row">
         <div class="col-md">
-          <h2><field-value v-bind:record="record" fieldid="title"></field-value></h2>
           <field-label-and-value v-bind:record="record" fieldid="acts"></field-label-and-value>
           <field-label-and-value v-bind:record="record" fieldid="artists"></field-label-and-value>
           <field-label-and-value v-bind:record="record" fieldid="author"></field-label-and-value>
@@ -267,6 +268,8 @@
           <field-label-and-value v-bind:record="record" fieldid="vs_total_pages"></field-label-and-value>
         </div>
     </div>
+  </div>
+    </div>
 </script>
 
 
@@ -277,17 +280,19 @@
     Vue.component("index-card",{
         props: ["record"],
         template: "#templateIndexCard" } );
-    // a function so we can call it from multiple places
-    function renderValue( createElement, record, fieldid ) {
+
+    Vue.component("field-value",{
+        props: ["record","fieldid"],
+        render: function(createElement) {
             var rendered_value;
-            if( !record ) {
+            if( !this.record ) {
                 rendered_value = "[FV:No record]";
             } else {
-                var field = record._dataset.fieldsById[fieldid];
+                var field = this.record._dataset.fieldsById[this.fieldid];
                 if( !field ) {
-                    rendered_value = "[FV:No field:"+fieldid+"]";
+                    rendered_value = "[FV:No field:"+this.fieldid+"]";
                 } else {
-                    var value = record[fieldid];
+                    var value = this.record[this.fieldid];
                     if( !value ) {
                         rendered_value = "/NULL/"; // TODO
                     } else {
@@ -306,26 +311,21 @@
             }
  
             return  createElement("div",{class:"field-value"},rendered_value);
-    }
-    Vue.component("field-value",{
-        props: ["record","fieldid"],
-        render: function(createElement) {
-            return renderValue( createElement, this.record, this.fieldid );
         }});
 
     Vue.component("field-label-and-value",{
         props: ["record","fieldid"],
         render: function(createElement) {
             if( !this.record ) {
-                return createElement("div",{"class":"field-value-and-label"},"[FV:No record]");
+                return createElement("div",{"class":"field-value-and-label"},"[FLV:No record]");
             }
             var field = this.record._dataset.fieldsById[this.fieldid];
             if( !field ) {
-                return createElement("div",{"class":"field-value-and-label"},"[FV:No field:"+this.fieldid+"]");
+                return createElement("div",{"class":"field-value-and-label"},"[FLV:No field:"+this.fieldid+"]");
             }
             return createElement("div",{"class":"field-value-and-label"},[
                 createElement("div",{"class":"field-label"},field.label),
-                renderValue( createElement, this.record, this.fieldid )
+                createElement("field-value",{"props":{"record":this.record, "fieldid":this.fieldid}})
             ]);
         }
     });
