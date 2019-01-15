@@ -24,8 +24,8 @@
 
 </head>
 <body>
-<div class="container">
-    <div class="row" id="navigation">
+<div class="container" id='page'>
+    <nav class="row" id="navigation">
         <div class="col col1"><a href="/" class="navlinks">FMC Home</a></div>
         <div class="col col2"><a href="/project-description" class="navlinks"> Project Description</a></div>
         <div class="col col3"><a href="/collections" class="navlinks">Collections</a></div>
@@ -33,12 +33,14 @@
         <div class="col col5"><a
                 href="http://search.fmc.ac.uk/#m-columnbrowser@||m-informationcontrol@url=html/help.php"
                 class="navlinks m-href">Help</a></div>
-    </div>
+    </nav>
     <div class="row" id="header">
         <img src="./assets/new-fmc-logo.jpg" alt="Header image"/>
     </div>
-    <div id="content" class="row">
+    <div class="row">
+    <div class="col">
         <h1>Music in the Second Empire Theatre</h1>
+    </div>
     </div>
 
     <div id="app"></div>
@@ -72,22 +74,26 @@
 <script type="text/x-template" id="templateDataset">
 <div>
         <nav class="row">
+        <nav class="col">
             <p>
                 <router-link to="/">Dataset home</router-link> | 
                 <router-link to="/data">Dataset schema and download</router-link>
             </p>
+         </nav>
          </nav>
          <router-view></router-view>
 </div>
 </script>
 
 <script type="text/x-template" id="templateHome">
-<div>
+<div class="row">
+<div class="col">
     Home template....
 
     <!--<div v-for="record in getResults()">-->
     <!--{{ record.title }}-->
     <!--</div>-->
+</div>
 </div>
 
 </script>
@@ -96,7 +102,8 @@
     <div class="row">
     <div class="col">
     <h2>About the data</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque eget libero vel dignissim. Nam tristique ipsum quis neque elementum, eu suscipit leo feugiat. Fusce viverra vel tellus id maximus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce id est sed erat hendrerit venenatis. Donec auctor ut felis eget tincidunt. Nam purus felis, congue id diam eu, ultricies eleifend felis.</p>
+    <p>This dataset has been created and shared with the intention it should be reused. The fields in the dataset are described below.</p>
+    <h2>Schema</h2>
     <table class="table">
         <thead>
         <tr>
@@ -123,7 +130,6 @@
     <div>
     <div class="row">
     <div class="col">
-        <h2>Single index card</h2>
         <index-card v-if="recordsById[ $route.params.id ]" v-bind:record="recordsById[ $route.params.id ]"></index-card>
         <div v-else>
            <p>NO SUCH RECORD</p>
