@@ -1,11 +1,43 @@
 
+
 var HomePage = Vue.component("home-page", {
     data: function() {
         return this.$root.defaultDataset; },
     methods: {
         getResults: function() {
-            return this.records;
-        }
+
+            // apply the filters
+
+            // create records to show array
+            var records_to_show = [];
+
+            // iterate over each record
+            for(var i = 0; i < this.records.length; i++) {
+                var record = this.records[i];
+
+                // iterate over each filter
+                var all_match = true;
+                for(var j = 0; j < this.filters.length; j++) {
+                    // does the filter pass?
+                    var filter = this.filters[j];
+                    if (!filter.matches(record)) {
+                        all_match = false;
+                        break;
+                    }
+                    // move on to the next record
+
+                    // if all filters pass then add to array of matching records
+                }
+
+                if (all_match) {
+                    records_to_show.push(record);
+                }
+
+            }
+
+            return records_to_show;
+        },
+
     },
     template: "#templateHome",
 });
@@ -113,15 +145,86 @@ var app = new Vue({
                 for( field_i=0; field_i<source.config.fields.length; ++field_i ) {
                     var field = source.config.fields[field_i];
                     dataset.fields_by_id[ field.id ] = field;
-                    var filter_item = { value: "", mode: "is", field: field };
-                    if( field.type=="date" || field.type=="integer" ) {
-                        filter_item.mode = "between"; 
-                        filter_item.value2 = "";
+                    var filter_item;
+
+                    switch (field.type)
+                    {
+                        case "text":
+                            filter_item = { value: "", mode: "is", field: field, matches: function(record) {
+                                if (this.value.trim() == "") {
+                                    return true;
+                                }
+
+                                // CHRIS TO REVIEW - set to empty string if null
+
+                                var values = record[this.field.id].value;
+                                if (values === null) {
+                                    return false;
+                                }
+
+                                // to simplify things always work with arrays.
+                                if (!this.field.multiple) {
+                                    values = [values];
+                                }
+
+                                if (this.mode == "is") {
+                                    var term = this.value.trim().toLowerCase()
+                                    for(var i = 0; i < values.length; i++) {
+                                        var value = values[i];
+                                        if (value.toLowerCase() == term) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                }
+
+                                // not 'is' so must be a 'contains' search
+                                // check that all the terms are found in the record
+                                    var terms = this.value.trim().toLowerCase().split(/\s+/);
+
+                                    for(var i = 0; i < terms.length; i++) {
+                                    var term = terms[i];
+                                    var term_found = false;
+                                    for(var j = 0; j < values.length; j++) {
+
+                                        var value = values[j];
+                                        if (value.toLowerCase().indexOf(term) > -1) {
+                                            term_found = true;
+                                            break;
+                                        }
+                                    }
+
+                                    // has to match all terms
+                                    if (!term_found) {
+                                        return false;
+                                    }
+
+                                }
+
+                                return true;
+
+                                } };
+                            break;
+                        case "integer":
+                            filter_item = { value: "", value2:"", mode: "between", field: field, matches: function(record) { return true }};
+                            break;
+                        case "enum":
+                            filter_item = { value: "", mode: "is", field: field, matches: function(record) { return true } };
+                            break;
+                        case "date":
+                            filter_item = { value: "", value2: "", mode: "between", field: field, matches: function(record) { return true } };
+                            break;
+                        default:
+                            break;
                     }
+
                     if( field.type=="enum" ) {
                         // init enum registry for an enum field
                          enums[field.id] = {};
                     }
+
+
+
              
                     dataset.filters_by_id[ field.id ] = filter_item;
                     dataset.filters.push( filter_item );

@@ -113,11 +113,12 @@
 <script type="text/x-template" id="templateFilterForm">
 <div class='filter-form'>
   <p>This is a first stab at generating search form fields.</p>
+
   <div v-for="filter in filters" class="form-row">
     <div class="col-sm-2 text-sm-right" >{{filter.field.label}}</div>
     <template v-if="filter.field.type=='text'">
       <div class="col-sm-2">
-          <select><option value="is">is</option><option value="contains">contains</option></select> 
+          <select v-model="filter.mode"><option value="is">is</option><option value="contains">contains</option></select>
       </div>
       <div class="col-sm-8">
           <input v-model="filter.value" />
@@ -138,7 +139,7 @@
     </template>
     <template v-else>
       <div class="col-sm-10"> 
-        Not sure how to render {{ filter.field }}
+            Render as drop down <!-- {{ filter.field }}-->
       </div>
     </template>
   </div>
