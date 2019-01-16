@@ -117,28 +117,41 @@
     <div class="col-sm-2 text-sm-right" >{{filter.field.label}}</div>
     <template v-if="filter.field.type=='text'">
       <div class="col-sm-2">
-          <select><option value="is">is</option><option value="contains">contains</option></select> 
+          <select v-model="filter.mode"><option value="is">is</option><option value="contains">contains</option></select>
       </div>
       <div class="col-sm-8">
           <input v-model="filter.value" />
       </div>
     </template>
-    <template v-else-if="filter.field.type=='integer' || filter.field.type=='date'">
+    <template v-else-if="filter.field.type=='integer'">
       <div class="col-sm-2">
           <select v-model="filter.mode"><option value="is">is</option><option value="between">is between</option></select> 
       </div>
       <div class="col-sm-8">
           <template v-if="filter.mode=='is'">
-              <input v-model="filter.value" />
+              <input v-model="filter.value" type="number" />
           </template>
           <template v-if="filter.mode=='between'">
-              <input v-model="filter.value" /> and <input v-model="filter.value2" />
+              <input v-model="filter.value" type="number" /> and <input v-model="filter.value2" type="number" />
           </template>
        </div>
     </template>
+      <template v-else-if="filter.field.type=='date'">
+          <div class="col-sm-2">
+              <select v-model="filter.mode"><option value="is">is</option><option value="between">is between</option></select>
+          </div>
+          <div class="col-sm-8">
+              <template v-if="filter.mode=='is'">
+                  <input v-model="filter.value" />
+              </template>
+              <template v-if="filter.mode=='between'">
+                  <input v-model="filter.value" /> and <input v-model="filter.value2" />
+              </template>
+          </div>
+      </template>
     <template v-else>
       <div class="col-sm-10"> 
-        Not sure how to render {{ filter.field }}
+            Render as drop down <!-- {{ filter.field }}-->
       </div>
     </template>
   </div>
