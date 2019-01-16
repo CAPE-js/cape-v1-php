@@ -9,6 +9,8 @@
     <link href="css/bootstrap-4.0.0/bootstrap.css" rel="stylesheet">
     <link href="css/site.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -188,17 +190,22 @@
 </script>
 
 <script type="text/x-template" id="templateSummaryCard">
-    <div class="summary-card">
+    <div class="summary-card card mb-1">
         <div class="card-body">
-            <div class="card-title"><field-value v-bind:typedValue="record.title"></field-value></div>
-            <div class="row">
-                <div class="col-sm-10">
-                    <field-label-and-value v-bind:typedValue="record.composer"></field-label-and-value>
-                    <field-label-and-value v-bind:typedValue="record.author"></field-label-and-value>
+            <div class="row pb-1">
+                <div class="col-sm-10 card-title">
+                    <field-value v-bind:typedValue="record.title"></field-value>
                 </div>
                 <div class="col-sm-2">
-                    <field-label-and-value v-bind:typedValue="record.date"></field-label-and-value>
+                    <field-value v-bind:typedValue="record.date"></field-value>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <i class="fas fa-music pr-1" title="Composer"></i><span class="sr-only">Composer</span><field-value v-bind:typedValue="record.composer" class="pr-2"></field-value>
+                    <i class="fas fa-pen pr-1" title="Authors"></i><span class="sr-only">Composer</span><field-value v-bind:typedValue="record.author"></field-value>
+                </div>
+
             </div>
         </div>
     </div>
