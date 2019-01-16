@@ -92,12 +92,51 @@
 <script type="text/x-template" id="templateHome">
 <div class="row">
 <div class="col">
+
+    <!--<filter-form v-bind:filters="filters"></filter-form>-->
+
     <div v-for="result in getResults()">
         <summary-card v-bind:record="result"></summary-card>
     </div>
+
 </div>
 </div>
 
+</script>
+
+<script type="text/x-template" id="templateFilterForm">
+<div class='filter-form'>
+  <p>This is a first stab at generating search form fields.</p>
+  <div v-for="filter in filters" class="form-row">
+    <div class="col-sm-2 text-sm-right" >{{filter.field.label}}</div>
+    <template v-if="filter.field.type=='text'">
+      <div class="col-sm-2">
+          <select><option value="is">is</option><option value="contains">contains</option></select> 
+      </div>
+      <div class="col-sm-8">
+          <input v-model="filter.value" />
+      </div>
+    </template>
+    <template v-else-if="filter.field.type=='integer' || filter.field.type=='date'">
+      <div class="col-sm-2">
+          <select v-model="filter.mode"><option value="is">is</option><option value="between">is between</option></select> 
+      </div>
+      <div class="col-sm-8">
+          <template v-if="filter.mode=='is'">
+              <input v-model="filter.value" />
+          </template>
+          <template v-if="filter.mode=='between'">
+              <input v-model="filter.value" /> and <input v-model="filter.value2" />
+          </template>
+       </div>
+    </template>
+    <template v-else>
+      <div class="col-sm-10"> 
+        Not sure how to render {{ filter.field }}
+      </div>
+    </template>
+  </div>
+</div>
 </script>
 
 <script type="text/x-template" id="templateData">
@@ -132,7 +171,7 @@
     <div>
     <div class="row">
     <div class="col">
-        <index-card v-if="recordsById[ $route.params.id ]" v-bind:record="recordsById[ $route.params.id ]"></index-card>
+        <index-card v-if="records_by_id[ $route.params.id ]" v-bind:record="records_by_id[ $route.params.id ]"></index-card>
         <div v-else>
            <p>NO SUCH RECORD</p>
         </div>
@@ -149,9 +188,9 @@
 </script>
 
 <script type="text/x-template" id="templateSummaryCard">
-    <div class="card index-card">
+    <div class="summary-card">
         <div class="card-body">
-            <h5 class="card-title"><field-value v-bind:typedValue="record.title"></field-value></h5>
+            <div class="card-title"><field-value v-bind:typedValue="record.title"></field-value></div>
             <div class="row">
                 <div class="col-sm-10">
                     <field-label-and-value v-bind:typedValue="record.composer"></field-label-and-value>
@@ -202,6 +241,11 @@
           <field-label-and-value v-bind:typedValue="record.vs_publisher"></field-label-and-value>
           <field-label-and-value v-bind:typedValue="record.vs_total_pages"></field-label-and-value>
           <field-label-and-value v-bind:typedValue="record.record_number"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.arranger"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.original_author"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.original_composer"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.original_title"></field-label-and-value>
+          <field-label-and-value v-bind:typedValue="record.tableaux"></field-label-and-value>
         </div>
     </div>
   </div>

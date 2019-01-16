@@ -16,6 +16,20 @@
         		"id_field":"record_number",
 			"fields":[
 				{
+					"id":"record_number",
+					"type":"integer",
+					"source_heading":"Record Number",
+					"label":"Record Number",
+					"description":""
+				},
+				{
+					"id":"title",
+					"type":"text",
+					"source_heading":"Title",
+					"label":"Title",
+					"description":""
+				},
+				{
 					"id":"acts",
 					"type":"integer",
 					"source_heading":"Acts",
@@ -183,13 +197,6 @@
 					"description":""
 				},
 				{
-					"id":"title",
-					"type":"text",
-					"source_heading":"Title",
-					"label":"Title",
-					"description":""
-				},
-				{
 					"id":"total_numbers",
 					"type":"integer",
 					"source_heading":"Total Numbers",
@@ -218,36 +225,29 @@
 					"description":""
 				},
 				{
-					"id":"record_number",
-					"type":"integer",
-					"source_heading":"Record Number",
-					"label":"Record Number",
-					"description":""
-				},
-				{
 					"id":"arranger",
-					"type":"string",
+					"type":"text",
 					"source_heading":"Arranger",
 					"label":"Arranger",
 					"description":""
 				},
 				{
 					"id":"original_author",
-					"type":"string",
+					"type":"text",
 					"source_heading":"Original Author",
 					"label":"Original Author",
 					"description":""
 				},
 				{
 					"id":"original_composer",
-					"type":"string",
+					"type":"text",
 					"source_heading":"Original Composer",
 					"label":"Original Composer",
 					"description":""
 				},
 				{
 					"id":"original_title",
-					"type":"string",
+					"type":"text",
 					"source_heading":"Original Title",
 					"label":"Original Title",
 					"description":""
