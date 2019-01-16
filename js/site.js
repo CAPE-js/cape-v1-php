@@ -67,7 +67,7 @@ var app = new Vue({
         sourceData: {
             status: "LOADING"
         },
-        recordsById: []
+        records_by_id: []
     },
     template: "#templateApp",
     created: function () {
@@ -84,7 +84,7 @@ var app = new Vue({
             if( this.sourceData.status == "ERROR" ) {
                 return;
             }
-            this.datasetsById = {};
+            this.datasets_by_id = {};
             // populate records by ID. Nb. This is using the wrong ID data for now. TODO
             for( ds_i=0; ds_i<this.sourceData.datasets.length; ++ds_i ) {
                 var dataset = {};
@@ -95,40 +95,60 @@ var app = new Vue({
                 dataset.config = source.config;
 
                 // add fields mapped by ID, and populate the filter object
-                dataset.fieldsById = {};
-                dataset.filtersById = {};
+                // initialise enum registries
+                var enums = {};
+                dataset.fields_by_id = {};
+                dataset.filters_by_id = {};
                 dataset.filters = [];
                 for( field_i=0; field_i<source.config.fields.length; ++field_i ) {
                     var field = source.config.fields[field_i];
-                    dataset.fieldsById[ field.id ] = field;
+                    dataset.fields_by_id[ field.id ] = field;
                     var filter_item = { value: "", mode: "is", field: field };
                     if( field.type=="date" || field.type=="integer" ) {
                         filter_item.mode = "between"; 
                         filter_item.value2 = "";
                     }
-                    dataset.filtersById[ field.id ] = filter_item;
+                    if( field.type=="enum" ) {
+                        // init enum registry for an enum field
+                         enums[field.id] = {};
+                    }
+             
+                    dataset.filters_by_id[ field.id ] = filter_item;
                     dataset.filters.push( filter_item );
                 }
 
 
                 // create a lookup table for record by id
-                dataset.recordsById = {};
+                dataset.records_by_id = {};
                 dataset.records = [];
                 for( record_i=0; record_i<source.records.length; ++record_i ) {
                     var source_record = source.records[record_i];
                     var record = {};
                     for( field_i=0; field_i<source.config.fields.length; ++field_i ) {
                         var field = source.config.fields[field_i];
-                        record[ field.id ] = {
-                            value: source_record[ field.id ],
-                            field: field }
+                        var value = source_record[ field.id ];
+                        if( field.type == 'date' && value ) {
+                             // convert 25/12/2001 to 2001-12-25 TODO: this should use sprintf or date functions
+                             value = value.split( "/" ).reverse().join( "-" );
+                        }
+                        if( field.type=="enum" ) {
+                            // init enum registry for an enum field
+                             enums[field.id][value] = 1;
+                        }
+                        record[ field.id ] = { value: value, field: field }
                     }
-                    dataset.recordsById[source_record[dataset.config.id_field]] = record;
+                    dataset.records_by_id[source_record[dataset.config.id_field]] = record;
                     dataset.records.push( record ); 
                 }
 
+                // add this list of enum values to each enum field
+                var enum_fields = Object.keys( enums );
+                for( var enum_i=0; enum_i<enum_fields.length; enum_i++ ) {
+                    dataset.fields_by_id[ enum_fields[enum_i] ].options = Object.keys( enums[enum_fields[enum_i]] ).sort();
+                }
+
                 // add dataset to our dataset collection
-                this.datasetsById[dataset.config.id] = dataset;
+                this.datasets_by_id[dataset.config.id] = dataset;
 
                 // first dataset becomes the default
                 if( ds_i == 0 ) {

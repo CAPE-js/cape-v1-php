@@ -171,7 +171,7 @@
     <div>
     <div class="row">
     <div class="col">
-        <index-card v-if="recordsById[ $route.params.id ]" v-bind:record="recordsById[ $route.params.id ]"></index-card>
+        <index-card v-if="records_by_id[ $route.params.id ]" v-bind:record="records_by_id[ $route.params.id ]"></index-card>
         <div v-else>
            <p>NO SUCH RECORD</p>
         </div>
