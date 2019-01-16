@@ -2,8 +2,8 @@
 # This file does *some* checking of the validity of config.json file but not exhaustedly
 # THis assumes that numbered field values are in the correct order in the source file.
 
-$CONFIG_FILE = "../config.json";
-$DATA_DIR = "../data";
+$CONFIG_FILE = __DIR__."/../config.json";
+$DATA_DIR = __DIR__."/../data";
 
 ini_set("auto_detect_line_endings", "1");
 header( "Content-type: text/json" );
@@ -53,7 +53,9 @@ function map_dataset( $config, $source ) {
 	$output["missing_headings"] = array();	
 	foreach( $source["headings"] as $heading ) {
 		if( array_key_exists( $heading, $fields ) ) {
-			$map[$heading] = $fields[$heading];
+			if( $fields[$heading]["type"] != "ignore" ) {
+				$map[$heading] = $fields[$heading];
+			}
 			unset( $to_map[$fields[$heading]["id"]] );
 			continue;
 		}
@@ -93,6 +95,15 @@ function map_dataset( $config, $source ) {
 		}
 		$output["records"] []= $out_record;
 	}
+
+	# trim out fields of type "ignore"
+	$fields = array();
+	foreach( $output["config"]["fields"] as $field ) {
+		if( $field["type"] != "ignore" ) {
+			$fields []= $field;
+		}
+	}
+	$output["config"]["fields"] = $fields;
 
 	return $output;	
 }

@@ -17,10 +17,10 @@
         		"id_field":"record_number",
 			"fields":[
 				{
-					"id":"record_number",
-					"type":"integer",
-					"source_heading":"Record Number",
-					"label":"Record Number",
+					"id":"date",
+					"type":"date",
+					"source_heading":"Date",
+					"label":"Date",
 					"description":""
 				},
 				{
@@ -31,73 +31,6 @@
 					"description":""
 				},
 				{
-					"id":"acts",
-					"type":"integer",
-					"source_heading":"Acts",
-					"label":"Acts",
-					"description":""
-				},
-				{
-					"id":"artists",
-					"type":"text",
-					"source_heading":"Artists",
-					"label":"Artists",
-					"description":""
-				},
-				{
-					"id":"author",
-					"multiple":true,
-					"source_format":"repeated",
-					"type":"text",
-					"source_heading":"Author",
-					"label":"Author",
-					"description":""
-				},
-				{
-					"id":"censors_libretto",
-					"type":"text",
-					"source_heading":"Censors' Libretto",
-					"label":"Censors' Libretto",
-					"description":""
-				},
-				{
-					"id":"composer",
-					"type":"text",
-					"source_heading":"Composer",
-					"label":"Composer",
-					"description":""
-				},
-				{
-					"id":"dance_number",
-					"type":"text",
-					"source_heading":"Dance Number",
-					"label":"Dance Number",
-					"description":""
-				},
-				{
-					"id":"date",
-					"type":"date",
-					"source_heading":"Date",
-					"label":"Date",
-					"description":""
-				},
-				{
-					"id":"emplois_listed_in_vs",
-					"type":"text",
-					"source_heading":"Emplois listed in VS?",
-					"label":"Emplois listed in VS?",
-					"description":""
-				},
-				{
-					"id":"female",
-					"multiple":true,
-					"source_format":"repeated",
-					"type":"text",
-					"source_heading":"Female",
-					"label":"Female",
-					"description":""
-				},
-				{
 					"id":"genre",
 					"type":"enum",
 					"source_heading":"Genre",
@@ -105,47 +38,10 @@
 					"description":""
 				},
 				{
-					"id":"institution",
-					"type":"text",
-					"source_heading":"Institution",
-					"label":"Institution",
-					"description":""
-				},
-				{
-					"id":"libretto_publisher",
-					"type":"text",
-					"source_heading":"Libretto Publisher",
-					"label":"Libretto Publisher",
-					"description":""
-				},
-				{
-					"id":"libretto_total_pages",
+					"id":"acts",
 					"type":"integer",
-					"source_heading":"Libretto Total pages",
-					"label":"Libretto Total pages",
-					"description":""
-				},
-				{
-					"id":"male",
-					"multiple":true,
-					"source_format":"repeated",
-					"type":"text",
-					"source_heading":"Male",
-					"label":"Male",
-					"description":""
-				},
-				{
-					"id":"melodrame",
-					"type":"text",
-					"source_heading":"Mélodrame",
-					"label":"Mélodrame",
-					"description":""
-				},
-				{
-					"id":"metteur_en_scene",
-					"type":"text",
-					"source_heading":"Metteur en scène",
-					"label":"Metteur en scène",
+					"source_heading":"Acts",
+					"label":"Acts",
 					"description":""
 				},
 				{
@@ -170,6 +66,78 @@
 					"description":""
 				},
 				{
+					"id":"total_numbers",
+					"type":"integer",
+					"source_heading":"Total Numbers",
+					"label":"Total Numbers",
+					"description":""
+				},
+				{
+					"id":"male",
+					"multiple":true,
+					"source_format":"repeated",
+					"type":"text",
+					"source_heading":"Male",
+					"label":"Male",
+					"description":""
+				},
+				{
+					"id":"female",
+					"multiple":true,
+					"source_format":"repeated",
+					"type":"text",
+					"source_heading":"Female",
+					"label":"Female",
+					"description":""
+				},
+				{
+					"id":"author",
+					"multiple":true,
+					"source_format":"repeated",
+					"type":"text",
+					"source_heading":"Author",
+					"label":"Author",
+					"description":""
+				},
+				{
+					"id":"composer",
+					"type":"text",
+					"source_heading":"Composer",
+					"label":"Composer",
+					"description":""
+				},
+
+
+				{
+					"id":"emplois_listed_in_vs",
+					"type":"text",
+					"source_heading":"Emplois listed in VS?",
+					"label":"Emplois listed in VS?",
+					"description":""
+				},
+				{
+					"id":"dance_number",
+					"type":"text",
+					"source_heading":"Dance Number",
+					"label":"Dance Number",
+					"description":""
+				},
+				{
+					"id":"melodrame",
+					"type":"text",
+					"source_heading":"Mélodrame",
+					"label":"Mélodrame",
+					"description":""
+				},
+
+				{
+					"id":"institution",
+					"type":"text",
+					"source_heading":"Institution",
+					"label":"Institution",
+					"description":""
+				},
+				{
 					"id":"original_date",
 					"type":"text",
 					"source_heading":"Original Date",
@@ -183,25 +151,35 @@
 					"label":"Original Institution",
 					"description":""
 				},
+
+
 				{
-					"id":"printed_libretto",
+					"id":"metteur_en_scene",
 					"type":"text",
-					"source_heading":"Printed Libretto",
-					"label":"Printed Libretto",
+					"source_heading":"Metteur en scène",
+					"label":"Metteur en scène",
 					"description":""
 				},
 				{
-					"id":"printed_score",
+					"id":"libretto_publisher",
 					"type":"text",
-					"source_heading":"Printed Score",
-					"label":"Printed Score",
+					"source_heading":"Libretto Publisher",
+					"label":"Libretto Publisher",
 					"description":""
 				},
 				{
-					"id":"total_numbers",
+					"id":"libretto_total_pages",
 					"type":"integer",
-					"source_heading":"Total Numbers",
-					"label":"Total Numbers",
+					"source_heading":"Libretto Total pages",
+					"label":"Libretto Total pages",
+					"description":""
+				},
+
+				{
+					"id":"vs_publisher",
+					"type":"text",
+					"source_heading":"VS Publisher",
+					"label":"VS Publisher",
 					"description":""
 				},
 				{
@@ -212,19 +190,13 @@
 					"description":""
 				},
 				{
-					"id":"vs_publisher",
-					"type":"text",
-					"source_heading":"VS Publisher",
-					"label":"VS Publisher",
-					"description":""
-				},
-				{
 					"id":"vs_total_pages",
 					"type":"integer",
 					"source_heading":"VS Total Pages",
 					"label":"VS Total Pages",
 					"description":""
 				},
+
 				{
 					"id":"arranger",
 					"type":"text",
@@ -259,7 +231,37 @@
 					"source_heading":"Tableaux",
 					"label":"Tableaux",
 					"description":""
+				},
+
+				{
+					"id":"record_number",
+					"type":"integer",
+					"source_heading":"Record Number",
+					"label":"Record Number",
+					"description":""
+				},
+
+				{
+					"type":"ignore",
+					"source_heading":"Artists"
+				},
+				{
+					"type":"ignore",
+					"source_heading":"Censors' Libretto"
+				},
+				{
+					"type":"ignore",
+					"source_heading":"Printed Libretto"
+				},
+				{
+					"type":"ignore",
+					"source_heading":"Printed Score"
+				},
+				{
+					"type":"ignore",
+					"source_heading":"Record Complete?"
 				}
+
 			]
 		}
 	]

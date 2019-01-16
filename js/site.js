@@ -83,9 +83,10 @@ Vue.component("field-value", {
     props: ["typedValue"],
     render: function (createElement) {
         var rendered_value;
-
+        var classList = ["field-value"];
         if (!this.typedValue.value) {
-            rendered_value = "/NULL/"; // TODO
+            rendered_value = "unspecified";
+            classList.push( "field-null" );
         } else {
             if (this.typedValue.field.multiple === true) {
                 rendered_value = [];
@@ -100,7 +101,7 @@ Vue.component("field-value", {
                 rendered_value = this.typedValue.value;
             }
         }
-        return createElement("div", {class: "field-value"}, rendered_value);
+        return createElement("div", {class: classList }, rendered_value);
     }
 });
 
