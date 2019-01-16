@@ -92,17 +92,21 @@
 </script>
 
 <script type="text/x-template" id="templateHome">
-<div class="row">
-<div class="col">
+    <div>
+        <div class="row">
+            <div class="col">
+                <filter-form v-bind:filters="filters"></filter-form>
+            </div>
+        </div>
 
-    <!--<filter-form v-bind:filters="filters"></filter-form>-->
-
-    <div v-for="result in getResults()">
-        <summary-card v-bind:record="result"></summary-card>
+        <div class="row">
+            <div class="col">
+                <div v-for="result in getResults()">
+                    <summary-card v-bind:record="result"></summary-card>
+                </div>
+            </div>
+        </div>
     </div>
-
-</div>
-</div>
 
 </script>
 
