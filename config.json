@@ -4,6 +4,7 @@
 			"id":"opera",
 			"title": "Music in the Second Empire Theatre",
 			"base_file_name":"opera",
+                        "format":"xlsx",
 			"sort": [ "title", "date" ],
 			"license": {
 				"url":"http://totl.net",

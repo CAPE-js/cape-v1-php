@@ -2,8 +2,8 @@
 # This file does *some* checking of the validity of config.json file but not exhaustedly
 # THis assumes that numbered field values are in the correct order in the source file.
 
-$CONFIG_FILE = "config.json";
-$DATA_DIR = "data";
+$CONFIG_FILE = "../config.json";
+$DATA_DIR = "../data";
 
 ini_set("auto_detect_line_endings", "1");
 header( "Content-type: text/json" );
@@ -18,7 +18,14 @@ if( !$config ) {
 $datasets = array();
 foreach( $config["datasets"] as $dataset_config ) {
 	$dataset_file = latest_file_with_prefix( $DATA_DIR, $dataset_config["base_file_name"] );
-	$raw_dataset = read_csv( $dataset_file );
+        if( !isset( $dataset_config["format"]) || $dataset_config["format"] == "csv" ) {
+		$table = read_csv( $dataset_file );
+        } elseif( $dataset_config["format"] == "xlsx" ) {
+		$table = read_xlsx( $dataset_file );
+	} else {
+		exit_with_error( "Unknown format: ".$dataset_config["format"] );
+	}
+	$raw_dataset = table_to_objects( $table );
 	$datasets []= map_dataset( $dataset_config, $raw_dataset );
 }
 
@@ -76,6 +83,8 @@ function map_dataset( $config, $source ) {
 			if( empty( $value ) ) { continue; }
 			if( !$map[$heading] ) { continue; }
 			$field = $map[$heading];
+			# strip any time data after the ISO date
+			if( $field["type"] == "date" ) { $value = substr( $value, 0, 10 ); }
 			if( $field["multiple"] ) {
 				$out_record[$field["id"]] []= $value;
 			} else {
@@ -94,30 +103,47 @@ function exit_with_error($msg) {
 	exit;
 }
 
+function read_xlsx( $file ) {
+	require_once( "SimpleXLSX.php");
+	$xlsx = SimpleXLSX::parse($file);
+	if( !$xlsx ) {
+		exit_with_error( "Error reading XSLX file ". SimpleXLSX::parseError() );
+	}
+	return $xlsx->rows();
+}
+
 function read_csv( $file ) {
 	$handle = fopen($file, "r");
 	if( $handle===FALSE ) {
 		exit_with_error( "Can't open CSV file $file" );
 	}
+	$table = array();
+	while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+		$table []= $row;
+	}
+	fclose($handle);
+	return $table;
+}
+
+function table_to_objects( $table ) {
 	$first_row = true;
 	$headings = array();
 	$records = array();
-	while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+	foreach( $table as $row ) {
 		if( $first_row ) {
 			$headings = array();
-			foreach( $data as $item ) { 
+			foreach( $row as $item ) { 
 				$headings []= trim($item);
 			};
 			$first_row = false;
 			continue;
 		}
 		$record = array();
-		for( $i=0;$i<count($data);++$i ) {
-			$record[ $headings[$i] ] = trim($data[$i]);
+		for( $i=0;$i<count($row);++$i ) {
+			$record[ $headings[$i] ] = trim($row[$i]);
 		}
 		$records []= $record;
 	}
-	fclose($handle);
 	return array( "headings"=>$headings, "records"=>$records );
 }
 
