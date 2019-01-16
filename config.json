@@ -33,7 +33,9 @@
 				{
 					"id":"genre",
 					"type":"enum",
+					"multiple":true,
 					"source_heading":"Genre",
+					"source_split":"\\s*;\\s*",
 					"label":"Genre",
 					"description":""
 				},

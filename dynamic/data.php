@@ -88,7 +88,14 @@ function map_dataset( $config, $source ) {
 			# strip any time data after the ISO date
 			if( $field["type"] == "date" ) { $value = substr( $value, 0, 10 ); }
 			if( $field["multiple"] ) {
-				$out_record[$field["id"]] []= $value;
+				if( $field["source_split"] ) {
+					$parts = preg_split( "/".$field["source_split"]."/", trim($value) );
+					foreach( $parts as $part ) {
+						$out_record[$field["id"]] []= $part;
+					}
+				} else {
+					$out_record[$field["id"]] []= $value;
+				}
 			} else {
 				$out_record[$field["id"]] = $value;
 			}
