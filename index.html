@@ -120,7 +120,7 @@
           <select v-model="filter.mode"><option value="is">is</option><option value="contains">contains</option></select>
       </div>
       <div class="col-sm-8">
-          <input v-model="filter.value" />
+          <input v-model="filter.term" />
       </div>
     </template>
     <template v-else-if="filter.field.type=='integer'">
@@ -129,10 +129,10 @@
       </div>
       <div class="col-sm-8">
           <template v-if="filter.mode=='is'">
-              <input v-model="filter.value" type="number" />
+              <input v-model="filter.term" type="number" />
           </template>
           <template v-if="filter.mode=='between'">
-              <input v-model="filter.value" type="number" /> and <input v-model="filter.value2" type="number" />
+              <input v-model="filter.term" type="number" /> and <input v-model="filter.term2" type="number" />
           </template>
        </div>
     </template>
@@ -142,10 +142,10 @@
           </div>
           <div class="col-sm-8">
               <template v-if="filter.mode=='is'">
-                  <input v-model="filter.value" />
+                  <input v-model="filter.term" />
               </template>
               <template v-if="filter.mode=='between'">
-                  <input v-model="filter.value" /> and <input v-model="filter.value2" />
+                  <input v-model="filter.term" /> and <input v-model="filter.term2" />
               </template>
           </div>
       </template>

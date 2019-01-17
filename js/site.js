@@ -1,3 +1,131 @@
+function makeFilter( field ) {
+    switch (field.type) {
+        case "text":    return new TextFilter( field ); 
+        case "integer": return new IntegerFilter( field ); 
+        case "enum":    return new EnumFilter( field ); 
+        case "date":    return new DateFilter( field ); 
+    }
+    console.log("No filter for field type "+field.type);
+}
+
+/*
+ *  Filter
+ *  abstract base class, should not be instatiated directly
+ */
+function Filter( field ) {
+    this.term = "";
+    this.mode = "contains";
+    this.field = field;
+}
+Filter.prototype.unset = function() {
+    return (this.term.trim() == "");
+}
+Filter.prototype.termIs = function(values) {
+    var term = this.term.trim().toLowerCase()
+    for (var i = 0; i < values.length; i++) {
+        var value = values[i];
+        if (value.toLowerCase() == term) {
+            return true;
+        }
+    }
+    return false;
+}
+Filter.prototype.termContains = function(values) {
+    // check that all the terms are found in the record
+    
+    var terms = this.term.trim().toLowerCase().split(/\s+/);
+
+    for (var i = 0; i < terms.length; i++) {
+        var term = terms[i];
+        var term_found = false;
+        for (var j = 0; j < values.length; j++) {
+
+            var value = values[j];
+            if (value.toLowerCase().indexOf(term) > -1) {
+                term_found = true;
+                break;
+            }
+        }
+
+        // has to match all terms
+        if (!term_found) {
+            return false;
+        }
+
+    }
+
+    return true;
+}
+Filter.prototype.matches = function(record) {
+    if( this.unset() ) {
+        return true;
+    }
+    var values = record[this.field.id].value;
+    if (values === null) {
+        return false;
+    }
+    if (this.field.multiple && values.length==0) {
+        return false;
+    }
+
+    // to simplify things always work with arrays.
+    if (!this.field.multiple) {
+        values = [values];
+    }
+
+    if( this.mode == "is" ) {
+        return this.termIs( values );
+    }
+    
+    // not 'is' so must be a 'contains' search
+    return this.termContains( values );
+}
+
+/*
+ *  TextFilter
+ *  
+ */
+function TextFilter( field ) {
+    Filter.call( this, field );
+}
+TextFilter.prototype = Object.create(Filter.prototype);
+
+/*
+ *  TextFilter
+ *  
+ */
+function IntegerFilter( field ) {
+    Filter.call( this, field );
+    this.mode = "between";
+    this.term2 = "";
+}
+IntegerFilter.prototype = Object.create(Filter.prototype);
+
+/*
+ *  TextFilter
+ *  
+ */
+function DateFilter( field ) {
+    Filter.call( this, field );
+    this.mode = "between";
+    this.term2 = "";
+}
+DateFilter.prototype = Object.create(Filter.prototype);
+
+/*
+ *  TextFilter
+ *  
+ */
+function EnumFilter( field ) {
+    Filter.call( this, field );
+}
+EnumFilter.prototype = Object.create(Filter.prototype);
+
+
+/*
+ *  Vue Components
+ */
+
 var HomePage = Vue.component("home-page", {
     data: function () {
         return this.$root.defaultDataset;
@@ -153,108 +281,16 @@ var app = new Vue({
                 for (field_i = 0; field_i < source.config.fields.length; ++field_i) {
                     var field = source.config.fields[field_i];
                     dataset.fields_by_id[field.id] = field;
-                    var filter_item;
-
-                    switch (field.type) {
-                        case "text":
-                            filter_item = {
-                                value: "", mode: "is", field: field, matches: function (record) {
-                                    if (this.value.trim() == "") {
-                                        return true;
-                                    }
-
-                                    var values = record[this.field.id].value;
-                                    if (values === null) {
-                                        return false;
-                                    }
-
-                                    // to simplify things always work with arrays.
-                                    if (!this.field.multiple) {
-                                        values = [values];
-                                    }
-
-                                    if (this.mode == "is") {
-                                        var term = this.value.trim().toLowerCase()
-                                        for (var i = 0; i < values.length; i++) {
-                                            var value = values[i];
-                                            if (value.toLowerCase() == term) {
-                                                return true;
-                                            }
-                                        }
-                                        return false;
-                                    }
-
-                                    // not 'is' so must be a 'contains' search
-                                    // check that all the terms are found in the record
-                                    var terms = this.value.trim().toLowerCase().split(/\s+/);
-
-                                    for (var i = 0; i < terms.length; i++) {
-                                        var term = terms[i];
-                                        var term_found = false;
-                                        for (var j = 0; j < values.length; j++) {
-
-                                            var value = values[j];
-                                            if (value.toLowerCase().indexOf(term) > -1) {
-                                                term_found = true;
-                                                break;
-                                            }
-                                        }
-
-                                        // has to match all terms
-                                        if (!term_found) {
-                                            return false;
-                                        }
-
-                                    }
-
-                                    return true;
-
-                                }
-                            };
-                            break;
-                        case "integer":
-                            filter_item = {
-                                value: "",
-                                value2: "",
-                                mode: "between",
-                                field: field,
-                                matches: function (record) {
-                                    return true
-                                }
-                            };
-                            break;
-                        case "enum":
-                            filter_item = {
-                                value: "", mode: "is", field: field, matches: function (record) {
-                                    return true
-                                }
-                            };
-                            break;
-                        case "date":
-                            filter_item = {
-                                value: "",
-                                value2: "",
-                                mode: "between",
-                                field: field,
-                                matches: function (record) {
-                                    return true
-                                }
-                            };
-                            break;
-                        default:
-                            break;
-                    }
 
                     if (field.type == "enum") {
                         // init enum registry for an enum field
                         enums[field.id] = {};
                     }
 
-
-                    dataset.filters_by_id[field.id] = filter_item;
-                    dataset.filters.push(filter_item);
+                    var filter = makeFilter( field );
+                    dataset.filters_by_id[field.id] = filter;
+                    dataset.filters.push(filter);
                 }
-
 
                 // create a lookup table for record by id
                 dataset.records_by_id = {};
