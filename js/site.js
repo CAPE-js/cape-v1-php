@@ -256,8 +256,38 @@ function FreeTextFilter( field ) {
 }
 FreeTextFilter.prototype = Object.create(Filter.prototype);
 FreeTextFilter.prototype.matchesRecord = function(record) {
-    console.log( "HI" );
-};
+    // check that all the terms are found in the record
+    
+    var terms = this.term.toLowerCase().split(/\s+/);
+
+    termloop: for (var i = 0; i < terms.length; i++) {
+        var term = terms[i];
+        var term_found = false;
+        var fieldnames = Object.keys( record );
+        fieldloop: for( var j=0; j<fieldnames.length; j++ ) {
+             var values = record[fieldnames[j]].value;
+             if( values == undefined ) { break; }
+             if( !record[fieldnames[j]].field.multiple ) {
+                 values = [values];
+             }
+             valueloop: for (var k = 0; k < values.length; k++) {
+                  var value = ""+values[k]; // force it into a string
+                  if (value.toLowerCase().indexOf(term) > -1) {
+                      term_found = true;
+                      break fieldloop;
+                  }
+             }
+        }
+
+        // has to match all terms
+        if (!term_found) {
+            return false;
+        }
+
+    }
+
+    return true;
+}
 
 
 
@@ -461,8 +491,8 @@ var app = new Vue({
                 dataset.quick_filters = [];
                 dataset.other_filters = [];
                 dataset.show_all_filters = false;
-	
-		var free_text_filter = makeFilter( { label:"Any text", quick_search:true, type:"freetext" } );
+
+                var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext" } );
                 dataset.filters.push(free_text_filter);
                 dataset.quick_filters.push(free_text_filter);
 
