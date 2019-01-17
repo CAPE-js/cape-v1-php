@@ -17,7 +17,7 @@
     <script src="./js/html5shiv.min.js"></script>
     <script src="./js/respond.min.js"></script>
     <![endif]-->
- 
+
     <script src="local.js"></script>
 
     <script src="js/vue.js"></script>
@@ -58,22 +58,37 @@
 
 <script type="text/x-template" id="templateApp">
     <div>
-    <template v-if="sourceData.status == 'ERROR'">
+    <template v-if="app_status == 'dev'">
+        <div class="card bg-warning">
+          <div class="card-body">
+             This is a development instance of this service.
+          </div>
+      </div>
+    </template>
+    <template v-if="app_status == 'pprd'">
+        <div class="card bg-warning">
+          <div class="card-body">
+             This is the pre-production instance of this service.
+          </div>
+      </div>
+    </template>
+    
+    <template v-if="source_data.status == 'ERROR'">
         <div class="row">
         <div class="col">
             <h2>Unable to load data</h2>
-            <p>An error has occurred. The error was: {{ sourceData.error_message }}.</p>
+            <p>An error has occurred. The error was: {{ source_data.error_message }}.</p>
         </div>
         </div>
     </template>
-    <template v-if="sourceData.status == 'LOADING'">
+    <template v-if="source_data.status == 'LOADING'">
         <div class="row">
         <div class="col">
             Please wait while the data loads.
         </div>
         </div>
     </template>
-    <template v-if="sourceData.status == 'OK'">
+    <template v-if="source_data.status == 'OK'">
         <dataset v-bind:dataset="defaultDataset"></dataset>
     </template>
     </div>
