@@ -237,7 +237,7 @@ var HomePage = Vue.component("home-page", {
             for (var i = 0; i < this.filters.length; i++) {
                 // does the filter pass?
                 var filter = this.filters[i];
-                if (filter.isSet()) {
+                if (filter.isSet() && ( this.show_all_filters || filter.field.quick_search )) {
                     active_filters.push(filter);
                 }
             }
@@ -391,6 +391,9 @@ var app = new Vue({
                 dataset.fields_by_id = {};
                 dataset.filters_by_id = {};
                 dataset.filters = [];
+                dataset.quick_filters = [];
+                dataset.other_filters = [];
+                dataset.show_all_filters = false;
                 for (field_i = 0; field_i < source.config.fields.length; ++field_i) {
                     var field = source.config.fields[field_i];
                     dataset.fields_by_id[field.id] = field;
@@ -403,6 +406,11 @@ var app = new Vue({
                     var filter = makeFilter( field );
                     dataset.filters_by_id[field.id] = filter;
                     dataset.filters.push(filter);
+                    if( field.quick_search ) {
+                         dataset.quick_filters.push(filter);
+                    } else {
+                         dataset.other_filters.push(filter);
+                    }
                 }
 
                 // create a lookup table for record by id

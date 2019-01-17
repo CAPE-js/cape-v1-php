@@ -21,7 +21,8 @@
 					"type":"date",
 					"source_heading":"Date",
 					"label":"Date",
-					"description":""
+					"description":"",
+					"quick_search":true
 				},
 				{
 					"id":"title",
