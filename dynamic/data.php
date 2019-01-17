@@ -91,9 +91,11 @@ function map_dataset( $config, $source ) {
 				if( $field["source_split"] ) {
 					$parts = preg_split( "/".$field["source_split"]."/", trim($value) );
 					foreach( $parts as $part ) {
-						$out_record[$field["id"]] []= $part;
-						# force integers to be integers	
-						if( $field["type"]=="integer" && !empty($part) ) { $value+=0; }
+						if( !empty( $part )) {
+							# force integers to be integers	
+							if( $field["type"]=="integer" ) { $part+=0; }
+							$out_record[$field["id"]] []= $part;
+						}
 					}
 				} else {
 					# force integers to be integers	
