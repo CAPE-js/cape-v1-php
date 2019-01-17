@@ -354,8 +354,14 @@ var app = new Vue({
     },
     template: "#templateApp",
     created: function () {
+        if (typeof data_location === 'undefined') {
+            this.sourceData.status = "ERROR";
+            this.sourceData.error_message = "Please ensure that local.js sets the property data_location";
+            return;
+        }
+            
         // GET /someUrl
-        this.$http.get('/example-data.json').then(response => {
+        this.$http.get( data_location ).then(response => {
             // get body data
             if (!isObject(response.body)) {
                 this.sourceData.status = "ERROR";
