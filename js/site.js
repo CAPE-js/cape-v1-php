@@ -5,6 +5,7 @@ function makeFilter( field ) {
         case "integer": return new IntegerFilter( field ); 
         case "enum":    return new EnumFilter( field ); 
         case "date":    return new DateFilter( field ); 
+        case "freetext":return new FreeTextFilter( field ); 
     }
     console.log("No filter for field type "+field.type);
 }
@@ -246,6 +247,17 @@ EnumFilter.prototype.matchesValues = function(values) {
     return this.matchesValuesIs( values );
 }
 
+/*
+ *  FreeTextFilter
+ *  
+ */
+function FreeTextFilter( field ) {
+    Filter.call( this, field );
+}
+FreeTextFilter.prototype = Object.create(Filter.prototype);
+FreeTextFilter.prototype.matchesRecord = function(record) {
+    console.log( "HI" );
+};
 
 
 
@@ -303,6 +315,8 @@ var HomePage = Vue.component("home-page", {
                 var bv = b[dataset.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
                 if(typeof bv === 'array') { bv = bv[0]; }
+                if( av == null ) { av = ""; }
+                if( bv == null ) { bv = ""; }
                 av = av.toLowerCase();
                 bv = bv.toLowerCase();
                 if( av==bv ) { return 0; }
@@ -437,17 +451,21 @@ var app = new Vue({
                 // add config to dataset
                 dataset.config = source.config;
 
-                // add fields mapped by ID, and populate the filter object
                 // initialise enum registries
                 var enums = {};
+
+                // add fields mapped by ID, and populate the filter object
                 dataset.fields_by_id = {};
                 dataset.filters_by_id = {};
                 dataset.filters = [];
                 dataset.quick_filters = [];
                 dataset.other_filters = [];
                 dataset.show_all_filters = false;
-                dataset.sort_dir = "asc"; // or desc
-                dataset.sort_fields = [];
+	
+		var free_text_filter = makeFilter( { label:"Any text", quick_search:true, type:"freetext" } );
+                dataset.filters.push(free_text_filter);
+                dataset.quick_filters.push(free_text_filter);
+
                 for (field_i = 0; field_i < source.config.fields.length; ++field_i) {
                     var field = source.config.fields[field_i];
                     dataset.fields_by_id[field.id] = field;
@@ -507,6 +525,8 @@ var app = new Vue({
                 })};
 
                 // expand sort field names into actual field objects for MVC
+                dataset.sort_dir = "asc"; // or desc
+                dataset.sort_fields = [];
                 for( var i=0; i<dataset.config.sort.length; ++i ) {
                      var field = dataset.fields_by_id[ dataset.config.sort[i] ];
                      dataset.sort_fields.push( field );
