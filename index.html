@@ -117,35 +117,35 @@
     <div class="col-sm-2 text-sm-right" >{{filter.field.label}}</div>
     <template v-if="filter.field.type=='text'">
       <div class="col-sm-2">
-          <select v-model="filter.mode"><option value="is">is</option><option value="contains">contains</option></select>
+          <select v-model.trim="filter.mode"><option value="is">is</option><option value="contains">contains</option></select>
       </div>
       <div class="col-sm-8">
-          <input v-model="filter.term" />
+          <input v-model.trim="filter.term" />
       </div>
     </template>
     <template v-else-if="filter.field.type=='integer'">
       <div class="col-sm-2">
-          <select v-model="filter.mode"><option value="is">is</option><option value="between">is between</option></select> 
+          <select v-model.trim="filter.mode"><option value="is">is</option><option value="between">is between</option></select>
       </div>
       <div class="col-sm-8">
           <template v-if="filter.mode=='is'">
-              <input v-model="filter.term" type="number" />
+              <input v-model.number="filter.term" type="number" />
           </template>
           <template v-if="filter.mode=='between'">
-              <input v-model="filter.term" type="number" /> and <input v-model="filter.term2" type="number" />
+              <input v-model.number="filter.term" type="number" /> and <input v-model.number="filter.term2" type="number" />
           </template>
        </div>
     </template>
       <template v-else-if="filter.field.type=='date'">
           <div class="col-sm-2">
-              <select v-model="filter.mode"><option value="is">is</option><option value="between">is between</option></select>
+              <select v-model.trim="filter.mode"><option value="is">is</option><option value="between">is between</option></select>
           </div>
           <div class="col-sm-8">
               <template v-if="filter.mode=='is'">
-                  <input v-model="filter.term" />
+                  <input v-model.trim="filter.term" />
               </template>
               <template v-if="filter.mode=='between'">
-                  <input v-model="filter.term" /> and <input v-model="filter.term2" />
+                  <input v-model.trim="filter.term" /> and <input v-model="filter.term2" />
               </template>
           </div>
       </template>
