@@ -20,7 +20,7 @@ function Filter( field ) {
 Filter.prototype.unset = function() {
     return (this.term.trim() == "");
 }
-Filter.prototype.termIs = function(values) {
+Filter.prototype.matchesValuesIs = function(values) {
     var term = this.term.trim().toLowerCase()
     for (var i = 0; i < values.length; i++) {
         var value = values[i];
@@ -30,7 +30,7 @@ Filter.prototype.termIs = function(values) {
     }
     return false;
 }
-Filter.prototype.termContains = function(values) {
+Filter.prototype.matchesValuesContains = function(values) {
     // check that all the terms are found in the record
     
     var terms = this.term.trim().toLowerCase().split(/\s+/);
@@ -56,7 +56,7 @@ Filter.prototype.termContains = function(values) {
 
     return true;
 }
-Filter.prototype.matches = function(record) {
+Filter.prototype.matchesRecord = function(record) {
     if( this.unset() ) {
         return true;
     }
@@ -73,12 +73,12 @@ Filter.prototype.matches = function(record) {
         values = [values];
     }
 
-    if( this.mode == "is" ) {
-        return this.termIs( values );
-    }
-    
-    // not 'is' so must be a 'contains' search
-    return this.termContains( values );
+    return this.matchesValues( values );
+}
+
+Filter.prototype.matchesValues = function(values) {
+    console.log( "matchesValues must be overridden!");
+    return false;
 }
 
 /*
@@ -89,9 +89,17 @@ function TextFilter( field ) {
     Filter.call( this, field );
 }
 TextFilter.prototype = Object.create(Filter.prototype);
+TextFilter.prototype.matchesValues = function(values) {
+    if( this.mode == "is" ) {
+        return this.matchesValuesIs( values );
+    } else {
+        // not 'is' so must be a 'contains' search
+        return this.matchesValuesContains( values );
+    }
+}
 
 /*
- *  TextFilter
+ *  IntegerFilter
  *  
  */
 function IntegerFilter( field ) {
@@ -100,9 +108,29 @@ function IntegerFilter( field ) {
     this.term2 = "";
 }
 IntegerFilter.prototype = Object.create(Filter.prototype);
+IntegerFilter.prototype.matchesValues = function(values) {
+    if( this.mode == "is" ) {
+        return this.matchesValuesIs( values );
+    } else {
+        // not 'is' so must be a 'between' search
+        return this.matchesValuesBetween( values );
+    }
+}
+IntegerFilter.prototype.matchesValuesBetween = function(values) {
+    var term = this.term.trim();
+    var term2 = this.term2.trim().toLowerCase()
+    for (var i = 0; i < values.length; i++) {
+        var value = values[i];
+        // null terms are treated as not being bounded so up-to- or from- if only one term is set
+        if ((term=="" || value >= term) && (term2=="" || value <= term2 )) {
+            return true;
+        }
+    }
+    return false;
+}
 
 /*
- *  TextFilter
+ *  DateFilter
  *  
  */
 function DateFilter( field ) {
@@ -111,15 +139,54 @@ function DateFilter( field ) {
     this.term2 = "";
 }
 DateFilter.prototype = Object.create(Filter.prototype);
+DateFilter.prototype.matchesValues = function(values) {
+    if( this.mode == "is" ) {
+        return this.matchesValuesIs( values );
+    } else {
+        // not 'is' so must be a 'between' search
+        return this.matchesValuesBetween( values );
+    }
+}
+// for dates, date "is" actually is 'starts with' so that 1990-02-02 "is" 1990
+DateFilter.prototype.matchesValuesIs = function(values) {
+    var term = this.term.trim().toLowerCase()
+    for (var i = 0; i < values.length; i++) {
+        var value = values[i];
+        if (value.indexOf(term) == 0 ) {
+            return true; 
+        }
+    }
+    return false;
+}
+DateFilter.prototype.matchesValuesBetween = function(values) {
+    // Pad dates if they are missing month and day
+    var term = this.term.trim();
+    if( term.length == 4 ) { term += "-00"; }
+    if( term.length == 7 ) { term += "-00"; }
+    var term2 = this.term2.trim().toLowerCase()
+    if( term2.length == 4 ) { term2 += "-99"; }
+    if( term2.length == 7 ) { term2 += "-99"; }
+    for (var i = 0; i < values.length; i++) {
+        var value = values[i];
+        // null terms are treated as not being bounded so up-to- or from- if only one term is set
+        if ((term=="" || value >= term) && (term2=="" || value <= term2 )) {
+            return true;
+        }
+    }
+    return false;
+}
 
 /*
- *  TextFilter
+ *  EnumFilter
  *  
  */
 function EnumFilter( field ) {
     Filter.call( this, field );
 }
 EnumFilter.prototype = Object.create(Filter.prototype);
+EnumFilter.prototype.matchesValues = function(values) {
+    return this.matchesValuesIs( values );
+}
 
 
 /*
@@ -147,7 +214,7 @@ var HomePage = Vue.component("home-page", {
                 for (var j = 0; j < this.filters.length; j++) {
                     // does the filter pass?
                     var filter = this.filters[j];
-                    if (!filter.matches(record)) {
+                    if (!filter.matchesRecord(record)) {
                         all_match = false;
                         break;
                     }
