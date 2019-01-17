@@ -97,6 +97,7 @@ h2 {
 .summary-card {
     background-color: #f3f3f3;
     border:none;
+    cursor: pointer;
 }
 
 .summary-card .card-title {
