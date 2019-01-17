@@ -368,7 +368,7 @@ var app = new Vue({
         }
             
         // GET /someUrl
-        this.$http.get( data_location ).then(response => {
+        this.$http.get( data_location ).then(function(response) {
             // get body data
             if (!isObject(response.body)) {
                 this.source_data.status = "ERROR";
@@ -449,7 +449,7 @@ var app = new Vue({
                     this.defaultDataset = dataset;
                 }
             }
-        }, response => {
+        }, function(response) {
             // error callback
             this.source_data.status = "ERROR"
             this.source_data.error_message = "Error loading data over network";
