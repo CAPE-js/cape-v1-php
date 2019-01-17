@@ -271,10 +271,10 @@ var HomePage = Vue.component("home-page", {
                 var bv = b[dataset.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
                 if(typeof bv === 'array') { bv = bv[0]; }
-		if( av==bv ) { return 0; }
-		if( dataset.sort_dir == 'asc'  && av>bv ) { return 1; }
-		if( dataset.sort_dir == 'desc' && av<bv ) { return 1; }
-		return -1;
+                if( av==bv ) { return 0; }
+                if( dataset.sort_dir == 'asc'  && av>bv ) { return 1; }
+                if( dataset.sort_dir == 'desc' && av<bv ) { return 1; }
+                return -1;
             }); 
             return records_to_show;
         }
@@ -446,11 +446,17 @@ var app = new Vue({
                             // convert 25/12/2001 to 2001-12-25 TODO: this should use sprintf or date functions
                             value = value.split("/").reverse().join("-");
                         }
-                        if (field.type == "enum") {
-                            // init enum registry for an enum field
-                            enums[field.id][value] = 1;
-                        }
                         record[field.id] = {value: value, field: field}
+
+                        if (field.type == "enum") {
+                            var enum_values = value;
+                            if( !field.multiple ) { enum_values = [ enum_values ]; }
+                            for( var i=0;i<enum_values.length;i++ ) { 
+                                if( enum_values[i] != "" ) {
+                                    enums[field.id][enum_values[i]] = 1;
+                                } 
+                            } 
+                        }
                     }
                     dataset.records_by_id[source_record[dataset.config.id_field]] = record;
                     dataset.records.push(record);
