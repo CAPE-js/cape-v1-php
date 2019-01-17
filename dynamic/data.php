@@ -30,7 +30,7 @@ foreach( $config["datasets"] as $dataset_config ) {
 }
 
 # output json file
-print json_encode( array( "status"=>"OK", "datasets"=>$datasets ), JSON_NUMERIC_CHECK );
+print json_encode( array( "status"=>"OK", "datasets"=>$datasets ), JSON_NUMERIC_CHECK|JSON_PRETTY_PRINT );
 
 exit;
 
