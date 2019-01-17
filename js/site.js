@@ -309,7 +309,13 @@ Vue.component("index-card", {
 
 Vue.component("summary-card", {
     props: ["record"],
-    template: "#templateSummaryCard"
+    template: "#templateSummaryCard",
+    methods: {
+        showIndexCard: function() {
+            var record_id = this.record.record_number.value;
+            this.$router.push({name: "record", params: { id: record_id }})
+        }
+    }
 });
 
 Vue.component("field-value", {
@@ -453,9 +459,9 @@ var app = new Vue({
 
     router: new VueRouter({
         routes: [
-            {path: '/', component: HomePage},
-            {path: '/data', component: DataPage},
-            {path: '/record/:id', component: RecordPage},
+            {name: 'root', path: '/', component: HomePage},
+            {name: 'data', path: '/data', component: DataPage},
+            {name: 'record', path: '/record/:id', component: RecordPage},
         ]
     })
 

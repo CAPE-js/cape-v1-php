@@ -9,7 +9,8 @@
     <link href="css/bootstrap-4.0.0/bootstrap.css" rel="stylesheet">
     <link href="css/site.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -17,7 +18,7 @@
     <script src="./js/html5shiv.min.js"></script>
     <script src="./js/respond.min.js"></script>
     <![endif]-->
- 
+
     <script src="local.js"></script>
 
     <script src="js/vue.js"></script>
@@ -42,9 +43,9 @@
         <img src="./assets/new-fmc-logo.jpg" alt="Header image"/>
     </div>
     <div class="row">
-    <div class="col">
-        <h1>Music in the Second Empire Theatre</h1>
-    </div>
+        <div class="col">
+            <h1>Music in the Second Empire Theatre</h1>
+        </div>
     </div>
 
     <div id="app"></div>
@@ -58,39 +59,40 @@
 
 <script type="text/x-template" id="templateApp">
     <div>
-    <template v-if="sourceData.status == 'ERROR'">
-        <div class="row">
-        <div class="col">
-            <h2>Unable to load data</h2>
-            <p>An error has occurred. The error was: {{ sourceData.error_message }}.</p>
-        </div>
-        </div>
-    </template>
-    <template v-if="sourceData.status == 'LOADING'">
-        <div class="row">
-        <div class="col">
-            Please wait while the data loads.
-        </div>
-        </div>
-    </template>
-    <template v-if="sourceData.status == 'OK'">
-        <dataset v-bind:dataset="defaultDataset"></dataset>
-    </template>
+        <template v-if="sourceData.status == 'ERROR'">
+            <div class="row">
+                <div class="col">
+                    <h2>Unable to load data</h2>
+                    <p>An error has occurred. The error was: {{ sourceData.error_message }}.</p>
+                </div>
+            </div>
+        </template>
+        <template v-if="sourceData.status == 'LOADING'">
+            <div class="row">
+                <div class="col">
+                    Please wait while the data loads.
+                </div>
+            </div>
+        </template>
+        <template v-if="sourceData.status == 'OK'">
+            <dataset v-bind:dataset="defaultDataset"></dataset>
+        </template>
     </div>
 </script>
 
 <script type="text/x-template" id="templateDataset">
-<div>
+    <div>
         <nav class="row">
-        <nav class="col">
-            <p>
-                <router-link to="/">Dataset home</router-link> | 
-                <router-link to="/data">Dataset schema and download</router-link>
-            </p>
-         </nav>
-         </nav>
-         <router-view></router-view>
-</div>
+            <nav class="col">
+                <p>
+                    <router-link to="/">Dataset home</router-link>
+                    |
+                    <router-link to="/data">Dataset schema and download</router-link>
+                </p>
+            </nav>
+        </nav>
+        <router-view></router-view>
+    </div>
 </script>
 
 <script type="text/x-template" id="templateHome">
@@ -113,176 +115,194 @@
 </script>
 
 <script type="text/x-template" id="templateFilterForm">
-<div class='filter-form'>
-  <p>This is a first stab at generating search form fields.</p>
-  <div v-for="filter in filters" class="form-row">
-    <div class="col-sm-2 text-sm-right" >{{filter.field.label}}</div>
-    <template v-if="filter.field.type=='text'">
-      <div class="col-sm-2">
-          <select v-model.trim="filter.mode"><option value="is">is</option><option value="contains">contains</option></select>
-      </div>
-      <div class="col-sm-8">
-          <input v-model.trim="filter.term" />
-      </div>
-    </template>
-    <template v-else-if="filter.field.type=='integer'">
-      <div class="col-sm-2">
-          <select v-model.trim="filter.mode"><option value="is">is</option><option value="between">is between</option></select>
-      </div>
-      <div class="col-sm-8">
-          <template v-if="filter.mode=='is'">
-              <input v-model.number="filter.term" type="number" />
-          </template>
-          <template v-if="filter.mode=='between'">
-              <input v-model.number="filter.term" type="number" /> and <input v-model.number="filter.term2" type="number" />
-          </template>
-       </div>
-    </template>
-      <template v-else-if="filter.field.type=='date'">
-          <div class="col-sm-2">
-              <select v-model.trim="filter.mode"><option value="is">is</option><option value="between">is between</option></select>
-          </div>
-          <div class="col-sm-8">
-              <template v-if="filter.mode=='is'">
-                  <input v-model.trim="filter.term" />
-              </template>
-              <template v-if="filter.mode=='between'">
-                  <input v-model.trim="filter.term" /> and <input v-model="filter.term2" />
-              </template>
-          </div>
-      </template>
-    <template v-else>
-      <div class="col-sm-10"> 
-            Render as drop down <!-- {{ filter.field }}-->
-      </div>
-    </template>
-  </div>
-</div>
+    <div class='filter-form'>
+        <p>This is a first stab at generating search form fields.</p>
+        <div v-for="filter in filters" class="form-row">
+            <div class="col-sm-2 text-sm-right">{{filter.field.label}}</div>
+            <template v-if="filter.field.type=='text'">
+                <div class="col-sm-2">
+                    <select v-model.trim="filter.mode">
+                        <option value="is">is</option>
+                        <option value="contains">contains</option>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <input v-model.trim="filter.term"/>
+                </div>
+            </template>
+            <template v-else-if="filter.field.type=='integer'">
+                <div class="col-sm-2">
+                    <select v-model.trim="filter.mode">
+                        <option value="is">is</option>
+                        <option value="between">is between</option>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <template v-if="filter.mode=='is'">
+                        <input v-model.number="filter.term" type="number"/>
+                    </template>
+                    <template v-if="filter.mode=='between'">
+                        <input v-model.number="filter.term" type="number"/> and <input v-model.number="filter.term2"
+                                                                                       type="number"/>
+                    </template>
+                </div>
+            </template>
+            <template v-else-if="filter.field.type=='date'">
+                <div class="col-sm-2">
+                    <select v-model.trim="filter.mode">
+                        <option value="is">is</option>
+                        <option value="between">is between</option>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <template v-if="filter.mode=='is'">
+                        <input v-model.trim="filter.term"/>
+                    </template>
+                    <template v-if="filter.mode=='between'">
+                        <input v-model.trim="filter.term"/> and <input v-model="filter.term2"/>
+                    </template>
+                </div>
+            </template>
+            <template v-else>
+                <div class="col-sm-10">
+                    Render as drop down <!-- {{ filter.field }}-->
+                </div>
+            </template>
+        </div>
+    </div>
 </script>
 
 <script type="text/x-template" id="templateData">
     <div class="row">
-    <div class="col">
-    <h2>About the data</h2>
-    <p>This dataset has been created and shared with the intention it should be reused. The fields in the dataset are described below.</p>
-    <h2>Schema</h2>
-    <p>Field types may be text, date, integer or enum. An enum field is short for enumerated, which means a limited set of terms rather than free text.</p>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Field id</th>
-            <th scope="col">Field name</th>
-            <th scope="col">Field type</th>
-            <th scope="col">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr v-for="field in getConfigFields()">
-                <td>{{ field.id }}</td>
-                <td>{{ field.label }}</td>
-                <td>{{ field.type }} <span v-if="field.multiple"> list</span></td>
-                <td>{{ field.description }}</td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
+        <div class="col">
+            <h2>About the data</h2>
+            <p>This dataset has been created and shared with the intention it should be reused. The fields in the
+                dataset are described below.</p>
+            <h2>Schema</h2>
+            <p>Field types may be text, date, integer or enum. An enum field is short for enumerated, which means a
+                limited set of terms rather than free text.</p>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Field id</th>
+                    <th scope="col">Field name</th>
+                    <th scope="col">Field type</th>
+                    <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="field in getConfigFields()">
+                    <td>{{ field.id }}</td>
+                    <td>{{ field.label }}</td>
+                    <td>{{ field.type }} <span v-if="field.multiple"> list</span></td>
+                    <td>{{ field.description }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </script>
 
 <script type="text/x-template" id="templateRecord">
     <div>
-    <div class="row">
-    <div class="col">
-        <index-card v-if="records_by_id[ $route.params.id ]" v-bind:record="records_by_id[ $route.params.id ]"></index-card>
-        <div v-else>
-           <p>NO SUCH RECORD</p>
+        <div class="row">
+            <div class="col">
+                <index-card v-if="records_by_id[ $route.params.id ]"
+                            v-bind:record="records_by_id[ $route.params.id ]"></index-card>
+                <div v-else>
+                    <p>NO SUCH RECORD</p>
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
     </div>
 </script>
 
 <script type="text/x-template" id="templateFieldLabelAndValue">
-   <div class="field-label-and-value"> 
-      <div class="field-label">{{ typedValue.field.label }}</div>
-      <field-value v-bind:typedValue="typedValue"></field-value>
-   </div>
+    <div class="field-label-and-value">
+        <div class="field-label">{{ typedValue.field.label }}</div>
+        <field-value v-bind:typedValue="typedValue"></field-value>
+    </div>
 </script>
 
 <script type="text/x-template" id="templateSummaryCard">
     <div class="summary-card card mb-1">
-        <div class="card-body">
-            <div class="row pb-1">
-                <div class="col-sm-10 card-title">
-                    <field-value v-bind:typedValue="record.title"></field-value>
+            <div class="card-body" v-on:click="showIndexCard" title="See full details.">
+                <div class="row pb-1">
+                    <div class="col-sm-10 card-title">
+                        <field-value v-bind:typedValue="record.title"></field-value>
+                    </div>
+                    <div class="col-sm-2">
+                        <field-value v-bind:typedValue="record.date"></field-value>
+                    </div>
                 </div>
-                <div class="col-sm-2">
-                    <field-value v-bind:typedValue="record.date"></field-value>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <i class="fas fa-music pr-1" title="Composer"></i><span class="sr-only">Composer</span><field-value v-bind:typedValue="record.composer" class="pr-2"></field-value>
-                    <i class="fas fa-pen pr-1" title="Authors"></i><span class="sr-only">Composer</span><field-value v-bind:typedValue="record.author"></field-value>
-                </div>
+                <div class="row">
+                    <div class="col">
+                        <i class="fas fa-music pr-1" title="Composer"></i><span class="sr-only">Composer</span>
+                        <field-value v-bind:typedValue="record.composer" class="pr-2"></field-value>
+                        <i class="fas fa-pen pr-1" title="Authors"></i><span class="sr-only">Composer</span>
+                        <field-value v-bind:typedValue="record.author"></field-value>
+                    </div>
 
+                </div>
             </div>
-        </div>
+
     </div>
 </script>
 
 <script type="text/x-template" id="templateIndexCard">
-  <div class="card index-card">
-  <div class="card-body">
-    <h5 class="card-title"><field-value v-bind:typedValue="record.title"></field-value></h5>
-  <div class="row">
-        <div class="col-md">
-          <field-label-and-value v-bind:typedValue="record.date"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.title"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.acts"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.genre"></field-label-and-value>
-          <br />
-          <field-label-and-value v-bind:typedValue="record.numbers_act_1"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.numbers_act_2"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.numbers_act_3"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.total_numbers"></field-label-and-value>
-          <br />
-          <field-label-and-value v-bind:typedValue="record.male"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.female"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.author"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.composer"></field-label-and-value>
-          <br />
-          <field-label-and-value v-bind:typedValue="record.emplois_listed_in_vs"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.dance_number"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.melodrame"></field-label-and-value>
-        </div>
-        <div class="col-md">
-          <field-label-and-value v-bind:typedValue="record.institution"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.original_date"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.original_institution"></field-label-and-value>
-          <br />
-          <field-label-and-value v-bind:typedValue="record.metteur_en_scene"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.libretto_publisher"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.libretto_total_pages"></field-label-and-value>
-          <br />
-          <field-label-and-value v-bind:typedValue="record.vs_publisher"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.vs_arranger"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.vs_total_pages"></field-label-and-value>
-          <br />
-          <field-label-and-value v-bind:typedValue="record.record_number"></field-label-and-value>
-        </div>
-      </div>
-      <div class="row">
-        </div class="col-md">
-          (fields not in current example we're working from!)
-          <field-label-and-value v-bind:typedValue="record.arranger"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.original_author"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.original_composer"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.original_title"></field-label-and-value>
-          <field-label-and-value v-bind:typedValue="record.tableaux"></field-label-and-value>
+    <div class="card index-card">
+        <div class="card-body">
+            <h5 class="card-title">
+                <field-value v-bind:typedValue="record.title"></field-value>
+            </h5>
+            <div class="row">
+                <div class="col-md">
+                    <field-label-and-value v-bind:typedValue="record.date"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.title"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.acts"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.genre"></field-label-and-value>
+                    <br/>
+                    <field-label-and-value v-bind:typedValue="record.numbers_act_1"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.numbers_act_2"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.numbers_act_3"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.total_numbers"></field-label-and-value>
+                    <br/>
+                    <field-label-and-value v-bind:typedValue="record.male"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.female"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.author"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.composer"></field-label-and-value>
+                    <br/>
+                    <field-label-and-value v-bind:typedValue="record.emplois_listed_in_vs"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.dance_number"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.melodrame"></field-label-and-value>
+                </div>
+                <div class="col-md">
+                    <field-label-and-value v-bind:typedValue="record.institution"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.original_date"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.original_institution"></field-label-and-value>
+                    <br/>
+                    <field-label-and-value v-bind:typedValue="record.metteur_en_scene"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.libretto_publisher"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.libretto_total_pages"></field-label-and-value>
+                    <br/>
+                    <field-label-and-value v-bind:typedValue="record.vs_publisher"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.vs_arranger"></field-label-and-value>
+                    <field-label-and-value v-bind:typedValue="record.vs_total_pages"></field-label-and-value>
+                    <br/>
+                    <field-label-and-value v-bind:typedValue="record.record_number"></field-label-and-value>
+                </div>
+            </div>
+            <div class="row">
+            </div class="col-md">
+            (fields not in current example we're working from!)
+            <field-label-and-value v-bind:typedValue="record.arranger"></field-label-and-value>
+            <field-label-and-value v-bind:typedValue="record.original_author"></field-label-and-value>
+            <field-label-and-value v-bind:typedValue="record.original_composer"></field-label-and-value>
+            <field-label-and-value v-bind:typedValue="record.original_title"></field-label-and-value>
+            <field-label-and-value v-bind:typedValue="record.tableaux"></field-label-and-value>
         </div>
     </div>
-  </div>
+    </div>
     </div>
 </script>
 
