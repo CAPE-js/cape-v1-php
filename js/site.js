@@ -264,6 +264,18 @@ var HomePage = Vue.component("home-page", {
                 }
             }
 
+            // sort records based on sort field
+            var dataset = this;
+            records_to_show.sort( function(a,b) {
+                var av = a[dataset.sort_field].value;
+                var bv = b[dataset.sort_field].value;
+                if(typeof av === 'array') { av = av[0]; }
+                if(typeof bv === 'array') { bv = bv[0]; }
+		if( av==bv ) { return 0; }
+		if( dataset.sort_dir == 'asc'  && av>bv ) { return 1; }
+		if( dataset.sort_dir == 'desc' && av<bv ) { return 1; }
+		return -1;
+            }); 
             return records_to_show;
         }
     },
@@ -394,6 +406,8 @@ var app = new Vue({
                 dataset.quick_filters = [];
                 dataset.other_filters = [];
                 dataset.show_all_filters = false;
+                dataset.sort_dir = "asc"; // or desc
+                dataset.sort_fields = [];
                 for (field_i = 0; field_i < source.config.fields.length; ++field_i) {
                     var field = source.config.fields[field_i];
                     dataset.fields_by_id[field.id] = field;
@@ -442,6 +456,13 @@ var app = new Vue({
                 for (var enum_i = 0; enum_i < enum_fields.length; enum_i++) {
                     dataset.fields_by_id[enum_fields[enum_i]].options = Object.keys(enums[enum_fields[enum_i]]).sort();
                 }
+
+                // expand sort field names into actual field objects for MVC
+                for( var i=0; i<dataset.config.sort.length; ++i ) {
+                     var field = dataset.fields_by_id[ dataset.config.sort[i] ];
+                     dataset.sort_fields.push( field );
+                }
+                dataset.sort_field = dataset.sort_fields[0].id;
 
                 // add dataset to our dataset collection
                 this.datasets_by_id[dataset.config.id] = dataset;

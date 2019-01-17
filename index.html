@@ -113,12 +113,19 @@
     <form>
         <div class="row">
             <div class="col">
+                <filter-form v-if="show_all_filters" v-bind:filters="filters"></filter-form>
+                <filter-form v-else v-bind:filters="quick_filters"></filter-form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                Order results by <select v-model="sort_field"><option v-for="field in sort_fields" v-bind:value="field.id">{{field.label}}</option></select><select v-model="sort_dir"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
+            </div>
+            <div class="col-sm-6 text-sm-right">
                 <div class="switch switch-sm">
                   <input v-model="show_all_filters" type="checkbox" class="switch" id="show-all-filters" />
                   <label for="show-all-filters">Show all filters</label>
                 </div>
-                <filter-form v-if="show_all_filters" v-bind:filters="filters"></filter-form>
-                <filter-form v-else v-bind:filters="quick_filters"></filter-form>
             </div>
         </div>
         <div class="row">
