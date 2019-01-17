@@ -1,3 +1,4 @@
+// filter factory
 function makeFilter( field ) {
     switch (field.type) {
         case "text":    return new TextFilter( field ); 
@@ -10,18 +11,20 @@ function makeFilter( field ) {
 
 /*
  *  Filter
- *  abstract base class, should not be instatiated directly
+ *  abstract base class, should not be instantiated directly
  */
 function Filter( field ) {
     this.term = "";
     this.mode = "contains";
     this.field = field;
 }
-Filter.prototype.unset = function() {
-    return (this.term.trim() == "");
+
+Filter.prototype.isSet = function() {
+    return (this.term != "");
 }
+
 Filter.prototype.matchesValuesIs = function(values) {
-    var term = this.term.trim().toLowerCase()
+    var term = this.term.toLowerCase()
     for (var i = 0; i < values.length; i++) {
         var value = values[i];
         if (value.toLowerCase() == term) {
@@ -33,7 +36,7 @@ Filter.prototype.matchesValuesIs = function(values) {
 Filter.prototype.matchesValuesContains = function(values) {
     // check that all the terms are found in the record
     
-    var terms = this.term.trim().toLowerCase().split(/\s+/);
+    var terms = this.term.toLowerCase().split(/\s+/);
 
     for (var i = 0; i < terms.length; i++) {
         var term = terms[i];
@@ -57,9 +60,8 @@ Filter.prototype.matchesValuesContains = function(values) {
     return true;
 }
 Filter.prototype.matchesRecord = function(record) {
-    if( this.unset() ) {
-        return true;
-    }
+    /* Assumes that the filter is set */
+    
     var values = record[this.field.id].value;
     if (values === null) {
         return false;
@@ -107,7 +109,14 @@ function IntegerFilter( field ) {
     this.mode = "between";
     this.term2 = "";
 }
+
 IntegerFilter.prototype = Object.create(Filter.prototype);
+
+IntegerFilter.prototype.isSet = function() {
+    return (this.term != "" || (this.mode == "between" && this.term2 != ""));
+}
+
+
 IntegerFilter.prototype.matchesValues = function(values) {
     if( this.mode == "is" ) {
         return this.matchesValuesIs( values );
@@ -116,9 +125,21 @@ IntegerFilter.prototype.matchesValues = function(values) {
         return this.matchesValuesBetween( values );
     }
 }
+
+IntegerFilter.prototype.matchesValuesIs = function(values) {
+    // is a match if any of the supplied values are exact match
+    for(var i = 0; i < values.length; i++) {
+        if (values[i] == this.term) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 IntegerFilter.prototype.matchesValuesBetween = function(values) {
-    var term = this.term.trim();
-    var term2 = this.term2.trim().toLowerCase()
+    var term = this.term;
+    var term2 = this.term2;
     for (var i = 0; i < values.length; i++) {
         var value = values[i];
         // null terms are treated as not being bounded so up-to- or from- if only one term is set
@@ -139,6 +160,11 @@ function DateFilter( field ) {
     this.term2 = "";
 }
 DateFilter.prototype = Object.create(Filter.prototype);
+
+DateFilter.prototype.isSet = function() {
+    return (this.term != "" || (this.mode == "between" && this.term2 != ""));
+}
+
 DateFilter.prototype.matchesValues = function(values) {
     if( this.mode == "is" ) {
         return this.matchesValuesIs( values );
@@ -149,7 +175,7 @@ DateFilter.prototype.matchesValues = function(values) {
 }
 // for dates, date "is" actually is 'starts with' so that 1990-02-02 "is" 1990
 DateFilter.prototype.matchesValuesIs = function(values) {
-    var term = this.term.trim().toLowerCase()
+    var term = this.term.toLowerCase()
     for (var i = 0; i < values.length; i++) {
         var value = values[i];
         if (value.indexOf(term) == 0 ) {
@@ -160,10 +186,10 @@ DateFilter.prototype.matchesValuesIs = function(values) {
 }
 DateFilter.prototype.matchesValuesBetween = function(values) {
     // Pad dates if they are missing month and day
-    var term = this.term.trim();
+    var term = this.term;
     if( term.length == 4 ) { term += "-00"; }
     if( term.length == 7 ) { term += "-00"; }
-    var term2 = this.term2.trim().toLowerCase()
+    var term2 = this.term2.toLowerCase()
     if( term2.length == 4 ) { term2 += "-99"; }
     if( term2.length == 7 ) { term2 += "-99"; }
     for (var i = 0; i < values.length; i++) {
@@ -189,6 +215,8 @@ EnumFilter.prototype.matchesValues = function(values) {
 }
 
 
+
+
 /*
  *  Vue Components
  */
@@ -203,17 +231,27 @@ var HomePage = Vue.component("home-page", {
             return results;
         },
         filterResults: function() {
-            var records_to_show = [];
+
+            // build a list of filters to be applied
+            var active_filters = [];
+            for (var i = 0; i < this.filters.length; i++) {
+                // does the filter pass?
+                var filter = this.filters[i];
+                if (filter.isSet()) {
+                    active_filters.push(filter);
+                }
+            }
 
             // iterate over each record
+            var records_to_show = [];
             for (var i = 0; i < this.records.length; i++) {
                 var record = this.records[i];
 
-                // iterate over each filter
+                // iterate over each active filter
                 var all_match = true;
-                for (var j = 0; j < this.filters.length; j++) {
+                for (var j = 0; j < active_filters.length; j++) {
                     // does the filter pass?
-                    var filter = this.filters[j];
+                    var filter = active_filters[j];
                     if (!filter.matchesRecord(record)) {
                         all_match = false;
                         break;
@@ -329,6 +367,7 @@ var app = new Vue({
             if (this.sourceData.status == "ERROR") {
                 return;
             }
+
             this.datasets_by_id = {};
             // populate records by ID. Nb. This is using the wrong ID data for now. TODO
             for (ds_i = 0; ds_i < this.sourceData.datasets.length; ++ds_i) {
