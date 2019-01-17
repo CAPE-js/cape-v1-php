@@ -30,7 +30,7 @@ foreach( $config["datasets"] as $dataset_config ) {
 }
 
 # output json file
-print json_encode( array( "status"=>"OK", "datasets"=>$datasets ) );
+print json_encode( array( "status"=>"OK", "datasets"=>$datasets ), JSON_NUMERIC_CHECK );
 
 exit;
 
@@ -92,8 +92,12 @@ function map_dataset( $config, $source ) {
 					$parts = preg_split( "/".$field["source_split"]."/", trim($value) );
 					foreach( $parts as $part ) {
 						$out_record[$field["id"]] []= $part;
+						# force integers to be integers	
+						if( $field["type"]=="integer" && !empty($part) ) { $value+=0; }
 					}
 				} else {
+					# force integers to be integers	
+					if( $field["type"]=="integer" && !empty($part) ) { $value+=0; }
 					$out_record[$field["id"]] []= $value;
 				}
 			} else {

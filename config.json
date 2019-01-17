@@ -141,7 +141,7 @@
 				},
 				{
 					"id":"original_date",
-					"type":"text",
+					"type":"date",
 					"source_heading":"Original Date",
 					"label":"Original Date",
 					"description":""
