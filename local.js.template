@@ -9,3 +9,7 @@ data_location = "example-data.json";
 // data.php should be saved into a file called data.json 
 // and this file should have
 // data_location = "data.json";
+
+app_status='dev'
+// app_status='prod'
+// app_status='pprd'

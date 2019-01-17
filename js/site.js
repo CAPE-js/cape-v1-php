@@ -353,16 +353,17 @@ Vue.component("field-label-and-value", {
 var app = new Vue({
     el: '#app',
     data: {
-        sourceData: {
+        source_data: {
             status: "LOADING"
         },
+        app_status: (typeof app_status === 'undefined'?"dev":app_status),
         records_by_id: []
     },
     template: "#templateApp",
     created: function () {
         if (typeof data_location === 'undefined') {
-            this.sourceData.status = "ERROR";
-            this.sourceData.error_message = "Please ensure that local.js sets the property data_location";
+            this.source_data.status = "ERROR";
+            this.source_data.error_message = "Please ensure that local.js sets the property data_location";
             return;
         }
             
@@ -370,22 +371,22 @@ var app = new Vue({
         this.$http.get( data_location ).then(response => {
             // get body data
             if (!isObject(response.body)) {
-                this.sourceData.status = "ERROR";
-                this.sourceData.error_message = "Downloaded data is not a JSON object";
+                this.source_data.status = "ERROR";
+                this.source_data.error_message = "Downloaded data is not a JSON object";
                 return;
             }
 
-            this.sourceData = response.body;
-            if (this.sourceData.status == "ERROR") {
+            this.source_data = response.body;
+            if (this.source_data.status == "ERROR") {
                 return;
             }
 
             this.datasets_by_id = {};
             // populate records by ID. Nb. This is using the wrong ID data for now. TODO
-            for (ds_i = 0; ds_i < this.sourceData.datasets.length; ++ds_i) {
+            for (ds_i = 0; ds_i < this.source_data.datasets.length; ++ds_i) {
                 var dataset = {};
 
-                var source = this.sourceData.datasets[ds_i];
+                var source = this.source_data.datasets[ds_i];
 
                 // add config to dataset
                 dataset.config = source.config;
@@ -450,8 +451,8 @@ var app = new Vue({
             }
         }, response => {
             // error callback
-            this.sourceData.status = "ERROR"
-            this.sourceData.error_message = "Error loading data over network";
+            this.source_data.status = "ERROR"
+            this.source_data.error_message = "Error loading data over network";
         })
     },
 
