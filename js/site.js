@@ -504,14 +504,6 @@ var app = new Vue({
                         var a_value = a.toLowerCase();
                         var b_value = b.toLowerCase();
                         return a_value.localeCompare(b_value);
-
-                        if (a_value.localeCompare(b_value) ) {
-                            return -1
-                        }
-
-                        if (a_value > b_value) {return 1};
-
-                        return 0;
                 })};
 
                 // expand sort field names into actual field objects for MVC
