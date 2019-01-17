@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -188,10 +188,31 @@
                     </template>
                 </div>
             </template>
+            <template v-else-if="filter.field.type=='enum'">
+                <div class="col-sm-2">
+                    <select v-model.trim="filter.mode">
+                        <option value="is">is</option>
+                        <option value="one-of">one of</option>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                <template v-if="filter.mode=='is'">
+                    <select v-model="filter.term">
+                        <option selected="selected" value="">Select</option>
+                        <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
+                    </select>
+                </template>
+                <template v-if="filter.mode=='one-of'">
+                    <select multiple="multiple" v-model="filter.terms">
+                        <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
+                    </select>
+                </template>
+                </div>
+            </template>
+
             <template v-else>
                 <div class="col-sm-10">
-                    Render as drop down <!-- {{ filter.field }}-->
-{{ filter.field }}
+                   Unknown filter type.
                 </div>
             </template>
         </div>

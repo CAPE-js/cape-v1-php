@@ -208,9 +208,41 @@ DateFilter.prototype.matchesValuesBetween = function(values) {
  */
 function EnumFilter( field ) {
     Filter.call( this, field );
+    this.mode = "is";
+    this.terms = [];
 }
 EnumFilter.prototype = Object.create(Filter.prototype);
+
+EnumFilter.prototype.isSet = function() {
+    if (this.mode == "is") {
+        return this.term != "";
+    } else if (this.mode == "one-of") {
+        return this.terms.length != 0;
+    }
+}
+
 EnumFilter.prototype.matchesValues = function(values) {
+
+    if (this.mode=='is') {
+        // find a value that matches the term
+        for(var i = 0; i < values.length; i++) {
+            if (values[i] == this.term) {
+                return true;
+            }
+        }
+        return false;
+
+    } else if (this.mode == 'one-of') {
+        // do any of the terms match any of the values?
+        for(var i = 0; i < values.length; i++) {
+            for(var j = 0; j < this.terms.length; j++)
+            if (values[i] == this.terms[j]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     return this.matchesValuesIs( values );
 }
 
@@ -271,6 +303,8 @@ var HomePage = Vue.component("home-page", {
                 var bv = b[dataset.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
                 if(typeof bv === 'array') { bv = bv[0]; }
+                av = av.toLowerCase();
+                bv = bv.toLowerCase();
                 if( av==bv ) { return 0; }
                 if( dataset.sort_dir == 'asc'  && av>bv ) { return 1; }
                 if( dataset.sort_dir == 'desc' && av<bv ) { return 1; }
@@ -466,8 +500,19 @@ var app = new Vue({
                 // add this list of enum values to each enum field
                 var enum_fields = Object.keys(enums);
                 for (var enum_i = 0; enum_i < enum_fields.length; enum_i++) {
-                    dataset.fields_by_id[enum_fields[enum_i]].options = Object.keys(enums[enum_fields[enum_i]]).sort();
-                }
+                    dataset.fields_by_id[enum_fields[enum_i]].options = Object.keys(enums[enum_fields[enum_i]]).sort(function(a, b) {
+                        var a_value = a.toLowerCase();
+                        var b_value = b.toLowerCase();
+                        return a_value.localeCompare(b_value);
+
+                        if (a_value.localeCompare(b_value) ) {
+                            return -1
+                        }
+
+                        if (a_value > b_value) {return 1};
+
+                        return 0;
+                })};
 
                 // expand sort field names into actual field objects for MVC
                 for( var i=0; i<dataset.config.sort.length; ++i ) {
