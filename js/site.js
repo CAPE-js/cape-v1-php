@@ -316,7 +316,7 @@ var app = new Vue({
     },
     template: "#templateApp",
     created: function () {
-        if( !data_location ) {
+        if (typeof data_location === 'undefined') {
             this.sourceData.status = "ERROR";
             this.sourceData.error_message = "Please ensure that local.js sets the property data_location";
             return;
