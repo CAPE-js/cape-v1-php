@@ -318,11 +318,7 @@ var HomePage = Vue.component("home-page", {
         return this.$root.defaultDataset;
     },
     methods: {
-        getResults: function () {
-            var results = this.filterResults();
-            return results;
-        },
-        filterResults: function() {
+        filteredAndSortedResults: function() {
 
             // build a list of filters to be applied
             var active_filters = [];
