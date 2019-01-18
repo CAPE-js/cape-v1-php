@@ -15,13 +15,17 @@ function makeFilter( field ) {
  *  abstract base class, should not be instantiated directly
  */
 function Filter( field ) {
-    this.term = "";
-    this.mode = "contains";
+    this.reset();
     this.field = field;
 }
 
 Filter.prototype.isSet = function() {
     return (this.term != "");
+}
+
+Filter.prototype.reset = function() {
+    this.term = "";
+    this.mode = "contains";
 }
 
 Filter.prototype.matchesValuesIs = function(values) {
@@ -107,8 +111,6 @@ TextFilter.prototype.matchesValues = function(values) {
  */
 function IntegerFilter( field ) {
     Filter.call( this, field );
-    this.mode = "between";
-    this.term2 = "";
 }
 
 IntegerFilter.prototype = Object.create(Filter.prototype);
@@ -117,6 +119,11 @@ IntegerFilter.prototype.isSet = function() {
     return (this.term != "" || (this.mode == "between" && this.term2 != ""));
 }
 
+IntegerFilter.prototype.reset = function() {
+    this.mode = "between";
+    this.term = "";
+    this.term2 = "";
+}
 
 IntegerFilter.prototype.matchesValues = function(values) {
     if( this.mode == "is" ) {
@@ -166,6 +173,12 @@ DateFilter.prototype.isSet = function() {
     return (this.term != "" || (this.mode == "between" && this.term2 != ""));
 }
 
+DateFilter.prototype.reset = function() {
+    this.mode = "between";
+    this.term = "";
+    this.term2 = "";
+}
+
 DateFilter.prototype.matchesValues = function(values) {
     if( this.mode == "is" ) {
         return this.matchesValuesIs( values );
@@ -209,9 +222,8 @@ DateFilter.prototype.matchesValuesBetween = function(values) {
  */
 function EnumFilter( field ) {
     Filter.call( this, field );
-    this.mode = "is";
-    this.terms = [];
 }
+
 EnumFilter.prototype = Object.create(Filter.prototype);
 
 EnumFilter.prototype.isSet = function() {
@@ -220,6 +232,12 @@ EnumFilter.prototype.isSet = function() {
     } else if (this.mode == "one-of") {
         return this.terms.length != 0;
     }
+}
+
+EnumFilter.prototype.reset = function() {
+    this.mode = "is";
+    this.term = "";
+    this.terms = [];
 }
 
 EnumFilter.prototype.matchesValues = function(values) {
@@ -355,6 +373,11 @@ var HomePage = Vue.component("home-page", {
                 return -1;
             }); 
             return records_to_show;
+        },
+        resetFilters: function() {
+            for (var i = 0; i < this.filters.length; i++) {
+                this.filters[i].reset();
+            }
         }
     },
     template: "#templateHome",
