@@ -126,7 +126,9 @@
 
         <div class="row">
             <div class="col-sm-6">
-                Order results by <select v-model="sort_field"><option v-for="field in sort_fields" v-bind:value="field.id">{{field.label}}</option></select><select v-model="sort_dir"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
+                Order results by 
+                <select v-model="sort_field"><option v-for="field in sort_fields" v-bind:value="field.id">{{field.label}}</option></select>
+                <select v-model="sort_dir"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
             </div>
             <div class="col-sm-6 text-sm-right">
                 <div class="switch switch-sm">
