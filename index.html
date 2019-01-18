@@ -50,7 +50,7 @@
 
     <div id="app"></div>
 
-    <div class="row" id="footer">
+    <div class="row mt-2" id="footer">
         <div class="col-sm-6"><img src="./assets/soton.png" alt="University of Southampton logo"/></div>
         <div class="col-sm-6"><img src="./assets/cam.png" alt="University of Cambridge logo"/></div>
     </div>
@@ -60,32 +60,48 @@
 <script type="text/x-template" id="templateApp">
     <div>
     <template v-if="app_status == 'dev'">
-        <div class="card bg-warning">
+        <div class="row">
+        <div class="col">
+        <div class="card bg-warning mt-2">
           <div class="card-body">
              This is a development instance of this service.
           </div>
-      </div>
+        </div>
+        </div>
+        </div>
     </template>
     <template v-if="app_status == 'pprd'">
-        <div class="card bg-warning">
+        <div class="row">
+        <div class="col">
+        <div class="card bg-warning mt-2">
           <div class="card-body">
              This is the pre-production instance of this service.
           </div>
-      </div>
+        </div>
+        </div>
+        </div>
     </template>
     
     <template v-if="source_data.status == 'ERROR'">
         <div class="row">
         <div class="col">
+        <div class="card bg-error mt-2">
+          <div class="card-body">
             <h2>Unable to load data</h2>
             <p>An error has occurred. The error was: {{ source_data.error_message }}.</p>
+          </div>
+        </div>
         </div>
         </div>
     </template>
     <template v-if="source_data.status == 'LOADING'">
         <div class="row">
         <div class="col">
+        <div class="card bg-info mt-2">
+          <div class="card-body">
             Please wait while the data loads.
+          </div>
+        </div>
         </div>
         </div>
     </template>
