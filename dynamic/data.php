@@ -75,10 +75,12 @@ function map_dataset( $config, $source ) {
 	foreach( $source["records"] as $record ) {
 		$out_record = array();
 		foreach( $config["fields"] as $field ) {
-			if( $field["multiple"] ) {
-				$out_record[$field["id"]]=array();
-			} else {
-				$out_record[$field["id"]]=null;
+			if( $field["type"] != "ignore" ) {
+				if( $field["multiple"] ) {
+					$out_record[$field["id"]]=array();
+				} else {
+					$out_record[$field["id"]]=null;
+				}
 			}
 		}
 		foreach( $record as $heading=>$value ) {
