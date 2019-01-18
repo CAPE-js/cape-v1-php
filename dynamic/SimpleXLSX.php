@@ -865,7 +865,23 @@ class SimpleXLSX {
 				break;
 			case 'd':
 				// Value is a date
-				$value = $this->datetimeFormat ? gmdate( $this->datetimeFormat, $this->unixstamp( (float) $cell->v ) ) : (float) $cell->v;
+
+	// altered by cjg 
+				if( $cell['t'] == "s" ) {
+					// Value is a shared string
+					if ( (string) $cell->v !== '' ) {
+						$value = $this->sharedstrings[ (int) $cell->v ];
+					}
+				} else {
+					$value = (string) $cell->v;
+				}
+				if( $format == "dd/mm/yyyy" ) {
+					$dmy = preg_split( "/\//", $value );
+					$value = sprintf( "%04d-%02d-%02d", $dmy[2], $dmy[1], $dmy[0] );
+				} else {
+					$value = $this->datetimeFormat ? gmdate( $this->datetimeFormat, $this->unixstamp( (float) $cell->v ) ) : (float) $cell->v;
+				} 
+	//end of cjg chahnge
 				break;
 
 
@@ -890,6 +906,7 @@ class SimpleXLSX {
 	public function unixstamp( $excelDateTime ) {
 		$d = floor( $excelDateTime ); // seconds since 1900
 		$t = $excelDateTime - $d;
+print "//$excelDateTime/$d/$t\n";
 
 		/** @noinspection SummerTimeUnsafeTimeManipulationInspection */
 		$t = ( abs( $d ) > 0 ) ? ( $d - 25569 ) * 86400 + round( $t * 86400 ) : round( $t * 86400 );

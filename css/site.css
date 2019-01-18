@@ -122,7 +122,11 @@ h2 {
     color: #5a6268;
     font-size: 0.6rem;
 }
-
+.summary-card .label-note {
+    font-size: 0.8rem;
+    color: #999;
+}
+ 
 
 /* end of summary cards
  */

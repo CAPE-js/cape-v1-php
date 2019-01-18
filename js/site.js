@@ -385,8 +385,15 @@ var DataPage = Vue.component("data-page", {
     },
     template: "#templateData",
     methods: {
-        getConfigFields: function () {
-            return this.config.fields;
+        downloadJSON: function() {
+            var filename = this.config.id+".json";
+            download( filename, JSON.stringify(this.raw_records), "application/json" );
+        },
+        downloadCSV: function() {
+            var table = records_to_table( this.config.fields, this.records );
+            var csv = table_to_csv( table );
+            var filename = this.config.id+".csv";
+            download( filename, csv, "text/csv;charset=utf-8" );
         }
     }
 });
@@ -488,7 +495,7 @@ var app = new Vue({
         // GET /someUrl
         this.$http.get( data_location ).then(function(response) {
             // get body data
-            if (!isObject(response.body)) {
+            if (!is_object(response.body)) {
                 this.source_data.status = "ERROR";
                 this.source_data.error_message = "Downloaded data is not a JSON object";
                 return;
@@ -622,13 +629,63 @@ var app = new Vue({
 
 }); // end of app
 
-function isObject(value) {
+function is_object(value) {
     return value && typeof value === 'object' && value.constructor === Object;
+}
+
+// this can take a dataset or a vue component with the same properties
+function records_to_table( fields, records ) {
+    var table = [[]];
+    
+    for( var i=0; i<fields.length; ++i ) {
+        table[0].push( fields[i].id );
+    }
+    for( var i=0; i<records.length; ++i ) {
+        var record = records[i];
+        var row = [];
+        for( var j=0; j<fields.length; ++j ) {
+            var field = fields[j];
+            var v = record[field.id].value;
+            if( field.multiple && v!=null ) {
+                v = v.join( "; " );
+            }
+            row.push( v );
+        }
+        table.push( row );
+    }
+    return table;
+}
+
+
+function table_to_csv( table ) {
+    var process_row = function (row) {
+        var final_val = '';
+        for (var j = 0; j < row.length; j++) {
+            var inner_val = row[j] === null ? '' : row[j].toString();
+            if (row[j] instanceof Date) {
+                inner_val = row[j].toLocaleString();
+            };
+            var result = inner_val.replace(/"/g, '""').replace(/\r\n/g, "\n");
+            if (result.search(/("|,|\n)/g) >= 0)
+                result = '"' + result + '"';
+            if (j > 0)
+                final_val += ',';
+            final_val += result;
+        }
+        return final_val + '\n';
+    };
+    var csv_file = '';
+    for (var i = 0; i < table.length; i++) {
+        csv_file += process_row(table[i]);
+    }
+console.log( csv_file );
+    return csv_file;
 }
 
 /* this function creates a download of a file with a given filename and mimetype. */
 function download(filename, data, mimetype) {
-    var blob = new Blob([data], {type: mimetype});
+    // create a blob starting with a utf8 BOM (you did want utf-8, right)
+    var blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]),data], {type: mimetype});
     if(window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveBlob(blob, filename);
     }

@@ -29,7 +29,7 @@
 					"type":"date",
 					"source_heading":"Date",
 					"label":"Date",
-					"description":"",
+					"description":"Example description",
 					"quick_search":true
 				},
 				{
@@ -252,7 +252,13 @@
 					"label":"Record Number",
 					"description":""
 				},
-
+				{
+					"id":"record_complete",
+					"source_heading":"Record Complete?",
+					"type":"text",
+					"label":"Record Number",
+					"description":""
+				},
 				{
 					"type":"ignore",
 					"source_heading":"Artists"
@@ -268,10 +274,6 @@
 				{
 					"type":"ignore",
 					"source_heading":"Printed Score"
-				},
-				{
-					"type":"ignore",
-					"source_heading":"Record Complete?"
 				}
 
 			]
