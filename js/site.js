@@ -439,6 +439,10 @@ Vue.component("field-label-and-value", {
     template: "#templateFieldLabelAndValue"
 });
 
+Vue.component("field-label-and-value-if-set", {
+    props: ["typedValue"],
+    template: "#templateFieldLabelAndValueIfSet"
+});
 
 var app = new Vue({
     el: '#app',
@@ -528,7 +532,7 @@ var app = new Vue({
                             // convert 25/12/2001 to 2001-12-25 TODO: this should use sprintf or date functions
                             value = value.split("/").reverse().join("-");
                         }
-                        record[field.id] = {value: value, field: field}
+                        record[field.id] = {value: value, field: field};
 
                         if (field.type == "enum") {
                             var enum_values = value;

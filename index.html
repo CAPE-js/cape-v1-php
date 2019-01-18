@@ -268,10 +268,16 @@
     </div>
 </script>
 
+<script type="text/x-template" id="templateFieldLabelAndValueIfSet">
+      <field-label-and-value v-if="typedValue.value != '' && typedValue.value != null && !(typeof typedValue.value=='array' && typedValue.value.length==0)" v-bind:typedValue="typedValue"></field-label-and-value>
+</script>
+
 <script type="text/x-template" id="templateFieldLabelAndValue">
     <div class="field-label-and-value">
+      <template v-if="typedValue.field.value != ''">
         <div class="field-label">{{ typedValue.field.label }}</div>
         <field-value v-bind:typedValue="typedValue"></field-value>
+      </template>
     </div>
 </script>
 
@@ -313,9 +319,9 @@
                     <field-label-and-value v-bind:typedValue="record.acts"></field-label-and-value>
                     <field-label-and-value v-bind:typedValue="record.genre"></field-label-and-value>
                     <br/>
-                    <field-label-and-value v-bind:typedValue="record.numbers_act_1"></field-label-and-value>
-                    <field-label-and-value v-bind:typedValue="record.numbers_act_2"></field-label-and-value>
-                    <field-label-and-value v-bind:typedValue="record.numbers_act_3"></field-label-and-value>
+                    <field-label-and-value-if-set v-bind:typedValue="record.numbers_act_1"></field-label-and-value-if-set>
+                    <field-label-and-value-if-set v-bind:typedValue="record.numbers_act_2"></field-label-and-value-if-set>
+                    <field-label-and-value-if-set v-bind:typedValue="record.numbers_act_3"></field-label-and-value-if-set>
                     <field-label-and-value v-bind:typedValue="record.total_numbers"></field-label-and-value>
                     <br/>
                     <field-label-and-value v-bind:typedValue="record.male"></field-label-and-value>
