@@ -240,6 +240,9 @@
             <h2>About the data</h2>
             <p>This dataset has been created and shared with the intention it should be reused. The fields in the
                 dataset are described below.</p>
+            <p>This data is copyright <a v-bind:href="config.copyright.url">{{ config.copyright.name }}</a> and may be reused under the <a v-bind:href="config.license.url">{{ config.license.name }}</a> license.</p>
+            <p>This dataset was created by <span v-for="(creator, index) in config.creators"><span>{{ creator.name }}</span><span v-if="index+1 < config.creators.length">, </span></span>.</p>
+            <p>If using this data, please attribute it as "{{ config.attribution.text }}" with a link to <a v-bind:href="config.attribution.url">{{config.attribution.url}}</a>.</p>
             <h2>Schema</h2>
             <p>Field types may be text, date, integer or enum. An enum field is short for enumerated, which means a
                 limited set of terms rather than free text.</p>

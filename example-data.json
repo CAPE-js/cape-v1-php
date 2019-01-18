@@ -12,12 +12,22 @@
                     "date"
                 ],
                 "license": {
-                    "url": "http:\/\/totl.net",
-                    "name": "TBD"
+                    "url": "https:\/\/creativecommons.org\/licenses\/by\/3.0\/",
+                    "name": "Creative Commons Attribution 3.0 Unported (CC BY 3.0)"
                 },
                 "copyright": {
-                    "url": "http:\/\/totl.net",
-                    "name": "CopyName"
+                    "url": "https:\/\/www.southampton.ac.uk\/",
+                    "name": "University of Southampton"
+                },
+                "creators": [
+                    {
+                        "name": "Mark Everist",
+                        "email": "M.Everist@southampton.ac.uk"
+                    }
+                ],
+                "attribution": {
+                    "text": "Music in the Second Empire Theatre (France: Musiques, Cultures project)",
+                    "url": "http:\/\/fmc.ac.uk\/mitset\/"
                 },
                 "id_field": "record_number",
                 "fields": [
