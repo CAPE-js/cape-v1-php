@@ -508,6 +508,7 @@ var app = new Vue({
 
                 // add config to dataset
                 dataset.config = source.config;
+                dataset.raw_records = source.records;
 
                 // initialise enum registries
                 var enums = {};
@@ -623,4 +624,20 @@ var app = new Vue({
 
 function isObject(value) {
     return value && typeof value === 'object' && value.constructor === Object;
+}
+
+/* this function creates a download of a file with a given filename and mimetype. */
+function download(filename, data, mimetype) {
+    var blob = new Blob([data], {type: mimetype});
+    if(window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveBlob(blob, filename);
+    }
+    else {
+        var elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = filename;
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
+    }
 }
