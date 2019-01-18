@@ -106,7 +106,8 @@ h2 {
 }
 
 .summary-card .card-body {
-    padding: 0.2em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
 }
 
 .summary-card .card-body .field-value, .summary-card .card-body .field-label {

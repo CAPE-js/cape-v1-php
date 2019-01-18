@@ -131,13 +131,24 @@
         </div>
         <div class="row">
             <div class="col">
-                <div v-for="result in getResults()">
-                    <summary-card v-bind:record="result"></summary-card>
-                </div>
+                <results v-bind:results="getResults()"></results>
             </div>
         </div>
     </form>
+</script>
 
+<script type="text/x-template" id="templateResults">
+    <div>
+        <div v-if="results.length == 0" class="card mb-1">
+            <div class="card-body">No records match your filter terms.</div>
+        </div>
+        <div class="card mb-1">
+            <div class="card-body">Showing {{ results.length }} record{{ (results.length==1?'':'s') }}.</div>
+        </div>
+        <div v-for="result in results">
+            <summary-card v-bind:record="result"></summary-card>
+        </div>
+    </div>
 </script>
 
 <script type="text/x-template" id="templateFilterForm">

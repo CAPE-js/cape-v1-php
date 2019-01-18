@@ -392,6 +392,11 @@ Vue.component("filter-form", {
     template: "#templateFilterForm",
 });
 
+Vue.component("results", {
+    template: "#templateResults",
+    props: ["results"]
+});
+
 Vue.component("index-card", {
     props: ["record"],
     template: "#templateIndexCard"
