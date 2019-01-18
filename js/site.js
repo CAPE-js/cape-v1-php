@@ -509,13 +509,16 @@ var app = new Vue({
                         enums[field.id] = {};
                     }
 
-                    var filter = makeFilter( field );
-                    dataset.filters_by_id[field.id] = filter;
-                    dataset.filters.push(filter);
-                    if( field.quick_search ) {
-                         dataset.quick_filters.push(filter);
-                    } else {
-                         dataset.other_filters.push(filter);
+                    if( field.filter === undefined ) { field.filter = true; };
+                    if( field.filter ) {
+                        var filter = makeFilter( field );
+                        dataset.filters_by_id[field.id] = filter;
+                        dataset.filters.push(filter);
+                        if( field.quick_search ) {
+                             dataset.quick_filters.push(filter);
+                        } else {
+                             dataset.other_filters.push(filter);
+                        }
                     }
                 }
 

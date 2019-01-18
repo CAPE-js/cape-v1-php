@@ -237,6 +237,7 @@
 				},
 
 				{
+
 					"id":"record_number",
 					"type":"integer",
 					"source_heading":"Record Number",
