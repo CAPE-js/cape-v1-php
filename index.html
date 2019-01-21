@@ -347,22 +347,22 @@
             <div class="card-body" v-on:click="showIndexCard" title="See full details.">
                 <div class="row pb-1">
                     <div class="col-sm-10 card-title">
-                        <field-value v-bind:typedValue="record.title"></field-value>
+                        <field-value v-bind:linkValue="false" v-bind:typedValue="record.title"></field-value>
                     </div>
                     <div class="col-sm-2">
-                        <field-value v-bind:typedValue="record.date"></field-value>
+                        <field-value v-bind:linkValue="false" v-bind:typedValue="record.date"></field-value>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <template v-if="record.composer.value != null && record.composer.value.length>0">
-                            <field-value v-bind:typedValue="record.composer"></field-value> <span class='label-note'>(composer)</span>
+                            <field-value v-bind:linkValue="false" v-bind:typedValue="record.composer"></field-value> <span class='label-note'>(composer)</span>
                         </template>
                         <template v-if="record.author.value != null && record.author.value.length>0">
-                            <field-value v-bind:typedValue="record.author"></field-value> <span class='label-note'>(author)</span>
+                            <field-value v-bind:linkValue="false" v-bind:typedValue="record.author"></field-value> <span class='label-note'>(author)</span>
                         </template>
                         <template v-if="record.institution.value != null && record.institution.value!=''">
-                            <field-value v-bind:typedValue="record.institution"></field-value> <span class='label-note'>(institution)</span>
+                            <field-value v-bind:linkValue="false" v-bind:typedValue="record.institution"></field-value> <span class='label-note'>(institution)</span>
                         </template>
                     </div>
 
@@ -376,7 +376,7 @@
     <div class="card index-card">
         <div class="card-body">
             <h5 class="card-title">
-                <field-value v-bind:typedValue="record.title"></field-value>
+                <field-value v-bind:linkValue="false" v-bind:typedValue="record.title"></field-value>
             </h5>
 
             <div class="row" v-if="record.record_complete.value=='X'">
