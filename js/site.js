@@ -320,7 +320,12 @@ var HomePage = Vue.component("home-page", {
     methods: {
         getResults: function () {
             var results = this.filterResults();
-            return results;
+            results = this.sortResults(results);
+            return {
+                total_result_count: results.length,
+                records: results.slice(0, this.display_count),
+                showing_all_records: results.length <= this.display_count
+            }
         },
         filterResults: function() {
 
@@ -356,9 +361,12 @@ var HomePage = Vue.component("home-page", {
                 }
             }
 
+            return records_to_show;
+        },
+        sortResults: function(results) {
             // sort records based on sort field
             var dataset = this;
-            records_to_show.sort( function(a,b) {
+            results.sort( function(a,b) {
                 var av = a[dataset.sort_field].value;
                 var bv = b[dataset.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
@@ -371,8 +379,8 @@ var HomePage = Vue.component("home-page", {
                 if( dataset.sort_dir == 'asc'  && av>bv ) { return 1; }
                 if( dataset.sort_dir == 'desc' && av<bv ) { return 1; }
                 return -1;
-            }); 
-            return records_to_show;
+            });
+            return results;
         },
         resetFilters: function() {
             for (var i = 0; i < this.filters.length; i++) {
@@ -417,7 +425,17 @@ Vue.component("filter-form", {
 
 Vue.component("results", {
     template: "#templateResults",
-    props: ["results"]
+    props: ["results"],
+    methods: {
+        showAllResults: function() {
+            console.log('show all')
+            this.$root.defaultDataset.display_count = Number.MAX_SAFE_INTEGER;
+        },
+        showFewerResults: function() {
+            console.log("show fewer")
+            this.$root.defaultDataset.display_count = 50;
+        }
+    }
 });
 
 Vue.component("index-card", {
@@ -523,6 +541,7 @@ var app = new Vue({
                 dataset.quick_filters = [];
                 dataset.other_filters = [];
                 dataset.show_all_filters = false;
+                dataset.display_count = 50;
 
                 var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext" } );
                 dataset.filters.push(free_text_filter);
