@@ -364,9 +364,12 @@ var HomePage = Vue.component("home-page", {
         this.setVisibleFilters();
     },
     watch: {
-        '$route' (to, from) {
+        '$route': function(to, from) {
             // triggered when we move between named routes
             this.onRouteUpdate( to );
+        },
+        'show_all_filters': function( to, from ) {
+            this.setVisibleFilters();
         }
     },
     methods: {
