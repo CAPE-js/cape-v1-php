@@ -14,6 +14,7 @@ body {
     margin-top: 40px;
     margin-bottom: 15px;
     font-size:0.9em;
+    line-height: 1.6em;
 }
 
 #navigation {
@@ -53,7 +54,7 @@ body {
 
 #footer {
     background-color: #e1e1e1;
-    padding: 2em 0;
+    padding: 2em 30px;
 }
 
 /* end of template elements */
