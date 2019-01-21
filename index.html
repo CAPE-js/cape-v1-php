@@ -26,6 +26,7 @@
     <script src="js/vue-resource-1.5.1.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap-4.0.0/bootstrap.min.js"></script>
+    <script src="js/moment.min.js"></script>
 
 </head>
 <body>
@@ -351,10 +352,10 @@
     <div class="summary-card card mb-1">
             <div class="card-body" v-on:click="showIndexCard" title="See full details.">
                 <div class="row pb-1">
-                    <div class="col-sm-10 card-title">
+                    <div class="col-sm card-title">
                         <field-value v-bind:linkValue="false" v-bind:typedValue="record.title"></field-value>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm text-sm-right">
                         <field-value v-bind:linkValue="false" v-bind:typedValue="record.date"></field-value>
                     </div>
                 </div>

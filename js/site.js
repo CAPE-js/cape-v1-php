@@ -575,6 +575,10 @@ Vue.component("field-value", {
     methods: {
         renderSingleValue( createElement, value ) {
             var rvalue = value;
+            if( this.typedValue.field.type == 'date' ) {
+                var day = moment( rvalue );
+                rvalue = day.format("dddd, MMMM Do YYYY");
+            }
             if( this.linkValue ) {
                 var path = "/browse/" + this.typedValue.field.id + "/" + rvalue;
                 rvalue = createElement( "router-link", {attrs:{to: path}}, rvalue );
