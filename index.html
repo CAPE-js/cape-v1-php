@@ -137,7 +137,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <results v-bind:results="getResults()"></results>
+                <results v-bind:results="getResults()" v-on:changeDisplayCount="changeDisplayCount"></results>
             </div>
         </div>
     </form>
@@ -149,7 +149,9 @@
             <div class="card-body">No records match your filter terms.</div>
         </div>
         <div class="card mb-1">
-            <div class="card-body">Showing {{ results.records.length }} of {{ results.total_result_count }} record{{ (results.length==1?'':'s') }}. <span v-if="!results.showing_all_records" v-on:click="showAllResults()">Show all records.</span><span v-if="results.showing_all_records" v-on:click="showFewerResults()">Show fewer records.</span></div>
+            <div class="card-body">Showing {{ results.records.length }} of {{ results.total_result_count }} record{{ (results.length==1?'':'s') }}.
+                <a href="#" v-if="results.show_more_records_option" v-on:click="showAllResults()">Show all records.</a>
+            </div>
         </div>
         <div v-for="record in results.records">
             <summary-card v-bind:record="record"></summary-card>

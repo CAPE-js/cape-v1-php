@@ -324,7 +324,7 @@ var HomePage = Vue.component("home-page", {
             return {
                 total_result_count: results.length,
                 records: results.slice(0, this.display_count),
-                showing_all_records: results.length <= this.display_count
+                show_more_records_option: this.display_count < results.length
             }
         },
         filterResults: function() {
@@ -386,6 +386,9 @@ var HomePage = Vue.component("home-page", {
             for (var i = 0; i < this.filters.length; i++) {
                 this.filters[i].reset();
             }
+        },
+        changeDisplayCount: function(recordsToDisplay) {
+            this.display_count = recordsToDisplay;
         }
     },
     template: "#templateHome",
@@ -428,13 +431,8 @@ Vue.component("results", {
     props: ["results"],
     methods: {
         showAllResults: function() {
-            console.log('show all')
-            this.$root.defaultDataset.display_count = Number.MAX_SAFE_INTEGER;
+            this.$emit('changeDisplayCount', Number.MAX_SAFE_INTEGER);
         },
-        showFewerResults: function() {
-            console.log("show fewer")
-            this.$root.defaultDataset.display_count = 50;
-        }
     }
 });
 
