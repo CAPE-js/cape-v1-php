@@ -157,3 +157,29 @@ h2 {
  
 
 /* end of unsorted css (don't add under this line) */
+
+
+/* Start results summary */
+
+.result-summary .record-count {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 1em;
+}
+
+.result-summary .switch {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.result-summary input[type=checkbox] {
+    vertical-align: middle;
+}
+
+.result-summary label {
+    vertical-align: middle;
+    margin-bottom: 0;
+}
+
+
+/* End results summary */

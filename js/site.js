@@ -321,11 +321,7 @@ var HomePage = Vue.component("home-page", {
         getResults: function () {
             var results = this.filterResults();
             results = this.sortResults(results);
-            return {
-                total_result_count: results.length,
-                records: results.slice(0, this.display_count),
-                show_more_records_option: this.display_count < results.length
-            }
+            return results;
         },
         filterResults: function() {
 
@@ -429,11 +425,25 @@ Vue.component("filter-form", {
 Vue.component("results", {
     template: "#templateResults",
     props: ["results"],
-    methods: {
-        showAllResults: function() {
-            this.$emit('changeDisplayCount', Number.MAX_SAFE_INTEGER);
-        },
+    data: function() {
+        return {
+            options:{show_all_results: false},
+        }
+    },
+    computed: {
+        visible_records: function() {
+            if (this.options.show_all_results) {
+                return this.results;
+            } else {
+                return this.results.slice(0, 50);
+            }
+        }
     }
+});
+
+Vue.component("results-summary", {
+    template: "#templateResultsSummary",
+    props: ["results", "visible_records_count", "options"],
 });
 
 Vue.component("index-card", {

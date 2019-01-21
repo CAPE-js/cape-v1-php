@@ -148,13 +148,31 @@
         <div v-if="results.length == 0" class="card mb-1">
             <div class="card-body">No records match your filter terms.</div>
         </div>
-        <div class="card mb-1">
-            <div class="card-body">Showing {{ results.records.length }} of {{ results.total_result_count }} record{{ (results.length==1?'':'s') }}.
-                <a href="#" v-if="results.show_more_records_option" v-on:click="showAllResults()">Show all records.</a>
+
+        <div v-else>
+            <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
+            <div v-for="record in visible_records">
+                <summary-card v-bind:record="record"></summary-card>
             </div>
+            <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
         </div>
-        <div v-for="record in results.records">
-            <summary-card v-bind:record="record"></summary-card>
+
+    </div>
+</script>
+
+<script type="text/x-template" id="templateResultsSummary">
+    <div class="result-summary">
+        <div class="card mb-1">
+            <div class="card-body">
+                <div>
+                    <div class="record-count">Showing {{ visible_records_count }} of {{ results.length }}</div>
+                    <div class="switch switch-sm">
+                            <input v-model="options.show_all_results" type="checkbox" class="switch" id="show-all-results" />
+                            <label for="show-all-results">Show all results</label>
+                        </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </script>
