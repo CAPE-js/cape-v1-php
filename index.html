@@ -130,8 +130,7 @@
     <form>
         <div class="row">
             <div class="col">
-                <filter-form v-if="show_all_filters" v-bind:filters="filters"></filter-form>
-                <filter-form v-else v-bind:filters="quick_filters"></filter-form>
+                <filter-form v-bind:filters="visible_filters"></filter-form>
             </div>
         </div>
         <div class="row" v-if="show_all_filters">
@@ -264,9 +263,9 @@
             <h2>About the data</h2>
             <p>This dataset has been created and shared with the intention it should be reused. The fields in the
                 dataset are described below.</p>
-            <p>This data is copyright <a v-bind:href="config.copyright.url">{{ config.copyright.name }}</a> and may be reused under the <a v-bind:href="config.license.url">{{ config.license.name }}</a> license.</p>
-            <p>This dataset was created by <span v-for="(creator, index) in config.creators"><span>{{ creator.name }}</span><span v-if="index+1 < config.creators.length">, </span></span>.</p>
-            <p>If using this data, please attribute it as "{{ config.attribution.text }}" with a link to <a v-bind:href="config.attribution.url">{{config.attribution.url}}</a>.</p>
+            <p>This data is copyright <a v-bind:href="dataset.config.copyright.url">{{ dataset.config.copyright.name }}</a> and may be reused under the <a v-bind:href="dataset.config.license.url">{{ dataset.config.license.name }}</a> license.</p>
+            <p>This dataset was created by <span v-for="(creator, index) in dataset.config.creators"><span>{{ creator.name }}</span><span v-if="index+1 < dataset.config.creators.length">, </span></span>.</p>
+            <p>If using this data, please attribute it as "{{ dataset.config.attribution.text }}" with a link to <a v-bind:href="dataset.config.attribution.url">{{dataset.config.attribution.url}}</a>.</p>
             <p>
                 <button v-on:click="downloadJSON" class="btn btn-secondary">Download JSON</button>
                 <button v-on:click="downloadCSV" class="btn btn-secondary">Download CSV</button>
@@ -284,7 +283,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="field in config.fields">
+                <tr v-for="field in dataset.config.fields">
                     <td>{{ field.id }}</td>
                     <td>{{ field.label }}</td>
                     <td>{{ field.type }} <span v-if="field.multiple"> list</span></td>
@@ -300,8 +299,8 @@
     <div>
         <div class="row">
             <div class="col">
-                <index-card v-if="records_by_id[ $route.params.id ]"
-                            v-bind:record="records_by_id[ $route.params.id ]"></index-card>
+                <index-card v-if="dataset.records_by_id[ $route.params.id ]"
+                            v-bind:record="dataset.records_by_id[ $route.params.id ]"></index-card>
                 <div v-else>
                     <p>NO SUCH RECORD</p>
                 </div>
