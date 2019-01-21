@@ -319,7 +319,11 @@ var HomePage = Vue.component("home-page", {
     },
     methods: {
         filteredAndSortedResults: function() {
-
+            var results = this.filterResults();
+            results = this.sortResults(results);
+            return results;
+        },
+        filterResults: function() {
             // build a list of filters to be applied
             var active_filters = [];
             for (var i = 0; i < this.filters.length; i++) {
@@ -352,9 +356,12 @@ var HomePage = Vue.component("home-page", {
                 }
             }
 
+            return records_to_show;
+        },
+        sortResults: function(results) {
             // sort records based on sort field
             var dataset = this;
-            records_to_show.sort( function(a,b) {
+            results.sort( function(a,b) {
                 var av = a[dataset.sort_field].value;
                 var bv = b[dataset.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
@@ -367,8 +374,8 @@ var HomePage = Vue.component("home-page", {
                 if( dataset.sort_dir == 'asc'  && av>bv ) { return 1; }
                 if( dataset.sort_dir == 'desc' && av<bv ) { return 1; }
                 return -1;
-            }); 
-            return records_to_show;
+            });
+            return results;
         },
         resetFilters: function() {
             for (var i = 0; i < this.filters.length; i++) {
@@ -420,7 +427,26 @@ Vue.component("filter-form", {
 
 Vue.component("results", {
     template: "#templateResults",
-    props: ["results"]
+    props: ["results"],
+    data: function() {
+        return {
+            options:{show_all_results: false},
+        }
+    },
+    computed: {
+        visible_records: function() {
+            if (this.options.show_all_results) {
+                return this.results;
+            } else {
+                return this.results.slice(0, 50);
+            }
+        }
+    }
+});
+
+Vue.component("results-summary", {
+    template: "#templateResultsSummary",
+    props: ["results", "visible_records_count", "options"],
 });
 
 Vue.component("index-card", {
