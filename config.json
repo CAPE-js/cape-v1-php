@@ -89,7 +89,7 @@
 					"source_format":"repeated",
 					"type":"text",
 					"source_heading":"Male",
-					"label":"Male",
+					"label":"Male Artist",
 					"description":"Male artists in premiere."
 				},
 				{
@@ -98,7 +98,7 @@
 					"source_format":"repeated",
 					"type":"text",
 					"source_heading":"Female",
-					"label":"Female",
+					"label":"Female Artist",
 					"description":"Female artists in premiere."
 				},
 				{
