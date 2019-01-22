@@ -577,7 +577,7 @@ Vue.component("field-value", {
             var rvalue = value;
             if( this.typedValue.field.type == 'date' ) {
                 var day = moment( rvalue );
-                rvalue = day.format("dddd, MMMM Do YYYY");
+                rvalue = day.format("dddd, D MMMM  YYYY");
             }
             if( this.linkValue ) {
                 var path = "/browse/" + this.typedValue.field.id + "/" + rvalue;
