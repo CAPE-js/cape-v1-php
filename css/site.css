@@ -146,7 +146,6 @@ h2 {
 }
 .field-label { 
     display: inline-block;
-    font-weight: bold;
 }
 .field-label:after { 
     content: ':';
@@ -156,10 +155,6 @@ h2 {
 
 /* unsorted css */
 
-.filter-form {
-    font-size: small;
-}
- 
 
 /* end of unsorted css (don't add under this line) */
 

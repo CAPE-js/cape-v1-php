@@ -10,8 +10,6 @@
     <link href="css/site.css" rel="stylesheet">
     <link href="css/switch.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="fontawesome-free-5/css/all.min.css">
-
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -21,6 +19,7 @@
 
     <script src="local.js"></script>
 
+    <script src="js/popper.min.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/vue-router.js"></script>
     <script src="js/vue-resource-1.5.1.js"></script>
@@ -51,9 +50,9 @@
 
     <div id="app"></div>
 
-    <div class="row mt-2" id="footer">
-        <div class="col-sm-6"><img src="./assets/soton.png" alt="University of Southampton logo"/></div>
-        <div class="col-sm-6"><img src="./assets/cam.png" alt="University of Cambridge logo"/></div>
+    <div class="row" id="footer">
+        <div class="col-sm-6 mt-2"><img src="./assets/soton.png" alt="University of Southampton logo"/></div>
+        <div class="col-sm-6 mt-2"><img src="./assets/cam.png" alt="University of Cambridge logo"/></div>
     </div>
 </div>
 </div>
@@ -134,18 +133,18 @@
             It inventories the works of, among others, the Opéra-Comique, the Théâtre des Bouffes-Parisiens, the Théâtre des Fantaisies-Parisiennes.
             The project is work is in progress ranging from institutions where some data is largely complete (Opéra-Comique; Fantaisies-Parisiennes) to those where no data current exists as of initial release on 1 February 2019 (Théâtre Déjazet; Délassements-Comiques ).
         </p>
-        <div class="row">
+        <div class="row mb-1">
             <div class="col">
                 <filter-form v-bind:filters="visible_filters"></filter-form>
             </div>
         </div>
         <div class="row" v-if="show_all_filters">
             <div class="col text-sm-right pb-3 pt-3">
-                <button v-on:click="resetFilters" class="btn btn-secondary">Reset form</button>
+                <button v-on:click="resetFilters" class="btn btn-secondary btn-sm">Reset form</button>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-1">
             <div class="col-sm-6">
                 Order results by 
                 <select v-model="sort_field"><option v-for="field in sort_fields" v-bind:value="field.id">{{field.label}}</option></select>
@@ -158,7 +157,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-1">
             <div class="col">
                 <results v-bind:results="filteredAndSortedResults()"></results>
             </div>
@@ -202,8 +201,11 @@
 
 <script type="text/x-template" id="templateFilterForm">
     <div class='filter-form'>
-        <div v-for="filter in filters" class="form-row">
-            <label class="col-sm-2 text-sm-right">{{filter.field.label}}</label>
+        <div v-for="filter in filters" class="form-row mb-1">
+            <div class="col-sm-2 text-sm-right">
+                <label v-if="filter.field.description != null" data-toggle="tooltip" v-bind:title="filter.field.description" v-bind:for="'filter-'+filter.field.id">{{filter.field.label}}</label>
+                <label v-else v-bind:for="'filter-'+filter.field.id">{{filter.field.label}}</label>
+            </div>
             <template v-if="filter.field.type=='text'">
                 <div class="col-sm-2">
                     <select v-model.trim="filter.mode" class="form-control form-control-sm">
@@ -212,7 +214,7 @@
                     </select>
                 </div>
                 <div class="col-sm-8">
-                    <input v-model.trim="filter.term" class="form-control form-control-sm"/>
+                    <input v-model.trim="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"/>
                 </div>
             </template>
             <template v-else-if="filter.field.type=='integer'">
@@ -224,7 +226,7 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is'">
-                        <input v-model.number="filter.term" type="number" class="form-control form-control-sm"/>
+                        <input v-model.number="filter.term" type="number" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"/>
                     </template>
                     <template v-if="filter.mode=='between'">
                         <input v-model.number="filter.term" type="number" class="form-control form-control-sm" style="display:inline-block;width:auto"/> and <input v-model.number="filter.term2"
@@ -234,7 +236,7 @@
             </template>
             <template v-else-if="filter.field.type=='date'">
                 <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                    <select v-model.trim="filter.mode" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
                         <option value="is">is</option>
                         <option value="between">is between</option>
                     </select>
@@ -257,13 +259,13 @@
                 </div>
                 <div class="col-sm-8">
                 <template v-if="filter.mode=='is'">
-                    <select v-model="filter.term" class="form-control form-control-sm">
+                    <select v-model="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
                         <option selected="selected" value="">Select</option>
                         <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
                     </select>
                 </template>
                 <template v-if="filter.mode=='one-of'">
-                    <select multiple="multiple" v-model="filter.terms" class="form-control form-control-sm">
+                    <select multiple="multiple" v-model="filter.terms" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
                         <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
                     </select>
                 </template>
@@ -296,6 +298,8 @@
                 <button v-on:click="downloadJSON" class="btn btn-secondary">Download JSON</button>
                 <button v-on:click="downloadCSV" class="btn btn-secondary">Download CSV</button>
             </p>
+            <h2>About this software</h2>
+            <p>This website uses pure javascript to provide interaction with a JSON datafile which contains the records and site configuration. It does not require any database or PHP. Our working title for the toolkit to make this happen is <i>DATA CAPE</i>. In theory it could be reused for similar projects in future. DATA CAPE, and this website, were created by David Pepper and <a href="https://www.ecs.soton.ac.uk/people/totl">Christopher Gutteridge</a> in the iSolutions Web & Data Innovation team.</p>
             <h2>Schema</h2>
             <p>Field types may be text, date, integer or enum. An enum field is short for enumerated, which means a
                 limited set of terms rather than free text.</p>
@@ -342,7 +346,8 @@
 <script type="text/x-template" id="templateFieldLabelAndValue">
     <div class="field-label-and-value">
       <template v-if="typedValue.field.value != ''">
-        <div class="field-label">{{ typedValue.field.label }}</div>
+        <div class="field-label" v-if="typedValue.field.description != null" data-toggle="tooltip" v-bind:title="typedValue.field.description">{{typedValue.field.label}}</div>
+        <div class="field-label" v-else>{{typedValue.field.label}}</div>
         <field-value v-bind:typedValue="typedValue"></field-value>
       </template>
     </div>

@@ -321,7 +321,7 @@ var HomePage = Vue.component("home-page", {
         data.filters = [];
         data.show_all_filters = false;
 
-        var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext" } );
+        var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext", description:"Search for terms anywhere in the record" } );
         data.filters.push(free_text_filter);
 
         for (field_i = 0; field_i < data.dataset.config.fields.length; ++field_i) {
@@ -371,6 +371,10 @@ var HomePage = Vue.component("home-page", {
         'show_all_filters': function( to, from ) {
             this.setVisibleFilters();
         }
+    },
+    updated: function() {
+        // enable tooltips
+        $('[data-toggle="tooltip"]').tooltip();
     },
     methods: {
         onRouteUpdate: function(to) {
@@ -478,7 +482,7 @@ var DataPage = Vue.component("data-page", {
     methods: {
         downloadJSON: function() {
             var filename = this.dataset.config.id+".json";
-            download( filename, JSON.stringify(this.raw_records), "application/json" );
+            download( filename, JSON.stringify(this.dataset.raw_records), "application/json" );
         },
         downloadCSV: function() {
             var table = records_to_table( this.dataset.config.fields, this.dataset.records );
@@ -537,7 +541,11 @@ Vue.component("results-summary", {
 
 Vue.component("index-card", {
     props: ["record"],
-    template: "#templateIndexCard"
+    template: "#templateIndexCard",
+    mounted: function() {
+        // enable tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+    }
 });
 
 Vue.component("summary-card", {
@@ -580,7 +588,7 @@ Vue.component("field-value", {
                 rvalue = day.format("dddd, D MMMM  YYYY");
             }
             if( this.linkValue ) {
-                var path = "/browse/" + this.typedValue.field.id + "/" + rvalue;
+                var path = "/browse/" + this.typedValue.field.id + "/" + value;
                 rvalue = createElement( "router-link", {attrs:{to: path}}, rvalue );
             }
             return rvalue;
@@ -790,3 +798,4 @@ function download(filename, data, mimetype) {
         document.body.removeChild(elem);
     }
 }
+
