@@ -29,7 +29,7 @@
 					"type":"date",
 					"source_heading":"Date",
 					"label":"Date",
-					"description":"Date of premiere.",
+					"description":"Date of premiere",
 					"quick_search":true
 				},
 				{
@@ -37,7 +37,7 @@
 					"type":"text",
 					"source_heading":"Title",
 					"label":"Title",
-					"description":"Title of composition."
+					"description":"Title of composition"
 				},
 				{
 					"id":"genre",
@@ -46,42 +46,42 @@
 					"source_heading":"Genre",
 					"source_split":"\\s*;\\s*",
 					"label":"Genre",
-					"description":"Generic descriptor from primary source."
+					"description":"Generic descriptor from primary source"
 				},
 				{
 					"id":"acts",
 					"type":"integer",
 					"source_heading":"Acts",
 					"label":"Acts",
-					"description":"Number of acts in composition."
+					"description":"Number of acts in composition"
 				},
 				{
 					"id":"numbers_act_1",
 					"type":"integer",
 					"source_heading":"Numbers Act 1",
 					"label":"Numbers Act 1",
-					"description":"Number of compositions in act 1."
+					"description":"Number of compositions in act 1"
 				},
 				{
 					"id":"numbers_act_2",
 					"type":"integer",
 					"source_heading":"Numbers Act 2",
 					"label":"Numbers Act 2",
-					"description":"Number of compositions in act 2."
+					"description":"Number of compositions in act 2"
 				},
 				{
 					"id":"numbers_act_3",
 					"type":"integer",
 					"source_heading":"Numbers Act 3",
 					"label":"Numbers Act 3",
-					"description":"Number of compositions in act 3."
+					"description":"Number of compositions in act 3"
 				},
 				{
 					"id":"total_numbers",
 					"type":"integer",
 					"source_heading":"Total Numbers",
 					"label":"Total Numbers",
-					"description":"Total number of compositions."
+					"description":"Total number of compositions"
 				},
 				{
 					"id":"male",
@@ -90,7 +90,7 @@
 					"type":"text",
 					"source_heading":"Male",
 					"label":"Male Artist",
-					"description":"Male artists in premiere."
+					"description":"Male artists in premiere"
 				},
 				{
 					"id":"female",
@@ -99,7 +99,7 @@
 					"type":"text",
 					"source_heading":"Female",
 					"label":"Female Artist",
-					"description":"Female artists in premiere."
+					"description":"Female artists in premiere"
 				},
 				{
 					"id":"author",
@@ -108,7 +108,7 @@
 					"type":"text",
 					"source_heading":"Author",
 					"label":"Author",
-					"description":"Librettist[s]."
+					"description":"Librettist[s]"
 				},
 				{
 					"id":"composer",
@@ -124,21 +124,21 @@
 					"type":"text",
 					"source_heading":"Emplois listed in VS?",
 					"label":"Emplois listed in VS?",
-					"description":"Presence of voice types [emploi] in vocal score."
+					"description":"Presence of voice types [emploi] in vocal score"
 				},
 				{
 					"id":"dance_number",
 					"type":"text",
 					"source_heading":"Dance Number",
 					"label":"Dance Number",
-					"description":"Presence of identified dance number in score."
+					"description":"Presence of identified dance number in score"
 				},
 				{
 					"id":"melodrame",
 					"type":"text",
 					"source_heading":"Mélodrame",
 					"label":"Mélodrame",
-					"description":"Presence of mélodrame in score."
+					"description":"Presence of mélodrame in score"
 				},
 
 				{
@@ -146,63 +146,63 @@
 					"type":"text",
 					"source_heading":"Institution",
 					"label":"Institution",
-					"description":"Institution of first performance."
+					"description":"Institution of first performance"
 				},
 				{
 					"id":"original_date",
 					"type":"date",
 					"source_heading":"Original Date",
 					"label":"Original Date",
-					"description":"Date of premiere, if not original institution."
+					"description":"Date of premiere, if not original institution"
 				},
 				{
 					"id":"original_institution",
 					"type":"text",
 					"source_heading":"Original Institution",
 					"label":"Original Institution",
-					"description":"Original institution, if not premiere."
+					"description":"Original institution, if not premiere"
 				},
 				{
 					"id":"metteur_en_scene",
 					"type":"text",
 					"source_heading":"Metteur en scène",
 					"label":"Metteur en scène",
-					"description":"Name of metteur en scène."
+					"description":"Name of metteur en scène"
 				},
 				{
 					"id":"libretto_publisher",
 					"type":"text",
 					"source_heading":"Libretto Publisher",
 					"label":"Libretto Publisher",
-					"description":"Publisher of libretto."
+					"description":"Publisher of libretto"
 				},
 				{
 					"id":"libretto_total_pages",
 					"type":"integer",
 					"source_heading":"Libretto Total pages",
 					"label":"Libretto Total pages",
-					"description":"Number of pages in libretto."
+					"description":"Number of pages in libretto"
 				},
 				{
 					"id":"vs_publisher",
 					"type":"text",
 					"source_heading":"VS Publisher",
 					"label":"VS Publisher",
-					"description":"Publisher of vocal score."
+					"description":"Publisher of vocal score"
 				},
 				{
 					"id":"vs_arranger",
 					"type":"text",
 					"source_heading":"VS Arranger",
 					"label":"VS Arranger",
-					"description":"Arranger of keyboard reduction of vocal score."
+					"description":"Arranger of keyboard reduction of vocal score"
 				},
 				{
 					"id":"vs_total_pages",
 					"type":"integer",
 					"source_heading":"VS Total Pages",
 					"label":"VS Total Pages",
-					"description":"Number of pages in vocal score."
+					"description":"Number of pages in vocal score"
 				},
 
 				{
@@ -210,35 +210,35 @@
 					"type":"text",
 					"source_heading":"Arranger",
 					"label":"Arranger",
-					"description":"Musical arranger of work."
+					"description":"Musical arranger of work"
 				},
 				{
 					"id":"original_author",
 					"type":"text",
 					"source_heading":"Original Author",
 					"label":"Original Author",
-					"description":"Librettist of original form of work."
+					"description":"Librettist of original form of work"
 				},
 				{
 					"id":"original_composer",
 					"type":"text",
 					"source_heading":"Original Composer",
 					"label":"Original Composer",
-					"description":"Composer of original form of work."
+					"description":"Composer of original form of work"
 				},
 				{
 					"id":"original_title",
 					"type":"text",
 					"source_heading":"Original Title",
 					"label":"Original Title",
-					"description":"Title of orginal form of work."
+					"description":"Title of orginal form of work"
 				},
 				{
 					"id":"tableaux",
 					"type":"integer",
 					"source_heading":"Tableaux",
 					"label":"Tableaux",
-					"description":"Number of tableaux in addition to number of acts."
+					"description":"Number of tableaux in addition to number of acts"
 				},
 
 				{
@@ -247,7 +247,7 @@
 					"type":"integer",
 					"source_heading":"Record Number",
 					"label":"Record Number",
-					"description":"For management purposes."
+					"description":"For management purposes"
 				},
 				{
 					"id":"record_complete",
