@@ -176,7 +176,9 @@
             <div v-for="record in visible_records">
                 <summary-card v-bind:record="record"></summary-card>
             </div>
-            <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
+            <div style='position:fixed;bottom:1rem;right:1rem;z-index:10'>
+                <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
+            </div>
         </div>
 
     </div>
@@ -187,10 +189,11 @@
         <div class="card mb-1">
             <div class="card-body">
                 <div>
-                    <div class="record-count">Showing {{ visible_records_count }} of {{ results.length }}</div>
+                    <div v-if="visible_records_count==results.length" class="record-count">Showing all {{ visible_records_count }} matching records.</div>
+                    <div v-else class="record-count">Showing first {{ visible_records_count }} of {{ results.length }} matching records.</div>
                     <div class="switch switch-sm">
                             <input v-model="options.show_all_results" type="checkbox" class="switch" id="show-all-results" />
-                            <label for="show-all-results">Show all results</label>
+                            <label for="show-all-results">Show all matches</label>
                         </div>
 
                 </div>
