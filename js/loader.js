@@ -1,8 +1,32 @@
 $(document).ready(function() {
     var libs = {
-        prod: [ "js/popper.min.js", "js/vue.min.js", "js/vue-router.js", "js/vue-resource-1.5.1.js", "js/bootstrap.min.js", "js/moment.min.js", "js/site.js" ],
-        pprd: [ "js/popper.min.js", "js/vue.min.js", "js/vue-router.js", "js/vue-resource-1.5.1.js", "js/bootstrap.min.js", "js/moment.min.js", "js/site.js" ],
-        dev:  [ "js/popper.min.js", "js/vue.js",     "js/vue-router.js", "js/vue-resource-1.5.1.js", "js/bootstrap.min.js", "js/moment.min.js", "js/site.js" ]
+        prod: [ 
+            "js/popper.min.js", 
+            "js/vue.min.js", 
+            "js/vue-router.js", 
+            "js/vue-resource-1.5.1.js", 
+            "js/bootstrap.min.js", 
+            "js/moment.min.js", 
+            "js/lodash.min.js", 
+            "js/site.js" ],
+        pprd: [ 
+            "js/popper.min.js", 
+            "js/vue.min.js", 
+            "js/vue-router.js", 
+            "js/vue-resource-1.5.1.js", 
+            "js/bootstrap.min.js", 
+            "js/moment.min.js", 
+            "js/lodash.min.js", 
+            "js/site.js" ],
+        dev:  [ 
+            "js/popper.min.js", 
+            "js/vue.js",     
+            "js/vue-router.js", 
+            "js/vue-resource-1.5.1.js", 
+            "js/bootstrap.min.js", 
+            "js/moment.min.js", 
+            "js/lodash.min.js", 
+            "js/site.js" ]
     };
     var load_list = libs["dev"];
     if( app_status == "prod" || app_status == "pprd") { 
@@ -20,6 +44,5 @@ $(document).ready(function() {
               load_next_script();
         });
     }
-
 });
 
