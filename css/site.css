@@ -183,3 +183,9 @@ h2 {
 
 
 /* End results summary */
+
+/* Number filter */
+.between-number-filter {
+    display:inline-block;
+    width:auto
+}

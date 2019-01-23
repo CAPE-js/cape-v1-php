@@ -390,7 +390,6 @@ var HomePage = Vue.component("home-page", {
             }
             this.setVisibleFilters();
         },
- 
         setVisibleFilters: function() {
             this.visible_filters = [];
             for (var i = 0; i < this.filters.length; i++) {
@@ -401,11 +400,6 @@ var HomePage = Vue.component("home-page", {
                     this.visible_filters.push( filter );
                 }
             } 
-        },
-        filteredAndSortedResults: function() {
-            var results = this.filterResults();
-            results = this.sortResults(results);
-            return results;
         },
         filterResults: function() {
             // build a list of filters to be applied
@@ -469,6 +463,14 @@ var HomePage = Vue.component("home-page", {
             }
         }
     },
+    computed: {
+        // more efficient to have this as a computed as the results are cached
+        filteredAndSortedResults: function() {
+            var results = this.filterResults();
+            results = this.sortResults(results);
+            return results;
+        }
+    },
     template: "#templateHome",
 });
 
@@ -512,7 +514,7 @@ Vue.component("filter-form", {
         return {filter: this.$root.defaultDataset.filter};
     },
     props: ["filters"],
-    template: "#templateFilterForm",
+    template: "#templateFilterForm"
 });
 
 Vue.component("results", {
@@ -604,6 +606,25 @@ Vue.component("field-label-and-value", {
 Vue.component("field-label-and-value-if-set", {
     props: ["typedValue"],
     template: "#templateFieldLabelAndValueIfSet"
+});
+
+Vue.component("debounced-input", {
+    props: ["type", "value", "id"],
+    data: function() {
+        return {
+            input_type: this.type,
+            input_value: this.value,
+            input_id: this.id
+        }
+    },
+    template: "#templateDebouncedInput",
+    methods: {
+        debounce_input: _.debounce(function (e) {
+            console.log("debounce ", e.target.value)
+            this.$emit('input', e.target.value);
+        }, 500)
+
+    }
 });
 
 var app = new Vue({
