@@ -199,7 +199,7 @@
 
 <script type="text/x-template" id="templateFilterForm">
     <div class='filter-form'>
-        <div v-for="filter in filters" class="form-row mb-1">
+        <div v-for="filter in filters" :key="filter.field.id" class="form-row mb-1">
             <div class="col-sm-2 text-sm-right">
                 <label v-if="filter.field.description != null" data-toggle="tooltip" v-bind:title="filter.field.description" v-bind:for="'filter-'+filter.field.id">{{filter.field.label}}</label>
                 <label v-else v-bind:for="'filter-'+filter.field.id">{{filter.field.label}}</label>
@@ -242,12 +242,12 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is'">
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
                     </template>
                     <template v-if="filter.mode=='between'">
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm between-number-filter"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-to-'+filter.field.id"></debounced-input>
                         and
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term2" class="form-control form-control-sm between-number-filter"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term2" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-from-'+filter.field.id"></debounced-input>
                     </template>
                 </div>
             </template>
@@ -274,7 +274,7 @@
             </template>
             <template v-else-if="filter.field.type=='freetext'">
                 <div class="col-sm-10">
-                    <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm"></debounced-input>
+                    <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
                 </div>
             </template>
             <template v-else>

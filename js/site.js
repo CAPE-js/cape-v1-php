@@ -589,11 +589,10 @@ Vue.component("debounced-input", {
         }
     },
     template: "#templateDebouncedInput",
-    methods: {
-        debounce_input: _.debounce(function (e) {
+    created: function() {
+        this.debounce_input= _.debounce(function (e) {
             this.$emit('input', e.target.value);
-        }, 500)
-
+        }, 500);
     }
 });
 
@@ -700,7 +699,7 @@ var app = new Vue({
                 options.filters = [];
                 options.show_all_filters = false;
         
-                var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext", description:"Search for terms anywhere in the record" } );
+                var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext", id:"freetext", description:"Search for terms anywhere in the record" } );
                 options.filters.push(free_text_filter);
         
                 for (field_i = 0; field_i < dataset.config.fields.length; ++field_i) {
