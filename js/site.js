@@ -317,31 +317,9 @@ var HomePage = Vue.component("home-page", {
     data: function () {
         var data = {};
         data.dataset = this.$root.defaultDataset;
-        data.filters_by_id = {};
-        data.filters = [];
-        data.show_all_filters = false;
+        data.options = this.$root.defaultDatasetOptions;
 
-        var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext", description:"Search for terms anywhere in the record" } );
-        data.filters.push(free_text_filter);
-
-        for (field_i = 0; field_i < data.dataset.config.fields.length; ++field_i) {
-            var field = data.dataset.config.fields[field_i];
-            if( field.filter === undefined ) { field.filter = true; };
-            if( field.filter ) {
-                var filter = makeFilter( field );
-                data.filters_by_id[field.id] = filter;
-                data.filters.push(filter);
-            }
-        }
-
-        // expand sort field names into actual field objects for MVC
-        data.sort_dir = "asc"; // or desc
-        data.sort_fields = [];
-        for( var i=0; i<data.dataset.config.sort.length; ++i ) {
-             var field = data.dataset.fields_by_id[ data.dataset.config.sort[i] ];
-             data.sort_fields.push( field );
-        }
-        data.sort_field = data.sort_fields[0].id;
+        data.visible_filters = [];
 
         if( this.$route.name=="browse" && this.$route.params.field != null && this.$route.params.value != null ) {
             data.browse= { field:this.$route.params.field, value:this.$route.params.value };
@@ -350,8 +328,6 @@ var HomePage = Vue.component("home-page", {
         } else {
             data.browse = null;
         }
-
-        data.visible_filters = [];
 
         return data;
     },
@@ -368,7 +344,7 @@ var HomePage = Vue.component("home-page", {
             // triggered when we move between named routes
             this.onRouteUpdate( to );
         },
-        'show_all_filters': function( to, from ) {
+        'options.show_all_filters': function( to, from ) {
             this.setVisibleFilters();
         }
     },
@@ -380,11 +356,11 @@ var HomePage = Vue.component("home-page", {
         onRouteUpdate: function(to) {
             // when the route is updated, update the filters
             if( to.name=="browse" && to.params.field != null && to.params.value != null ) {
-                this.show_all_filters = false;
+                this.options.show_all_filters = false;
                 this.resetFilters();
                 this.browse= { field: to.params.field, value: to.params.value };
-                this.filters_by_id[ this.browse.field ].mode = "is";
-                this.filters_by_id[ this.browse.field ].term = this.browse.value;
+                this.options.filters_by_id[ this.browse.field ].mode = "is";
+                this.options.filters_by_id[ this.browse.field ].term = this.browse.value;
             } else {
                 this.browse = null;
             }
@@ -392,9 +368,9 @@ var HomePage = Vue.component("home-page", {
         },
         setVisibleFilters: function() {
             this.visible_filters = [];
-            for (var i = 0; i < this.filters.length; i++) {
-                var filter = this.filters[i];
-                if (( this.show_all_filters 
+            for (var i = 0; i < this.options.filters.length; i++) {
+                var filter = this.options.filters[i];
+                if (( this.options.show_all_filters 
                    || filter.field.quick_search 
                    || ( this.browse!=null && filter.field.id==this.browse.field) )) {
                     this.visible_filters.push( filter );
@@ -404,10 +380,10 @@ var HomePage = Vue.component("home-page", {
         filterResults: function() {
             // build a list of filters to be applied
             var active_filters = [];
-            for (var i = 0; i < this.filters.length; i++) {
+            for (var i = 0; i < this.options.filters.length; i++) {
                 // does the filter pass?
-                var filter = this.filters[i];
-                if (filter.isSet() && ( this.show_all_filters 
+                var filter = this.options.filters[i];
+                if (filter.isSet() && ( this.options.show_all_filters 
                                      || filter.field.quick_search 
                                      || ( this.browse!=null && filter.field.id==this.browse.field) )) {
                     active_filters.push(filter);
@@ -440,10 +416,10 @@ var HomePage = Vue.component("home-page", {
         },
         sortResults: function(results) {
             // sort records based on sort field
-            var dataset = this;
+            var component = this;
             results.sort( function(a,b) {
-                var av = a[dataset.sort_field].value;
-                var bv = b[dataset.sort_field].value;
+                var av = a[component.options.sort_field].value;
+                var bv = b[component.options.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
                 if(typeof bv === 'array') { bv = bv[0]; }
                 if( av == null ) { av = ""; }
@@ -451,15 +427,15 @@ var HomePage = Vue.component("home-page", {
                 av = av.toLowerCase();
                 bv = bv.toLowerCase();
                 if( av==bv ) { return 0; }
-                if( dataset.sort_dir == 'asc'  && av>bv ) { return 1; }
-                if( dataset.sort_dir == 'desc' && av<bv ) { return 1; }
+                if( component.options.sort_dir == 'asc'  && av>bv ) { return 1; }
+                if( component.options.sort_dir == 'desc' && av<bv ) { return 1; }
                 return -1;
             });
             return results;
         },
         resetFilters: function() {
-            for (var i = 0; i < this.filters.length; i++) {
-                this.filters[i].reset();
+            for (var i = 0; i < this.options.filters.length; i++) {
+                this.options.filters[i].reset();
             }
         }
     },
@@ -519,12 +495,7 @@ Vue.component("filter-form", {
 
 Vue.component("results", {
     template: "#templateResults",
-    props: ["results"],
-    data: function() {
-        return {
-            options:{show_all_results: false},
-        }
-    },
+    props: ["results","options"],
     computed: {
         visible_records: function() {
             if (this.options.show_all_results) {
@@ -657,6 +628,7 @@ var app = new Vue({
             }
 
             this.datasets_by_id = {};
+            this.dataset_options_by_id = {};
             // populate records by ID. Nb. This is using the wrong ID data for now. TODO
             for (ds_i = 0; ds_i < this.source_data.datasets.length; ++ds_i) {
                 var dataset = {};
@@ -721,12 +693,45 @@ var app = new Vue({
                         return a_value.localeCompare(b_value);
                 })};
 
+                /* Init options for this dataset, used by subcomponents */
+
+                var options = {};
+                options.filters_by_id = {};
+                options.filters = [];
+                options.show_all_filters = false;
+        
+                var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext", description:"Search for terms anywhere in the record" } );
+                options.filters.push(free_text_filter);
+        
+                for (field_i = 0; field_i < dataset.config.fields.length; ++field_i) {
+                    var field = dataset.config.fields[field_i];
+                    if( field.filter === undefined ) { field.filter = true; };
+                    if( field.filter ) {
+                        var filter = makeFilter( field );
+                        options.filters_by_id[field.id] = filter;
+                        options.filters.push(filter);
+                    }
+                }
+        
+                // expand sort field names into actual field objects for MVC
+                options.sort_dir = "asc"; // or desc
+                options.sort_fields = [];
+                for( var i=0; i<dataset.config.sort.length; ++i ) {
+                     var field = dataset.fields_by_id[ dataset.config.sort[i] ];
+                     options.sort_fields.push( field );
+                }
+                options.sort_field = options.sort_fields[0].id;
+
+
                 // add dataset to our dataset collection
                 this.datasets_by_id[dataset.config.id] = dataset;
+                this.dataset_options_by_id[dataset.config.id] = options;
+
 
                 // first dataset becomes the default
                 if (ds_i == 0) {
                     this.defaultDataset = dataset;
+                    this.defaultDatasetOptions = options;
                 }
             }
         }, function(response) {
