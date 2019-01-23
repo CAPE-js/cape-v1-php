@@ -323,8 +323,8 @@ var HomePage = Vue.component("home-page", {
 
         if( this.$route.name=="browse" && this.$route.params.field != null && this.$route.params.value != null ) {
             data.browse= { field:this.$route.params.field, value:this.$route.params.value };
-            data.filters_by_id[ data.browse.field ].mode = "is";
-            data.filters_by_id[ data.browse.field ].term = data.browse.value;
+            data.options.filters_by_id[ data.browse.field ].mode = "is";
+            data.options.filters_by_id[ data.browse.field ].term = data.browse.value;
         } else {
             data.browse = null;
         }
