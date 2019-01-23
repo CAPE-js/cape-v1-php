@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Music in the Second Empire Theatre</title>
 
-    <link href="css/bootstrap-4.0.0/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/site.css" rel="stylesheet">
     <link href="css/switch.css" rel="stylesheet">
 
@@ -24,7 +24,7 @@
     <script src="js/vue-router.js"></script>
     <script src="js/vue-resource-1.5.1.js"></script>
     <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap-4.0.0/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/moment.min.js"></script>
 
 </head>
@@ -63,7 +63,7 @@
         <div class="row">
         <div class="col">
         <div class="card bg-warning my-2">
-          <div class="card-body">
+          <div class="card-body text-center">
              This is a development instance of this service.
           </div>
         </div>
@@ -74,7 +74,7 @@
         <div class="row">
         <div class="col">
         <div class="card bg-warning my-2">
-          <div class="card-body">
+          <div class="card-body text-center">
              This is the pre-production instance of this service.
           </div>
         </div>
@@ -86,7 +86,7 @@
         <div class="row">
         <div class="col">
         <div class="card bg-error my-2">
-          <div class="card-body">
+          <div class="card-body text-center">
             <h2>Unable to load data</h2>
             <p>An error has occurred. The error was: {{ source_data.error_message }}.</p>
           </div>
@@ -97,9 +97,12 @@
     <template v-if="source_data.status == 'LOADING'">
         <div class="row">
         <div class="col">
-        <div class="card bg-info my-2">
-          <div class="card-body">
-            Please wait while the data loads.
+        <div class="card bg-primary text-white my-2">
+          <div class="card-body text-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <p>Please wait while the data loads.</p>
           </div>
         </div>
         </div>
@@ -176,7 +179,7 @@
             <div v-for="record in visible_records">
                 <summary-card v-bind:record="record"></summary-card>
             </div>
-            <div style='position:fixed;bottom:1rem;right:1rem;z-index:10'>
+            <div class="floating-summary">
                 <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
             </div>
         </div>
