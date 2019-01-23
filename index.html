@@ -18,15 +18,8 @@
     <![endif]-->
 
     <script src="local.js"></script>
-
-    <script src="js/popper.min.js"></script>
-    <script src="js/vue.js"></script>
-    <script src="js/vue-router.js"></script>
-    <script src="js/vue-resource-1.5.1.js"></script>
     <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/moment.min.js"></script>
-
+    <script src="js/loader.js"></script>
 </head>
 <body>
 <div class="container" id='page'>
@@ -305,7 +298,7 @@
                 <button v-on:click="downloadCSV" class="btn btn-secondary">Download CSV</button>
             </p>
             <h2>About this software</h2>
-            <p>This website uses pure Javascript to provide interaction with a JSON datafile which contains the records and site configuration. It does not require any database or PHP -- all the searching is done inside the single page. Our working title for the toolkit to make this happen is <i>DATA CAPE</i>. In theory it could be reused for similar projects in future. DATA CAPE, and this website (OPERA CAPE), were created by David Pepper and <a href="https://www.ecs.soton.ac.uk/people/totl">Christopher Gutteridge</a> in the iSolutions Web & Data Innovation team.</p>
+            <p>This website uses pure Javascript to provide interaction with a JSON datafile which contains the records and site configuration. It does not require any database or PHP -- all the searching is done inside the single page. Our working title for the toolkit to make this happen is <i>DATA CAPE</i>. In theory it could be reused for similar projects in future. DATA CAPE, and this website (OPERA CAPE), were created by <a href="https://www.ecs.soton.ac.uk/people/totl">Christopher Gutteridge</a> and David Pepper in the iSolutions Web & Data Innovation team.</p>
             <h2>Schema</h2>
             <p>Field types may be text, date, integer or enum. An enum field is short for enumerated, which means a
                 limited set of terms rather than free text.</p>
@@ -390,7 +383,7 @@
 </script>
 
 <script type="text/x-template" id="templateIndexCard">
-    <div class="card index-card">
+    <div class="card index-card mb-2">
         <div class="card-body">
             <h5 class="card-title">
                 <field-value v-bind:linkValue="false" v-bind:typedValue="record.title"></field-value>
@@ -489,6 +482,5 @@
 </script>
 
 </body>
-<script src="js/site.js"></script>
 </html>
 
