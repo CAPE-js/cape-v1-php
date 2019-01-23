@@ -620,7 +620,6 @@ Vue.component("debounced-input", {
     template: "#templateDebouncedInput",
     methods: {
         debounce_input: _.debounce(function (e) {
-            console.log("debounce ", e.target.value)
             this.$emit('input', e.target.value);
         }, 500)
 
