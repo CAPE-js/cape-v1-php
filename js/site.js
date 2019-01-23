@@ -632,8 +632,7 @@ var app = new Vue({
         source_data: {
             status: "LOADING"
         },
-        app_status: (typeof app_status === 'undefined'?"dev":app_status),
-        records_by_id: []
+        app_status: (typeof app_status === 'undefined'?"dev":app_status)
     },
     template: "#templateApp",
     created: function () {
