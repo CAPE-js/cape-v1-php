@@ -554,7 +554,7 @@ Vue.component("field-value", {
         return createElement("div", {class: classList }, rendered_value);
     },
     methods: {
-        renderSingleValue( createElement, value ) {
+        renderSingleValue: function( createElement, value ) {
             var rvalue = value;
             if( this.typedValue.field.type == 'date' ) {
                 var day = moment( rvalue );
@@ -822,3 +822,4 @@ function download(filename, data, mimetype) {
     }
 }
 
+//# sourceURL=site.js

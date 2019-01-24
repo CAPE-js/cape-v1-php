@@ -42,6 +42,8 @@ $(document).ready(function() {
         var next_script = load_list.shift();
         $.getScript(next_script, function(data, textStatus, jqxhr) {
               load_next_script();
+        }).fail(function(jqxhr, settings, exception) {
+            console.error("Error in ", next_script, "\n", exception)
         });
     }
 });
