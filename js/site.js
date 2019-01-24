@@ -590,8 +590,9 @@ Vue.component("debounced-input", {
     },
     template: "#templateDebouncedInput",
     created: function() {
+        var this_component = this;
         this.debounce_input= _.debounce(function (e) {
-            this.$emit('input', e.target.value);
+            this_component.$emit('input', e.target.value);
         }, 500);
     }
 });
