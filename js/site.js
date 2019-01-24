@@ -283,18 +283,21 @@ FreeTextFilter.prototype.matchesRecord = function(record) {
         var term_found = false;
         var fieldnames = Object.keys( record );
         fieldloop: for( var j=0; j<fieldnames.length; j++ ) {
-             var values = record[fieldnames[j]].value;
-             if( values == undefined ) { break; }
-             if( !record[fieldnames[j]].field.multiple ) {
-                 values = [values];
-             }
-             valueloop: for (var k = 0; k < values.length; k++) {
-                  var value = ""+values[k]; // force it into a string
-                  if (value.toLowerCase().indexOf(term) > -1) {
-                      term_found = true;
-                      break fieldloop;
-                  }
-             }
+
+            var values = record[fieldnames[j]].value;
+            if (values == undefined) {
+                continue;
+            }
+            if (!record[fieldnames[j]].field.multiple) {
+                values = [values];
+            }
+            valueloop: for (var k = 0; k < values.length; k++) {
+                var value = "" + values[k]; // force it into a string
+                if (value.toLowerCase().indexOf(term) > -1) {
+                    term_found = true;
+                    break fieldloop;
+                }
+            }
         }
 
         // has to match all terms
