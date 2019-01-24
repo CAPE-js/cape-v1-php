@@ -249,12 +249,12 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is'">
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
                     </template>
                     <template v-if="filter.mode=='between'">
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-to-'+filter.field.id"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-to-'+filter.field.id"></debounced-input>
                         and
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term2" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-from-'+filter.field.id"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term2" v-bind:placeholder="filter.placeholder.between[1]" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-from-'+filter.field.id"></debounced-input>
                     </template>
                 </div>
             </template>
