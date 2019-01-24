@@ -128,6 +128,14 @@
             It inventories the works of, among others, the Opéra-Comique, the Théâtre des Bouffes-Parisiens, the Théâtre des Fantaisies-Parisiennes.
             The project is work is in progress ranging from institutions where some data is largely complete (Opéra-Comique; Fantaisies-Parisiennes) to those where no data currently exists as of initial release on 1 February 2019 (Théâtre Déjazet; Délassements-Comiques).
         </p>
+        <div class="row">
+        <div class="col text-sm-right">
+            <div class="switch switch-sm">
+                <input v-model="options.show_all_filters" type="checkbox" class="switch" id="show-all-filters-upper" />
+                <label for="show-all-filters-upper">Show all filters</label>
+            </div>
+        </div>
+        </div>
         <div class="row mb-1">
             <div class="col">
                 <filter-form v-bind:filters="visible_filters"></filter-form>
@@ -146,9 +154,9 @@
                 <select v-model="options.sort_dir"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
             </div>
             <div class="col-sm-6 text-sm-right">
-                <div class="switch switch-sm">
-                  <input v-model="options.show_all_filters" type="checkbox" class="switch" id="show-all-filters" />
-                  <label for="show-all-filters">Show all filters</label>
+                <div class="switch switch-sm" v-if="options.show_all_filters">
+                  <input v-model="options.show_all_filters" type="checkbox" class="switch" id="show-all-filters-lower" />
+                  <label for="show-all-filters-lower">Show all filters</label>
                 </div>
             </div>
         </div>
