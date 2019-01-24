@@ -219,7 +219,7 @@
                     </select>
                 </div>
                 <div class="col-sm-8">
-                    <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" class="form-control form-control-sm"></debounced-input>
+                    <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder[filter.mode]" class="form-control form-control-sm"></debounced-input>
                 </div>
             </template>
             <template v-else-if="filter.field.type=='integer'">
@@ -231,12 +231,12 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is'">
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" class="form-control form-control-sm"></debounced-input>
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm"></debounced-input>
                     </template>
                     <template v-if="filter.mode=='between'">
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" class="form-control form-control-sm between-number-filter"></debounced-input>
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter"></debounced-input>
                         and
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" class="form-control form-control-sm between-number-filter"></debounced-input>
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" v-bind:placeholder="filter.placeholder.between[1]"  class="form-control form-control-sm between-number-filter"></debounced-input>
                     </template>
                 </div>
             </template>
@@ -491,7 +491,7 @@
 </script>
 
 <script type="text/x-template" id="templateDebouncedInput">
-    <input v-bind:type="input_type" v-bind:value="input_value" v-bind:id="input_id" v-on:input="debounce_input">
+    <input v-bind:placeholder="input_placeholder" v-bind:type="input_type" v-bind:value="input_value" v-bind:id="input_id" v-on:input="debounce_input">
 </script>
 
 </body>

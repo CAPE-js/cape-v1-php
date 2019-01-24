@@ -17,6 +17,10 @@ function makeFilter( field ) {
 function Filter( field ) {
     this.reset();
     this.field = field;
+    this.placeholder = { "is":"" };
+    if( field["placeholder"] && field["placeholder"]["is"] ) {
+        this.placeholder.is = field["placeholder"]["is"];
+    }
 }
 
 Filter.prototype.isSet = function() {
@@ -94,6 +98,11 @@ Filter.prototype.matchesValues = function(values) {
  */
 function TextFilter( field ) {
     Filter.call( this, field );
+    if( field["placeholder"] && field.placeholder["contains"] ) {
+        this.placeholder.contains = field.placeholder.contains;
+    } else {
+        this.placeholder.contains = "";
+    }
 }
 TextFilter.prototype = Object.create(Filter.prototype);
 TextFilter.prototype.matchesValues = function(values) {
@@ -111,6 +120,9 @@ TextFilter.prototype.matchesValues = function(values) {
  */
 function IntegerFilter( field ) {
     Filter.call( this, field );
+    if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
+        this.placeholder.between = field.placeholder.between;
+    }
 }
 
 IntegerFilter.prototype = Object.create(Filter.prototype);
@@ -166,6 +178,9 @@ function DateFilter( field ) {
     Filter.call( this, field );
     this.mode = "between";
     this.term2 = "";
+    if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
+        this.placeholder.between = field.placeholder.between;
+    }
 }
 DateFilter.prototype = Object.create(Filter.prototype);
 
@@ -583,7 +598,7 @@ Vue.component("field-label-and-value-if-set", {
 });
 
 Vue.component("debounced-input", {
-    props: ["type", "value", "id"],
+    props: { type:String, value:String, id:String, placeholder: {"type":String,"default":""}},
     // note: use computed to expose props as local values, this avoids bad practice vue warning.
     computed: {
         input_type: function() {
@@ -594,6 +609,9 @@ Vue.component("debounced-input", {
         },
         input_id: function() {
             return this.id;
+        },
+        input_placeholder: function() {
+            return this.placeholder;
         }
     },
     template: "#templateDebouncedInput",
