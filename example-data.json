@@ -268,7 +268,7 @@
                         "id": "record_complete",
                         "source_heading": "Record Complete?",
                         "type": "text",
-                        "label": "Record Number",
+                        "label": "Record Complete",
                         "description": ""
                     }
                 ]
