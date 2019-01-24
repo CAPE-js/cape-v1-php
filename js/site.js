@@ -584,11 +584,16 @@ Vue.component("field-label-and-value-if-set", {
 
 Vue.component("debounced-input", {
     props: ["type", "value", "id"],
-    data: function() {
-        return {
-            input_type: this.type,
-            input_value: this.value,
-            input_id: this.id
+    // note: use computed to expose props as local values, this avoids bad practice vue warning.
+    computed: {
+        input_type: function() {
+            return this.type;
+        },
+        input_value: function() {
+            return this.value;
+        },
+        input_id: function() {
+            return this.id;
         }
     },
     template: "#templateDebouncedInput",
