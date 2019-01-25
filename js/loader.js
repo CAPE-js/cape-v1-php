@@ -33,6 +33,7 @@ $(document).ready(function() {
         load_list = libs[app_status];
     }
     load_next_script();
+    load_browser_styles();
 
     function load_next_script() {
         if( load_list.length == 0 ) {
@@ -45,6 +46,17 @@ $(document).ready(function() {
         }).fail(function(jqxhr, settings, exception) {
             console.error("Error in ", next_script, "\n", exception)
         });
-    }
+    };
+
+    function load_browser_styles() {
+        if (window.navigator.userAgent.indexOf("MSIE") < 0 && window.navigator.userAgent.indexOf("Trident") < 0) {
+
+            $('<link/>', {
+                rel: 'stylesheet',
+                type: 'text/css',
+                href: 'css/switch.css'
+            }).appendTo('head');
+        }
+    };
 });
 
