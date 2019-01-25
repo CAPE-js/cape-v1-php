@@ -122,6 +122,8 @@ function IntegerFilter( field ) {
     Filter.call( this, field );
     if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
         this.placeholder.between = field.placeholder.between;
+    } else {
+        this.placeholder.between = ["",""];
     }
 }
 
@@ -180,6 +182,8 @@ function DateFilter( field ) {
     this.term2 = "";
     if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
         this.placeholder.between = field.placeholder.between;
+    } else {
+        this.placeholder.between = ["",""];
     }
 }
 DateFilter.prototype = Object.create(Filter.prototype);
