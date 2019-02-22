@@ -566,7 +566,7 @@ Vue.component("field-value", {
             rendered_value = [];
             for (var i = 0; i < this.typedValue.value.length; ++i) {
                 if (rendered_value.length) {
-                    rendered_value.push(", ");
+                    rendered_value.push("; ");
                 }
                 rendered_value.push( this.renderSingleValue( createElement, this.typedValue.value[i] ) );
             }
