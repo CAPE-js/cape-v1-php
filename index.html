@@ -128,6 +128,11 @@
             The project is work is in progress ranging from institutions where some data is largely complete (Opéra-Comique; Fantaisies-Parisiennes) to those where no data currently exists as of initial release on 1 February 2019 (Théâtre Déjazet; Délassements-Comiques).
         </p>
         <div class="row">
+            <div class="col text-sm-right pb-3 pt-3">
+                <button v-on:click="resetFilters" class="btn btn-secondary btn-sm">Reset form</button>
+            </div>
+        </div>
+        <div class="row">
         <div class="col text-sm-right">
             <div class="switch switch-sm">
                 <input v-model="options.show_all_filters" type="checkbox" class="switch" id="show-all-filters-upper" />
@@ -230,12 +235,12 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is'">
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm"></debounced-input>
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
                     </template>
                     <template v-if="filter.mode=='between'">
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter"></debounced-input>
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
                         and
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" v-bind:placeholder="filter.placeholder.between[1]"  class="form-control form-control-sm between-number-filter"></debounced-input>
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" v-bind:placeholder="filter.placeholder.between[1]"  class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input> 
                     </template>
                 </div>
             </template>
