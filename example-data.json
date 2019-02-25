@@ -133,7 +133,7 @@
                     },
                     {
                         "id": "emplois_listed_in_vs",
-                        "type": "text",
+                        "type": "enum",
                         "source_heading": "Emplois listed in VS?",
                         "label": "Emplois listed in VS?",
                         "description": "Presence of voice types [emploi] in vocal score"
@@ -154,7 +154,7 @@
                     },
                     {
                         "id": "institution",
-                        "type": "text",
+                        "type": "enum",
                         "source_heading": "Institution",
                         "label": "Institution",
                         "description": "Institution of first performance"
@@ -189,7 +189,7 @@
                     },
                     {
                         "id": "libretto_publisher",
-                        "type": "text",
+                        "type": "enum",
                         "source_heading": "Libretto Publisher",
                         "label": "Libretto Publisher",
                         "description": "Publisher of libretto"
@@ -203,14 +203,14 @@
                     },
                     {
                         "id": "vs_publisher",
-                        "type": "text",
+                        "type": "enum",
                         "source_heading": "VS Publisher",
                         "label": "VS Publisher",
                         "description": "Publisher of vocal score"
                     },
                     {
                         "id": "vs_arranger",
-                        "type": "text",
+                        "type": "enum",
                         "source_heading": "VS Arranger",
                         "label": "VS Arranger",
                         "description": "Arranger of keyboard reduction of vocal score"
@@ -23119,7 +23119,8 @@
                 }
             ],
             "unmapped_headings": [],
-            "missing_headings": []
+            "missing_headings": [],
+            "source_file": "\/Users\/cjg\/Projects\/mitset\/dynamic\/..\/data\/opera-2019-01-16.xlsx"
         }
     ]
 }

@@ -26,7 +26,9 @@ foreach( $config["datasets"] as $dataset_config ) {
 		exit_with_error( "Unknown format: ".$dataset_config["format"] );
 	}
 	$raw_dataset = table_to_objects( $table );
-	$datasets []= map_dataset( $dataset_config, $raw_dataset );
+	$dataset = map_dataset( $dataset_config, $raw_dataset );
+	$dataset["source_file"] = $dataset_file;
+	$datasets []= $dataset;
 }
 
 # output json file
