@@ -129,7 +129,7 @@
                         "type": "text",
                         "source_heading": "Composer",
                         "label": "Composer",
-                        "description": ""
+                        "description": "Composer"
                     },
                     {
                         "id": "emplois_listed_in_vs",
