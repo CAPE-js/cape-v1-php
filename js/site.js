@@ -123,7 +123,7 @@ function IntegerFilter( field ) {
     if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
         this.placeholder.between = field.placeholder.between;
     } else {
-        this.placeholder.between = ["",""];
+        this.placeholder.between = ["Minimum "+field.min,"Maximum "+field.max];
     }
 }
 
@@ -602,7 +602,7 @@ Vue.component("field-label-and-value-if-set", {
 });
 
 Vue.component("debounced-input", {
-    props: { type:String, value:String, id:String, placeholder: {"type":String,"default":""}},
+    props: { type:String, value:[String,Number], id:String, placeholder: {"type":String,"default":""}},
     // note: use computed to expose props as local values, this avoids bad practice vue warning.
     computed: {
         input_type: function() {
@@ -671,6 +671,8 @@ var app = new Vue({
 
                 // initialise enum registries
                 var enums = {};
+                var intmax = {};
+                var intmin = {};
 
                 // add fields mapped by ID, and populate the filter object
                 dataset.fields_by_id = {};
@@ -682,6 +684,10 @@ var app = new Vue({
                     if (field.type == "enum") {
                         // init enum registry for an enum field
                         enums[field.id] = {};
+                    }
+                    if (field.type == "integer") {
+                        intmin[field.id] = null;
+                        intmax[field.id] = null;
                     }
                 }
 
@@ -698,8 +704,6 @@ var app = new Vue({
                             // convert 25/12/2001 to 2001-12-25 TODO: this should use sprintf or date functions
                             value = value.split("/").reverse().join("-");
                         }
-                        record[field.id] = {value: value, field: field};
-
                         if (field.type == "enum") {
                             var enum_values = value;
                             if( !field.multiple ) { enum_values = [ enum_values ]; }
@@ -709,19 +713,44 @@ var app = new Vue({
                                 } 
                             } 
                         }
+                        if (field.type == "integer" && value !== null ) {
+                            value = parseInt( value );
+                            if( isNaN(value) ) {
+                                value = null; 
+                            } else {
+                                if( intmin[field.id]==null || value < intmin[field.id] ) {
+                                    intmin[field.id] = value;
+                                }
+                                if( intmax[field.id]==null || value > intmax[field.id] ) {
+                                    intmax[field.id] = value;
+                                }
+                                value = ""+value;
+                            }
+                        }
+
+                        record[field.id] = {value: value, field: field};
                     }
                     dataset.records_by_id[source_record[dataset.config.id_field]] = record;
                     dataset.records.push(record);
                 }
-
                 // add this list of enum values to each enum field
                 var enum_fields = Object.keys(enums);
                 for (var enum_i = 0; enum_i < enum_fields.length; enum_i++) {
-                    dataset.fields_by_id[enum_fields[enum_i]].options = Object.keys(enums[enum_fields[enum_i]]).sort(function(a, b) {
+                    var fieldname = enum_fields[enum_i];
+                    dataset.fields_by_id[fieldname].options = Object.keys(enums[fieldname]).sort(function(a, b) {
                         var a_value = a.toLowerCase();
                         var b_value = b.toLowerCase();
                         return a_value.localeCompare(b_value);
                 })};
+
+                // add integer max and mins to each integer field
+                var int_fields = Object.keys(intmin);
+                for (var int_i = 0; int_i < int_fields.length; int_i++) {
+                    var fieldname = int_fields[int_i];
+                    // nb. force these to be strings
+                    dataset.fields_by_id[fieldname].min = ""+intmin[fieldname];
+                    dataset.fields_by_id[fieldname].max = ""+intmax[fieldname];
+                }
 
                 /* Init options for this dataset, used by subcomponents */
 
