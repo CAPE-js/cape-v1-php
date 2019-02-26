@@ -121,7 +121,7 @@
 </script>
 
 <script type="text/x-template" id="templateHome">
-    <form>
+    <form v-on:keypress.enter.prevent="ignoreEnter">
         <p>
             Music in the Second Empire Theatre is a database that gives access to the repertory of opéra comique, opérette and related genres during the long Second Empire, c1848 to c1873.
             It inventories the works of, among others, the Opéra-Comique, the Théâtre des Bouffes-Parisiens, the Théâtre des Fantaisies-Parisiennes.
