@@ -31,7 +31,7 @@
 					"label":"Date",
 					"description":"Date of premiere",
 					"quick_search":true,
-					"placeholder":{ "is": "1857 or 1857-12-25", "between": [ "1857 or 1857-12-25", "1857 or 1857-12-25" ] }
+					"placeholder":{ "is": "eg. 1857 or 1857-12-25", "between": [ "eg. 1857 or 1857-12-25", "eg. 1857 or 1857-12-25" ] }
 				},
 				{
 					"id":"title",
@@ -155,7 +155,7 @@
 					"source_heading":"Original Date",
 					"label":"Original Date",
 					"description":"Date of premiere, if not original institution",
-					"placeholder":{ "is": "1857 or 1857-12-25", "between": [ "1857 or 1857-12-25", "1857 or 1857-12-25" ] }
+					"placeholder":{ "is": "eg. 1857 or 1857-12-25", "between": [ "eg. 1857 or 1857-12-25", "eg. 1857 or 1857-12-25" ] }
 				},
 				{
 					"id":"original_institution",
