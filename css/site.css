@@ -195,13 +195,16 @@ a {
 
 /* End results summary */
 
-/* Number filter */
+/* filter */
 .between-number-filter {
     display:inline-block;
     width:auto
 }
+.form-control::placeholder {
+    color: #ccc;
+}
 
-/* End number filter */
+/* End filter */
 
 /* force switch to be more blue */
 .switch input:checked + label::before {
