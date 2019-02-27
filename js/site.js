@@ -707,7 +707,7 @@ var app = new Vue({
                             var enum_values = value;
                             if( !field.multiple ) { enum_values = [ enum_values ]; }
                             for( var i=0;i<enum_values.length;i++ ) { 
-                                if( enum_values[i] != "" ) {
+	                        if( enum_values[i] != "" && enum_values[i] != null ) {
                                     enums[field.id][enum_values[i]] = 1;
                                 } 
                             } 
