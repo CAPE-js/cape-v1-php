@@ -106,14 +106,14 @@
 					"id":"author",
 					"multiple":true,
 					"source_format":"repeated",
-					"type":"text",
+					"type":"enum",
 					"source_heading":"Author",
 					"label":"Author",
 					"description":"Librettist[s]"
 				},
 				{
 					"id":"composer",
-					"type":"text",
+					"type":"enum",
 					"source_heading":"Composer",
 					"label":"Composer",
 					"description":"Composer"
@@ -159,14 +159,14 @@
 				},
 				{
 					"id":"original_institution",
-					"type":"text",
+					"type":"enum",
 					"source_heading":"Original Institution",
 					"label":"Original Institution",
 					"description":"Original institution, if not premiere"
 				},
 				{
 					"id":"metteur_en_scene",
-					"type":"text",
+					"type":"enum",
 					"source_heading":"Metteur en scène",
 					"label":"Metteur en scène",
 					"description":"Name of metteur en scène"
@@ -216,14 +216,14 @@
 				},
 				{
 					"id":"original_author",
-					"type":"text",
+					"type":"enum",
 					"source_heading":"Original Author",
 					"label":"Original Author",
 					"description":"Librettist of original form of work"
 				},
 				{
 					"id":"original_composer",
-					"type":"text",
+					"type":"enum",
 					"source_heading":"Original Composer",
 					"label":"Original Composer",
 					"description":"Composer of original form of work"
@@ -254,7 +254,7 @@
 				{
 					"id":"record_complete",
 					"source_heading":"Record Complete?",
-					"type":"text",
+					"type":"enum",
 					"label":"Record Complete",
 					"description":""
 				},
