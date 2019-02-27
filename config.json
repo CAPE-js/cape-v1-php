@@ -129,14 +129,14 @@
 				},
 				{
 					"id":"dance_number",
-					"type":"text",
+					"type":"enum",
 					"source_heading":"Dance Number",
 					"label":"Dance Number",
 					"description":"Presence of identified dance number in score"
 				},
 				{
 					"id":"melodrame",
-					"type":"text",
+					"type":"enum",
 					"source_heading":"Mélodrame",
 					"label":"Mélodrame",
 					"description":"Presence of mélodrame in score"
