@@ -222,10 +222,14 @@ documented on the
                     <select v-model.trim="filter.mode" class="form-control form-control-sm">
                         <option value="is">is</option>
                         <option value="contains">contains</option>
+                        <option value="set">is set</option>
+                        <option value="not-set">is not set</option>
                     </select>
                 </div>
                 <div class="col-sm-8">
-                    <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder[filter.mode]" class="form-control form-control-sm"></debounced-input>
+                    <template v-if="filter.mode=='is' || filter.mode=='contains'">
+                        <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder[filter.mode]" class="form-control form-control-sm"></debounced-input>
+                    </template>
                 </div>
             </template>
             <template v-else-if="filter.field.type=='integer'">
@@ -233,6 +237,8 @@ documented on the
                     <select v-model.trim="filter.mode" class="form-control form-control-sm">
                         <option value="is">is</option>
                         <option value="between">is between</option>
+                        <option value="set">is set</option>
+                        <option value="not-set">is not set</option>
                     </select>
                 </div>
                 <div class="col-sm-8">
@@ -251,6 +257,8 @@ documented on the
                     <select v-model.trim="filter.mode" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
                         <option value="is">is</option>
                         <option value="between">is between</option>
+                        <option value="set">is set</option>
+                        <option value="not-set">is not set</option>
                     </select>
                 </div>
                 <div class="col-sm-8">
@@ -269,20 +277,22 @@ documented on the
                     <select v-model.trim="filter.mode" class="form-control form-control-sm">
                         <option value="is">is</option>
                         <option value="one-of">one of</option>
+                        <option value="set">is set</option>
+                        <option value="not-set">is not set</option>
                     </select>
                 </div>
                 <div class="col-sm-8">
-                <template v-if="filter.mode=='is'">
-                    <select v-model="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
-                        <option selected="selected" value="">Select</option>
-                        <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
-                    </select>
-                </template>
-                <template v-if="filter.mode=='one-of'">
-                    <select multiple="multiple" v-model="filter.terms" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
-                        <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
-                    </select>
-                </template>
+                    <template v-if="filter.mode=='is'">
+                        <select v-model="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
+                            <option selected="selected" value="">Select</option>
+                            <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
+                        </select>
+                    </template>
+                    <template v-if="filter.mode=='one-of'">
+                        <select multiple="multiple" v-model="filter.terms" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
+                            <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
+                        </select>
+                    </template>
                 </div>
             </template>
             <template v-else-if="filter.field.type=='freetext'">

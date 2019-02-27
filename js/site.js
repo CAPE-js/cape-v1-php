@@ -17,6 +17,7 @@ function makeFilter( field ) {
 function Filter( field ) {
     this.reset();
     this.field = field;
+    this.mode = "is";
     this.placeholder = { "is":"" };
     if( field["placeholder"] && field["placeholder"]["is"] ) {
         this.placeholder.is = field["placeholder"]["is"];
@@ -24,6 +25,7 @@ function Filter( field ) {
 }
 
 Filter.prototype.isSet = function() {
+    if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != "");
 }
 
@@ -66,14 +68,27 @@ Filter.prototype.matchesValuesContains = function(values) {
 
     return true;
 }
+Filter.prototype.matchesValuesSet = function(values) {
+    for (var j = 0; j < values.length; j++) {
+        if( values[j] !== null && values[j] !== "" ) {
+            return true;
+        }
+    }
+    return false;
+}
+Filter.prototype.matchesValuesNotSet = function(values) {
+    var v = this.matchesValuesSet(values);
+    return ! this.matchesValuesSet(values);
+}
+
+
 Filter.prototype.matchesRecord = function(record) {
     /* Assumes that the filter is set */
     
     var values = record[this.field.id].value;
-    if (values === null) {
-        return false;
-    }
-    if (this.field.multiple && values.length==0) {
+    if ( values === null || (this.field.multiple && values.length==0) ) {
+        // special case for not-set where not matching is a success
+        if( this.mode=="not-set" ) { return true; }
         return false;
     }
 
@@ -96,6 +111,7 @@ Filter.prototype.matchesValues = function(values) {
  */
 function TextFilter( field ) {
     Filter.call( this, field );
+    this.mode = "contains";
     if( field["placeholder"] && field.placeholder["contains"] ) {
         this.placeholder.contains = field.placeholder.contains;
     } else {
@@ -106,10 +122,15 @@ TextFilter.prototype = Object.create(Filter.prototype);
 TextFilter.prototype.matchesValues = function(values) {
     if( this.mode == "is" ) {
         return this.matchesValuesIs( values );
-    } else {
-        // not 'is' so must be a 'contains' search
+    } else if( this.mode == "contains" ) {
         return this.matchesValuesContains( values );
+    } else if( this.mode == "set" ) {
+        return this.matchesValuesSet( values );
+    } else if( this.mode == "not-set" ) {
+        return this.matchesValuesNotSet( values );
     }
+    console.log( "Unknown search mode "+this.mode+" on ", this );
+    return false;
 }
 
 /*
@@ -118,6 +139,7 @@ TextFilter.prototype.matchesValues = function(values) {
  */
 function IntegerFilter( field ) {
     Filter.call( this, field );
+    this.mode = "between";
     if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
         this.placeholder.between = field.placeholder.between;
     } else {
@@ -128,6 +150,7 @@ function IntegerFilter( field ) {
 IntegerFilter.prototype = Object.create(Filter.prototype);
 
 IntegerFilter.prototype.isSet = function() {
+    if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != "" || (this.mode == "between" && this.term2 != ""));
 }
 
@@ -140,10 +163,15 @@ IntegerFilter.prototype.reset = function() {
 IntegerFilter.prototype.matchesValues = function(values) {
     if( this.mode == "is" ) {
         return this.matchesValuesIs( values );
-    } else {
-        // not 'is' so must be a 'between' search
+    } else if( this.mode == "between" ) {
         return this.matchesValuesBetween( values );
+    } else if( this.mode == "set" ) {
+        return this.matchesValuesSet( values );
+    } else if( this.mode == "not-set" ) {
+        return this.matchesValuesNotSet( values );
     }
+    console.log( "Unknown search mode "+this.mode+" on ", this );
+    return false;
 }
 
 IntegerFilter.prototype.matchesValuesIs = function(values) {
@@ -187,6 +215,7 @@ function DateFilter( field ) {
 DateFilter.prototype = Object.create(Filter.prototype);
 
 DateFilter.prototype.isSet = function() {
+    if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != "" || (this.mode == "between" && this.term2 != ""));
 }
 
@@ -199,10 +228,15 @@ DateFilter.prototype.reset = function() {
 DateFilter.prototype.matchesValues = function(values) {
     if( this.mode == "is" ) {
         return this.matchesValuesIs( values );
-    } else {
-        // not 'is' so must be a 'between' search
+    } else if( this.mode == "between" ) {
         return this.matchesValuesBetween( values );
+    } else if( this.mode == "set" ) {
+        return this.matchesValuesSet( values );
+    } else if( this.mode == "not-set" ) {
+        return this.matchesValuesNotSet( values );
     }
+    console.log( "Unknown search mode "+this.mode+" on ", this );
+    return false;
 }
 // for dates, date "is" actually is 'starts with' so that 1990-02-02 "is" 1990
 DateFilter.prototype.matchesValuesIs = function(values) {
@@ -239,11 +273,13 @@ DateFilter.prototype.matchesValuesBetween = function(values) {
  */
 function EnumFilter( field ) {
     Filter.call( this, field );
+    this.mode = "is";
 }
 
 EnumFilter.prototype = Object.create(Filter.prototype);
 
 EnumFilter.prototype.isSet = function() {
+    if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     if (this.mode == "is") {
         return this.term != "";
     } else if (this.mode == "one-of") {
@@ -258,8 +294,7 @@ EnumFilter.prototype.reset = function() {
 }
 
 EnumFilter.prototype.matchesValues = function(values) {
-
-    if (this.mode=='is') {
+    if( this.mode == "is" ) {
         // find a value that matches the term
         for(var i = 0; i < values.length; i++) {
             if (values[i] == this.term) {
@@ -267,8 +302,7 @@ EnumFilter.prototype.matchesValues = function(values) {
             }
         }
         return false;
-
-    } else if (this.mode == 'one-of') {
+    } else if( this.mode == "one-of" ) {
         // do any of the terms match any of the values?
         for(var i = 0; i < values.length; i++) {
             for(var j = 0; j < this.terms.length; j++)
@@ -277,9 +311,14 @@ EnumFilter.prototype.matchesValues = function(values) {
             }
         }
         return false;
+    } else if( this.mode == "set" ) {
+        return this.matchesValuesSet( values );
+    } else if( this.mode == "not-set" ) {
+        return this.matchesValuesNotSet( values );
     }
 
-    return this.matchesValuesIs( values );
+    console.log( "Unknown search mode "+this.mode+" on ", this );
+    return false;
 }
 
 /*
