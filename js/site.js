@@ -53,7 +53,7 @@ Filter.prototype.matchesValuesContains = function(values) {
         var term = make_pattern(terms[i]);
         var term_found = false;
         for (var j = 0; j < values.length; j++) {
-            if (term.match( values[j] ) ) {
+            if (values[j].match( term ) ) {
                 term_found = true;
                 break;
             }
