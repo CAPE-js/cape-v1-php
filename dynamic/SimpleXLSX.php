@@ -906,7 +906,7 @@ class SimpleXLSX {
 	public function unixstamp( $excelDateTime ) {
 		$d = floor( $excelDateTime ); // seconds since 1900
 		$t = $excelDateTime - $d;
-print "//$excelDateTime/$d/$t\n";
+#print "//$excelDateTime/$d/$t\n";
 
 		/** @noinspection SummerTimeUnsafeTimeManipulationInspection */
 		$t = ( abs( $d ) > 0 ) ? ( $d - 25569 ) * 86400 + round( $t * 86400 ) : round( $t * 86400 );
