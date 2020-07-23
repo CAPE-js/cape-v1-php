@@ -507,7 +507,6 @@ var HomePage = Vue.component("home-page", {
             results = this.sortResults(results);
             // argh, this is a side effect! It lets the record view know the prev and next result
             currentSearchResults = {};
-            console.log(results); 
             return results;
         }
     },
