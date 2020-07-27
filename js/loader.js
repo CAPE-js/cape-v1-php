@@ -10,6 +10,7 @@ $(document).ready(function() {
             "js/lodash.min.js", 
             "js/site.js" ],
         pprd: [ 
+            "dynamic/gitinfo.php",
             "js/popper.min.js", 
             "js/vue.min.js", 
             "js/vue-router.js", 
@@ -19,6 +20,7 @@ $(document).ready(function() {
             "js/lodash.min.js", 
             "js/site.js" ],
         dev:  [ 
+            "dynamic/gitinfo.php",
             "js/popper.min.js", 
             "js/vue.js",     
             "js/vue-router.js", 
