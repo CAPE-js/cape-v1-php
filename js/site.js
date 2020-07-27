@@ -282,7 +282,6 @@ function EnumFilter( field ) {
     for( var i=0;i<field.options.length;i++ ) {
         this.field.multiselectOptions.push( { name: field.options[i] } );
     }
-    console.log( this.field.multiselectOptions );
 }
 
 EnumFilter.prototype = Object.create(Filter.prototype);
