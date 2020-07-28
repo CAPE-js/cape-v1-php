@@ -22,7 +22,7 @@ if( preg_match( "/commit\s+([^\n]+)\nAuthor:\s*([^\n]+)\nDate:\s*([^\n]+)\n((.|\
 	$data["commit_comment"] = trim($matches[4]);
 }
 
-print "gitinfo = ".json_encode( $data );
+print "git_info = ".json_encode( $data );
 exit(0);
 
 function read_cmd( $cmd ) {

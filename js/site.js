@@ -1,3 +1,11 @@
+
+// format date
+Vue.filter('formatTime', function(value) {
+    if (value) {
+        return moment(value*1000).toISOString();
+    }
+});
+
 // filter factory
 function makeFilter( field ) {
     switch (field.type) {
@@ -671,7 +679,8 @@ var app = new Vue({
         source_data: {
             status: "LOADING"
         },
-        app_status: (typeof app_status === 'undefined'?"dev":app_status)
+        app_status: (typeof app_status === 'undefined'?"dev":app_status),
+	git_info: git_info
     },
     template: "#templateApp",
     created: function () {
@@ -838,7 +847,8 @@ var app = new Vue({
         })
     },
 
-    methods: {},
+    methods: {
+    },
 
     router: new VueRouter({
         routes: [
