@@ -84,7 +84,10 @@ a {
 
 /* index cards */
 
-.index-card {
+.index-card .card-body {
+}
+.index-card-nav {
+    font-variant: small-caps;
 }
 
 /* end of index cards */

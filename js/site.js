@@ -380,6 +380,7 @@ FreeTextFilter.prototype.matchesRecord = function(record) {
 /*
  *  Vue Components
  */
+var currentSearchResults = null;
 
 var HomePage = Vue.component("home-page", {
     data: function () {
@@ -513,6 +514,8 @@ var HomePage = Vue.component("home-page", {
         filteredAndSortedResults: function() {
             var results = this.filterResults();
             results = this.sortResults(results);
+            // argh, this is a side effect! It lets the record view know the prev and next result
+            currentSearchResults = {};
             return results;
         }
     },
@@ -741,6 +744,17 @@ var app = new Vue({
                 // create a lookup table for record by id
                 dataset.records_by_id = {};
                 dataset.records = [];
+                var prev_id=null;
+                source.records.sort( (a,b)=>{
+                    if( Number(a[dataset.config.id_field]) < Number(b[dataset.config.id_field]) ) {
+                        return -1;
+                    }
+                    if( Number(a[dataset.config.id_field]) > Number(b[dataset.config.id_field]) ) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                    
                 for (record_i = 0; record_i < source.records.length; ++record_i) {
                     var source_record = source.records[record_i];
                     var record = {};
@@ -755,7 +769,7 @@ var app = new Vue({
                             var enum_values = value;
                             if( !field.multiple ) { enum_values = [ enum_values ]; }
                             for( var i=0;i<enum_values.length;i++ ) { 
-	                        if( enum_values[i] != "" && enum_values[i] != null ) {
+                                if( enum_values[i] != "" && enum_values[i] != null ) {
                                     enums[field.id][enum_values[i]] = 1;
                                 } 
                             } 
@@ -777,8 +791,14 @@ var app = new Vue({
 
                         record[field.id] = {value: value, field: field};
                     }
-                    dataset.records_by_id[source_record[dataset.config.id_field]] = record;
+                    var id = source_record[dataset.config.id_field];
+                    if( prev_id !== null ) {
+                        record.prev = prev_id;
+                        dataset.records_by_id[prev_id].next = id;
+                    } 
+                    dataset.records_by_id[id] = record;
                     dataset.records.push(record);
+                    prev_id = id;
                 }
                 // add this list of enum values to each enum field
                 var enum_fields = Object.keys(enums);
