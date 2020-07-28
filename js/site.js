@@ -296,7 +296,7 @@ EnumFilter.prototype.isSet = function() {
 }
 
 EnumFilter.prototype.reset = function() {
-    this.mode = "is";
+    this.mode = "one-of";
     this.term = "";
     this.terms = [];
 }
