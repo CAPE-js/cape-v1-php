@@ -1,6 +1,6 @@
 
 // format date
-Vue.filter('formatTime', function(value) {
+Vue.filter('formatDate', function(value) {
     if (value) {
         return moment(value*1000).toISOString();
     }
