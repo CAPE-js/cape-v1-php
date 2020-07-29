@@ -1,3 +1,6 @@
+
+Vue.component('multiselect', window.VueMultiselect.default)
+
 // filter factory
 function makeFilter( field ) {
     switch (field.type) {
@@ -273,7 +276,12 @@ DateFilter.prototype.matchesValuesBetween = function(values) {
  */
 function EnumFilter( field ) {
     Filter.call( this, field );
-    this.mode = "is";
+    this.mode = "one-of";
+    // prep options just the way multiselect likes them
+    this.field.multiselectOptions = [];
+    for( var i=0;i<field.options.length;i++ ) {
+        this.field.multiselectOptions.push( { name: field.options[i] } );
+    }
 }
 
 EnumFilter.prototype = Object.create(Filter.prototype);
@@ -288,7 +296,7 @@ EnumFilter.prototype.isSet = function() {
 }
 
 EnumFilter.prototype.reset = function() {
-    this.mode = "is";
+    this.mode = "one-of";
     this.term = "";
     this.terms = [];
 }
@@ -306,7 +314,8 @@ EnumFilter.prototype.matchesValues = function(values) {
         // do any of the terms match any of the values?
         for(var i = 0; i < values.length; i++) {
             for(var j = 0; j < this.terms.length; j++)
-            if (values[i] == this.terms[j]) {
+            // nb terms works differently in multiselect and is a list of objects
+            if (values[i] == this.terms[j].name) {
                 return true;
             }
         }
