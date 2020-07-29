@@ -7,6 +7,7 @@
     <title>Music in the Second Empire Theatre</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/vue-multiselect.min.css" rel="stylesheet">
     <link href="css/site.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -293,9 +294,9 @@ documented on the
                         </select>
                     </template>
                     <template v-if="filter.mode=='one-of'">
-                        <select multiple="multiple" v-model="filter.terms" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
-                            <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
-                        </select>
+                        <multiselect v-model="filter.terms" :options="filter.field.multiselectOptions" :multiple="true" :close-on-select="true" :clear-on-select="false" :preserve-search="true" placeholder="Pick some" label="name" track-by="name" >
+                            <template slot="tag" slot-scope="{ option, remove }"><span class="custom__tag"><span>{{ option.name }}</span><span class="custom__remove" @click="remove(option)">❌</span></span></template>
+                        </multiselect>
                     </template>
                 </div>
             </template>

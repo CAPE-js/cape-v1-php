@@ -57,6 +57,7 @@
                         "id": "genre",
                         "type": "enum",
                         "multiple": true,
+                        "quick_search": true,
                         "source_heading": "Genre",
                         "source_split": "\\s*;\\s*",
                         "label": "Genre",
