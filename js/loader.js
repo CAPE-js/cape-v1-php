@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var libs = {
         prod: [ 
+            "js/gitinfo.js", 
             "js/popper.min.js", 
             "js/vue.min.js", 
             "js/vue-router.js", 
