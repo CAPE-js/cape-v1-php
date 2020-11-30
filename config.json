@@ -1,9 +1,9 @@
 {
 	"datasets": [
 		{
-			"id":"opera",
-			"title": "Music in the Second Empire Theatre",
-			"base_file_name":"opera",
+			"id":"erddig",
+			"title": "Erddig Recordings",
+			"base_file_name":"erddig",
                         "format":"xlsx",
 			"sort": [ "title", "date" ],
 			"license": {
@@ -21,258 +21,208 @@
 			"attribution": {
 				"text": "France: Musiques, Cultures, 1789-1918 – Music in the Second Empire Theatre",
 				"url": "http://fmc.ac.uk/mitset/"
-			},
+			},	
         		"id_field":"record_number",
 			"fields":[
 				{
+					"id":"record_number",
+					"type":"integer",
+					"source_heading":"AUTO",
+					"label":"Record number",
+					"description":"Record number"
+				},
+				{
 					"id":"date",
-					"type":"date",
-					"source_heading":"Date",
+					"type":"text",
+					"source_heading":"Date of Original Work",
 					"label":"Date",
-					"description":"Date of premiere",
+					"description":"Date of Original Work",
 					"quick_search":true,
 					"placeholder":{ "is": "eg. 1857 or 1857-12-25", "between": [ "eg. 1857 or 1857-12-25", "eg. 1857 or 1857-12-25" ] }
 				},
 				{
 					"id":"title",
 					"type":"text",
-					"source_heading":"Title",
+					"source_heading":"Title [title of individual recorded piece]",
 					"label":"Title",
-					"description":"Title of composition"
+					"description":"Title [title of individual recorded piece]"
 				},
 				{
-					"id":"genre",
-					"type":"enum",
-					"multiple":true,
-					"source_heading":"Genre",
-					"source_split":"\\s*;\\s*",
-					"label":"Genre",
-					"description":"Generic descriptor from primary source"
-				},
-				{
-					"id":"acts",
-					"type":"integer",
-					"source_heading":"Acts",
-					"label":"Acts",
-					"description":"Number of acts in composition"
-				},
-				{
-					"id":"numbers_act_1",
-					"type":"integer",
-					"source_heading":"Numbers Act 1",
-					"label":"Numbers Act 1",
-					"description":"Number of compositions in act 1"
-				},
-				{
-					"id":"numbers_act_2",
-					"type":"integer",
-					"source_heading":"Numbers Act 2",
-					"label":"Numbers Act 2",
-					"description":"Number of compositions in act 2"
-				},
-				{
-					"id":"numbers_act_3",
-					"type":"integer",
-					"source_heading":"Numbers Act 3",
-					"label":"Numbers Act 3",
-					"description":"Number of compositions in act 3"
-				},
-				{
-					"id":"total_numbers",
-					"type":"integer",
-					"source_heading":"Total Numbers",
-					"label":"Total Numbers",
-					"description":"Total number of compositions"
-				},
-				{
-					"id":"male",
-					"multiple":true,
-					"source_format":"repeated",
+					"id":"work",
 					"type":"text",
-					"source_heading":"Male",
-					"label":"Male Artist",
-					"description":"Male artists in premiere"
+					"source_heading":"Work Title [title of larger work, if an excerpt, e.g. specific oratorio or suite]",
+					"label":"Work Title",
+					"description":"Work Title [title of larger work, if an excerpt, e.g. specific oratorio or suite]"
 				},
 				{
-					"id":"female",
-					"multiple":true,
-					"source_format":"repeated",
+					"id":"derivative_work",
 					"type":"text",
-					"source_heading":"Female",
-					"label":"Female Artist",
-					"description":"Female artists in premiere"
+					"source_heading":"Derivative Work [e.g. Cunning Man is drawn from Le Devin du Village]",
+					"label":"Derivative Work",
+					"description":"Derivative Work [e.g. Cunning Man is drawn from Le Devin du Village]"
 				},
 				{
-					"id":"author",
-					"multiple":true,
-					"source_format":"repeated",
-					"type":"enum",
-					"source_heading":"Author",
-					"label":"Author",
-					"description":"Librettist[s]"
+					"id":"date_of_derivative_work",
+					"type":"text",
+                			"source_heading":"Date of Derivative Work",
+                			"label":"Date of Derivative Work",
+                			"description":"Date of Derivative Work"
+				},
+				{
+					"id":"source",
+					"type":"text",
+                			"source_heading":"Source [title of print, or if manuscript, description]",
+                			"label":"Source",
+                			"description":"Source [title of print, or if manuscript, description]"
 				},
 				{
 					"id":"composer",
 					"type":"enum",
-					"source_heading":"Composer",
-					"label":"Composer",
-					"description":"Composer"
-				},
-
-
-				{
-					"id":"emplois_listed_in_vs",
-					"type":"enum",
-					"source_heading":"Emplois listed in VS?",
-					"label":"Emplois listed in VS?",
-					"description":"Presence of voice types [emploi] in vocal score"
+                			"source_heading":"Composer [last name, first name]",
+                			"label":"Composer",
+                			"description":"Composer [last name, first name]"
 				},
 				{
-					"id":"dance_number",
-					"type":"enum",
-					"source_heading":"Dance Number",
-					"label":"Dance Number",
-					"description":"Presence of identified dance number in score"
+					"id":"composer_dates",
+					"type":"text",
+                			"source_heading":"Composer dates",
+                			"label":"Composer dates",
+                			"description":"Composer dates"
 				},
-				{
-					"id":"melodrame",
-					"type":"enum",
-					"source_heading":"Mélodrame",
-					"label":"Mélodrame",
-					"description":"Presence of mélodrame in score"
-				},
-
-				{
-					"id":"institution",
-					"type":"enum",
-					"source_heading":"Institution",
-					"label":"Institution",
-					"description":"Institution of first performance"
-				},
-				{
-					"id":"original_date",
-					"type":"date",
-					"source_heading":"Original Date",
-					"label":"Original Date",
-					"description":"Date of premiere, if not original institution",
-					"placeholder":{ "is": "eg. 1857 or 1857-12-25", "between": [ "eg. 1857 or 1857-12-25", "eg. 1857 or 1857-12-25" ] }
-				},
-				{
-					"id":"original_institution",
-					"type":"enum",
-					"source_heading":"Original Institution",
-					"label":"Original Institution",
-					"description":"Original institution, if not premiere"
-				},
-				{
-					"id":"metteur_en_scene",
-					"type":"enum",
-					"source_heading":"Metteur en scène",
-					"label":"Metteur en scène",
-					"description":"Name of metteur en scène"
-				},
-				{
-					"id":"libretto_publisher",
-					"type":"enum",
-					"source_heading":"Libretto Publisher",
-					"label":"Libretto Publisher",
-					"description":"Publisher of libretto"
-				},
-				{
-					"id":"libretto_total_pages",
-					"type":"integer",
-					"source_heading":"Libretto Total pages",
-					"label":"Libretto Total pages",
-					"description":"Number of pages in libretto"
-				},
-				{
-					"id":"vs_publisher",
-					"type":"enum",
-					"source_heading":"VS Publisher",
-					"label":"VS Publisher",
-					"description":"Publisher of vocal score"
-				},
-				{
-					"id":"vs_arranger",
-					"type":"enum",
-					"source_heading":"VS Arranger",
-					"label":"VS Arranger",
-					"description":"Arranger of keyboard reduction of vocal score"
-				},
-				{
-					"id":"vs_total_pages",
-					"type":"integer",
-					"source_heading":"VS Total Pages",
-					"label":"VS Total Pages",
-					"description":"Number of pages in vocal score"
-				},
-
 				{
 					"id":"arranger",
+					"type":"enum",
+                			"source_heading":"Arranger [last name, first name]",
+                			"label":"Arranger",
+                			"description":"Arranger [last name, first name]"
+				},
+				{
+					"id":"arranger_dates",
 					"type":"text",
-					"source_heading":"Arranger",
-					"label":"Arranger",
-					"description":"Musical arranger of work"
+                			"source_heading":"Arranger dates",
+                			"label":"Arranger dates",
+                			"description":"Arranger dates"
 				},
 				{
-					"id":"original_author",
+					"id":"librettist_lyricist",
 					"type":"enum",
-					"source_heading":"Original Author",
-					"label":"Original Author",
-					"description":"Librettist of original form of work"
+                			"source_heading":"Librettist\/lyricist [last name, first name]",
+                			"label":"Librettist\/lyricist",
+                			"description":"Librettist\/lyricist [last name, first name]"
 				},
 				{
-					"id":"original_composer",
-					"type":"enum",
-					"source_heading":"Original Composer",
-					"label":"Original Composer",
-					"description":"Composer of original form of work"
-				},
-				{
-					"id":"original_title",
+					"id":"librettist_lyricist_dates",
 					"type":"text",
-					"source_heading":"Original Title",
-					"label":"Original Title",
-					"description":"Title of orginal form of work"
+                			"source_heading":"Librettist\/lyricist dates",
+                			"label":"Librettist\/lyricist dates",
+                			"description":"Librettist\/lyricist dates"
 				},
 				{
-					"id":"tableaux",
-					"type":"integer",
-					"source_heading":"Tableaux",
-					"label":"Tableaux",
-					"description":"Number of tableaux in addition to number of acts"
-				},
-
-				{
-
-					"id":"record_number",
-					"type":"integer",
-					"source_heading":"Record Number",
-					"label":"Record Number",
-					"description":"For management purposes"
+					"id":"publication_details",
+					"type":"text",
+                			"source_heading":"Publication details [location, publisher]",
+                			"label":"Publication details",
+                			"description":"Publication details [location, publisher]"
 				},
 				{
-					"id":"record_complete",
-					"source_heading":"Record Complete?",
+					"id":"publication_used",
+					"type":"text",
+                			"source_heading":"Publication used for recording [rare cases, e.g. Wesley]",
+                			"label":"Publication used",
+                			"description":"Publication used for recording [rare cases, e.g. Wesley]"
+				},
+				{
+					"id":"date_of_publication",
+					"type":"text",
+                			"source_heading":"Date of publication",
+                			"label":"Date of publication",
+                			"description":"Date of publication"
+				},
+				{
+					"id":"plate_publication_numbers",
+					"type":"text",
+                			"source_heading":"Plate\/publication numbers [where relevant]",
+                			"label":"Plate\/publication numbers [where relevant]",
+                			"description":"Plate\/publication numbers [where relevant]"
+				},
+				{
+					"id":"sources_for_publication_dates",
+					"type":"text",
+                			"source_heading":"Sources for publication dates",
+                			"label":"Sources for publication dates",
+                			"description":"Sources for publication dates"
+				},
+				{
+					"id":"shelfmark_original",
+					"type":"text",
+                			"source_heading":"Shelfmark [original if Erddig item]",
+                			"label":"Shelfmark [original if Erddig item]",
+                			"description":"Shelfmark [original if Erddig item]"
+				},
+				{
+					"id":"shelfmark_2013",
+					"type":"text",
+                			"source_heading":"Shelfmark [new \u2013 Erddig only]",
+                			"label":"Shelfmark [new \u2013 Erddig only]",
+                			"description":"Shelfmark [new \u2013 Erddig only]"
+				},
+				{
+					"id":"nt_number",
+					"type":"text",
+                			"source_heading":"NT number",
+                			"label":"NT number",
+                			"description":"NT number"
+				},
+				{
+					"id":"instrument",
+					"type":"text",
+                			"source_heading":"Instruments [makers, relevant serial numbers, date]",
+                			"label":"Instruments",
+                			"description":"Instruments [makers, relevant serial numbers, date]"
+				},
+				{
+					"id":"instrument_owner",
 					"type":"enum",
-					"label":"Record Complete",
-					"description":""
+                			"source_heading":"Instrument owner",
+                			"label":"Instrument owner",
+                			"description":"Instrument owner"
 				},
 				{
-					"type":"ignore",
-					"source_heading":"Artists"
+					"id":"performers",
+					"type":"enum",
+                			"source_heading":"Performers",
+                			"label":"Performers",
+                			"description":"Performers"
 				},
 				{
-					"type":"ignore",
-					"source_heading":"Censors' Libretto"
+					"id":"recording_location",
+					"type":"enum",
+                			"source_heading":"Recording location [room specific at Erddig]",
+                			"label":"Recording location",
+                			"description":"Recording location [room specific at Erddig]"
 				},
 				{
-					"type":"ignore",
-					"source_heading":"Printed Libretto"
+					"id":"recording_date",
+					"type":"text",
+                			"source_heading":"1970-01-01 00:00:00",
+                			"label":"Recording Date",
+                			"description":"1970-01-01 00:00:00"
 				},
 				{
-					"type":"ignore",
-					"source_heading":"Printed Score"
+					"id":"tags",
+					"type":"enum",
+					"multiple":true,
+                			"source_heading":"Tags",
+                			"label":"Tags",
+                			"description":"Tags",
+					"source_split":"\\s*,\\s*"
+				},
+				{
+					"id":"notes",
+					"type":"text",
+                			"source_heading":"Notes",
+                			"label":"Notes",
+                			"description":"Notes"
 				}
 
 			]

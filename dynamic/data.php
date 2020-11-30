@@ -54,6 +54,12 @@ function map_dataset( $config, $source ) {
 	$output["unmapped_headings"] = array();	
 	$output["missing_headings"] = array();	
 	foreach( $source["headings"] as $heading ) {
+
+		if( $heading == "AUTO" ) {
+			#field will auto increment instead
+			unset( $to_map[$fields[$heading]["id"]] );
+			continue;
+		}
 		if( array_key_exists( $heading, $fields ) ) {
 			if( $fields[$heading]["type"] != "ignore" ) {
 				$map[$heading] = $fields[$heading];
@@ -74,24 +80,29 @@ function map_dataset( $config, $source ) {
 	$output["missing_headings"] = array_keys( $to_map );
 
 	# map records
+	$auto_incs = array();
 	foreach( $source["records"] as $record ) {
 		$out_record = array();
 		foreach( $config["fields"] as $field ) {
 			if( $field["type"] != "ignore" ) {
-				if( $field["multiple"] ) {
+				if( @$field["multiple"] ) {
 					$out_record[$field["id"]]=array();
 				} else {
 					$out_record[$field["id"]]=null;
 				}
 			}
+			if( $field["source_heading"] == "AUTO" ) {
+				$auto_incs[$field["id"]]++;
+				$out_record[$field["id"]] = $auto_incs[$field["id"]];
+			}
 		}
 		foreach( $record as $heading=>$value ) {
-			if( empty( $value ) ) { continue; }
-			if( !$map[$heading] ) { continue; }
+			if( @!$map[$heading] ) { continue; }
 			$field = $map[$heading];
+			if( empty( $value ) ) { continue; }
 			# strip any time data after the ISO date
 			if( $field["type"] == "date" ) { $value = substr( $value, 0, 10 ); }
-			if( $field["multiple"] ) {
+			if( @$field["multiple"] ) {
 				if( $field["source_split"] ) {
 					$parts = preg_split( "/".$field["source_split"]."/", trim($value) );
 					foreach( $parts as $part ) {

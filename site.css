@@ -1,83 +1,15 @@
-
-
-/* template elements */
-
-body {
-    background-color: #E5E5E5;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-#page {
-    border: 1px solid black;
-    background-color: white;
-    max-width: 900px;
-    margin-top: 40px;
-    margin-bottom: 15px;
-    font-size:0.9em;
-    line-height: 1.6em;
-}
-
-#navigation {
-    background-color: #666;
-}
-
-#navigation .col {
-    list-style: none;
-    text-align: center;
-    color: white;
-}
-
-#navigation .col:hover {
-    background-color: #E1E1E1;
-}
-
-#navigation .col:hover a {
-    color: #333;
-}
-
-#navigation .col a {
-    font-size: 0.8em;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-}
-
-#header {
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-}
-
-#header img {
-    width: 100%;
-    height: 100%;
-}
-
-#footer {
-    background-color: #e1e1e1;
-    padding: 2em 30px;
-}
-
-/* end of template elements */
-
 /* typography */
 
 h1, h2, h3, h4, h5, h6 {
-    color: #900;
 }
 
 h1 {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-top: 1em;
 }
 
 h2 {
-    font-size: 1.1em;
-    font-weight: bold;
 }
 
 a {
-    color: #00f;
 }
 
 /* end of typography */
@@ -100,6 +32,7 @@ a {
     /*font-weight: bold;*/
 /*}*/
 
+/*
 .summary-card {
     background-color: #f3f3f3;
     border:none;
@@ -132,7 +65,7 @@ a {
     font-size: 0.8rem;
     color: #999;
 }
- 
+*/ 
 
 /* end of summary cards
  */
@@ -166,6 +99,7 @@ a {
 
 /* Start results summary */
 
+/*
 .result-summary .record-count {
     display: inline-block;
     vertical-align: middle;
