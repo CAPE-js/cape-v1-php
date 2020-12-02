@@ -92,6 +92,9 @@ function map_dataset( $config, $source ) {
 				}
 			}
 			if( $field["source_heading"] == "AUTO" ) {
+				if( !array_key_exists( $field["id"], $auto_incs ) ) {
+					$auto_incs[$field["id"]] = 0;
+				}
 				$auto_incs[$field["id"]]++;
 				$out_record[$field["id"]] = $auto_incs[$field["id"]];
 			}
