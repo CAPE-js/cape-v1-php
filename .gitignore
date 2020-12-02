@@ -87,6 +87,7 @@ data/
 Assets/
 config.json
 index.html
+site.css
 
 index2.html
 nohup.out
