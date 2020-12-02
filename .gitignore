@@ -84,3 +84,9 @@ fabric.properties
 
 local.js
 data/
+Assets/
+config.json
+index.html
+
+index2.html
+nohup.out

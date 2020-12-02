@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Erddig music</title>
+
+    <!-- css & js required by cape -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/vue-multiselect.min.css" rel="stylesheet">
+    <link href="css/cape.css" rel="stylesheet">
+    <script src="local.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/loader.js"></script>
+
+    <!-- additional css & js -->
+    <link href="css/theme.min.css" rel="stylesheet">
+    <!--<link href="site.css" rel="stylesheet">-->
+    <script src="js/theme.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5shiv.min.js"></script>
+    <script src="./js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div class="container" id='page'>
+
+  <div class="row account">
+    <div class="col">
+            
+      <a id="toolbar-launch" title="Launch the Accessibility Toolbar to adjust this webpage, have it read aloud and other functions." href="javascript:(function(){d=document;jf=d.createElement('script');jf.src=('https:'==document.location.protocol?'https://ssl.atbar.org/c':'http://c.atbar.org')+'/ATBar2/ATBar.min.user.js';jf.type='text/javascript';jf.id='ToolBar';d.getElementsByTagName('head')[0].appendChild(jf);})();">Accessibility Tools</a>
+      
+    </div>
+  </div>
+  <div class="row small branding">
+    <div class="col">
+      <h1><a href="/" name="servicetitle" id="servicetitle">Erddig</a></h1>
+      Music. In Wales. I think.
+    </div>
+  </div>
+
+  <div id="app" class="content"></div>
+
+</div>
+
+</body>
+</html>
+
+<script type="text/x-template" id="templateDataset">
+    <div class="row content">
+        <div class="col">
+            <div class="container">
+                <nav class="row">
+                    <nav class="col">
+                        <p>
+                            <router-link to="/">Return to search results</router-link>
+                            |
+                            <router-link to="/data">Dataset schema and download</router-link>
+                        </p>
+                    </nav>
+                </nav>
+                <router-view></router-view>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateIntro">
+    <div>
+        <p>Intro goes here</p>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateData">
+    <div class="row">
+        <div class="col">
+            <h2>About the data</h2>
+            <p>This dataset has been created and shared with the intention it should be reused. The fields in the
+                dataset are described below.</p>
+            <p>This data is copyright <a v-bind:href="dataset.config.copyright.url">{{ dataset.config.copyright.name }}</a> and may be reused under the <a v-bind:href="dataset.config.license.url">{{ dataset.config.license.name }}</a> license.</p>
+            <p>This dataset was created by <span v-for="(creator, index) in dataset.config.creators"><span>{{ creator.name }}</span><span v-if="index+1 < dataset.config.creators.length">, </span></span>.</p>
+            <p>If using this data, please attribute it as "{{ dataset.config.attribution.text }}" with a link to <a v-bind:href="dataset.config.attribution.url">{{dataset.config.attribution.url}}</a>.</p>
+            <p>
+                <button v-on:click="downloadJSON" class="btn btn-secondary">Download JSON</button>
+                <button v-on:click="downloadCSV" class="btn btn-secondary">Download CSV</button>
+            </p>
+            <h2>About this software</h2>
+            <p>This website uses pure Javascript to provide interaction with a JSON datafile which contains the records and site configuration. It does not require any database or PHP -- all the searching is done inside the single page. Our working title for the toolkit to make this happen is <i>DATA CAPE</i>. In theory it could be reused for similar projects in future. DATA CAPE, and this website (OPERA CAPE), were created by <a href="https://www.ecs.soton.ac.uk/people/totl">Christopher Gutteridge</a> and David Pepper in the iSolutions Web & Data Innovation team.</p>
+            <h2>Schema</h2>
+            <p>Field types may be text, date, integer or enum. An enum field is short for enumerated, which means a
+                limited set of terms rather than free text.</p>
+            <fields-table />
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateNoRecord">
+    <p>NO SUCH RECORD</p>
+</script>
+
+
+<script type="text/x-template" id="templateSummaryCard">
+    <div class="summary-card card mb-1">
+            <div class="card-body" v-on:click="showIndexCard" title="See full details.">
+                <div class="row pb-1">
+                    <div class="col-sm-8 card-title">
+                        <field-value v-bind:linkValue="false" v-bind:typedValue="record.title"></field-value>
+                    </div>
+                    <div class="col-sm-4 text-sm-right">
+                        <field-value v-bind:linkValue="false" v-bind:typedValue="record.date"></field-value>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <template v-if="record.composer.value != null && record.composer.value.length>0">
+                            <field-value v-bind:linkValue="false" v-bind:typedValue="record.composer"></field-value> <span class='label-note'>(composer)</span>
+                        </template>
+                    </div>
+
+                </div>
+            </div>
+
+    </div>
+</script>
+
+<script type="text/x-template" id="templateIndexCard">
+    <div>
+        <div class="index-card-nav">
+            <a v-if="record.prev" v-bind:href="'#/record/'+record.prev">⬅️&nbsp;Previous</a>
+            &nbsp;
+            <a v-if="record.next" style='float:right;display:inline-block' v-bind:href="'#/record/'+record.next">Next&nbsp;➡️</a>
+        </div>
+        <div class="card index-card mb-2">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <field-value v-bind:linkValue="false" v-bind:typedValue="record.title"></field-value>
+                </h5>
+    
+                <div class="row">
+                    <div class="col-md">
+                        <field-label-and-value-if-set v-bind:typedValue="record.date"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.title"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.work"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.derivative_work"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.date_of_derivative_work"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.source"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.composer"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.composer_dates"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.arranger"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.arranger_dates"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.librettist_lyricist"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.librettist_lyricist_dates"></field-label-and-value-if-set>
+                    </div>
+                    <div class="col-md">
+                        <field-label-and-value-if-set v-bind:typedValue="record.publication_details"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.publication_used"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.date_of_publication"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.plate_publication_numbers"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.sources_for_publication_dates"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.shelfmark_original"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.shelfmark_2013"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.nt_number"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.instrument"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.instrument_owner"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.performers"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.recording_location"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.recording_date"</field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.tags"></field-label-and-value-if-set>
+                        <field-label-and-value-if-set v-bind:typedValue="record.notes"></field-label-and-value-if-set>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+

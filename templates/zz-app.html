@@ -1,0 +1,58 @@
+<div>
+    <template v-if="app_status == 'dev'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-warning my-2">
+          <div class="card-body text-center">
+             This is a development instance of this service.
+             <br />
+             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    <template v-if="app_status == 'pprd'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-warning my-2">
+          <div class="card-body text-center">
+             This is the pre-production instance of this service.
+             <br />
+             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    
+    <template v-if="source_data.status == 'ERROR'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-error my-2">
+          <div class="card-body text-center">
+            <h2>Unable to load data</h2>
+            <p>An error has occurred. The error was: {{ source_data.error_message }}.</p>
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    <template v-if="source_data.status == 'LOADING'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-primary text-white my-2">
+          <div class="card-body text-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <p>Please wait while the data loads.</p>
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    <template v-if="source_data.status == 'OK'">
+        <dataset v-bind:dataset="defaultDataset"></dataset>
+    </template>
+</div>

@@ -1,0 +1,150 @@
+/* typography */
+
+h1, h2, h3, h4, h5, h6 {
+}
+
+h1 {
+}
+
+h2 {
+}
+
+a {
+}
+
+/* end of typography */
+
+/* index cards */
+
+.index-card .card-body {
+}
+.index-card-nav {
+    font-variant: small-caps;
+}
+
+/* end of index cards */
+
+/* summary cards */
+
+
+/*.summary-card h5.card-title .field-value {*/
+    /*font-size:0.7em;*/
+    /*font-weight: bold;*/
+/*}*/
+
+/*
+.summary-card {
+    background-color: #f3f3f3;
+    border:none;
+    cursor: pointer;
+}
+
+.summary-card .card-title {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.summary-card .card-body {
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+}
+
+.summary-card .card-body .field-value, .summary-card .card-body .field-label {
+    font-size: 0.9em;
+}
+
+.summary-card .field-label {
+    font-weight: normal;
+}
+
+.summary-card i {
+    color: #5a6268;
+    font-size: 0.6rem;
+}
+.summary-card .label-note {
+    font-size: 0.8rem;
+    color: #999;
+}
+*/ 
+
+/* end of summary cards
+ */
+
+/* values and labels */
+
+.field-label-and-value {
+}
+
+.field-value { 
+    display: inline-block;
+}
+.field-null { 
+    color: #ccc;
+    font-size: small;
+}
+.field-label { 
+    display: inline-block;
+}
+.field-label:after { 
+    content: ':';
+}
+
+/* end of values and labels */
+
+/* unsorted css */
+
+
+/* end of unsorted css (don't add under this line) */
+
+
+/* Start results summary */
+
+.result-summary .record-count {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 1em;
+}
+
+.result-summary .switch {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.result-summary input[type=checkbox] {
+    vertical-align: middle;
+}
+
+.result-summary label {
+    vertical-align: middle;
+    margin-bottom: 0;
+}
+
+.floating-summary {
+    position: fixed;
+    bottom: 0.5rem;
+    right: 0.5rem; 
+    z-index: 10;
+}
+.floating-summary .card {
+    box-shadow: 2px 6px 20px 2px rgba(0,0,0,0.2);
+}
+
+/* End results summary */
+
+/* filter */
+.between-number-filter {
+    display:inline-block;
+    width:auto
+}
+.form-control::placeholder {
+    color: #ccc;
+}
+
+
+/* End filter */
+
+/* force switch to be more blue */
+.switch input:checked + label::before {
+    background-color: #00f !important;
+}
+/* end force switch to be more blue */

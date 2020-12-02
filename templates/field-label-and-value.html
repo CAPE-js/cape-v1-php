@@ -1,0 +1,9 @@
+<div>
+    <div class="field-label-and-value">
+      <template v-if="typedValue.field.value != ''">
+        <div class="field-label" v-if="typedValue.field.description != null" data-toggle="tooltip" v-bind:title="typedValue.field.description">{{typedValue.field.label}}</div>
+        <div class="field-label" v-else>{{typedValue.field.label}}</div>
+        <field-value v-bind:typedValue="typedValue"></field-value>
+      </template>
+    </div>
+</div>

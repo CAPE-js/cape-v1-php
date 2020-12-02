@@ -1,0 +1,9 @@
+    <div>
+        <div class="row">
+            <div class="col">
+                <index-card v-if="dataset.records_by_id[ $route.params.id ]"
+                            v-bind:record="dataset.records_by_id[ $route.params.id ]"></index-card>
+                <no-record v-else></no-record>
+            </div>
+        </div>
+    </div>

@@ -10,7 +10,7 @@ $(document).ready(function() {
             "js/bootstrap.min.js", 
             "js/moment.min.js", 
             "js/lodash.min.js", 
-            "js/site.js" ],
+            "js/cape.js" ],
         pprd: [ 
             "dynamic/gitinfo.php",
             "js/popper.min.js", 
@@ -21,7 +21,7 @@ $(document).ready(function() {
             "js/bootstrap.min.js", 
             "js/moment.min.js", 
             "js/lodash.min.js", 
-            "js/site.js" ],
+            "js/cape.js" ],
         dev:  [ 
             "dynamic/gitinfo.php",
             "js/popper.min.js", 
@@ -32,7 +32,8 @@ $(document).ready(function() {
             "js/bootstrap.min.js", 
             "js/moment.min.js", 
             "js/lodash.min.js", 
-            "js/site.js" ]
+            "js/cape.js",
+            "dynamic/cape-templates-js.php" ]
     };
     var load_list = libs["dev"];
     if( app_status == "prod" || app_status == "pprd") { 
