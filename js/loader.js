@@ -10,7 +10,8 @@ $(document).ready(function() {
             "js/bootstrap.min.js", 
             "js/moment.min.js", 
             "js/lodash.min.js", 
-            "js/cape.js" ],
+            "js/cape.js",
+            "js/cape-templates.js" ],
         pprd: [ 
             "dynamic/gitinfo.php",
             "js/popper.min.js", 
@@ -21,7 +22,8 @@ $(document).ready(function() {
             "js/bootstrap.min.js", 
             "js/moment.min.js", 
             "js/lodash.min.js", 
-            "js/cape.js" ],
+            "js/cape.js",
+            "js/cape-templates.js" ],
         dev:  [ 
             "dynamic/gitinfo.php",
             "js/popper.min.js", 
