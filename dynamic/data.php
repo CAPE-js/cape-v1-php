@@ -13,16 +13,15 @@ if( !$config ) {
 	exit_with_error( "Failed to read JSON config file" );
 }
 
-if( $config["data_dir"] ) {
-	$DATA_DIR = __DIR__."/../".$config["data_dir"];
-} else {
-	$DATA_DIR = __DIR__."/../data";
-} 
-
 # read source file(s)
 $datasets = array();
 foreach( $config["datasets"] as $dataset_config ) {
-	$dataset_file = latest_file_with_prefix( $DATA_DIR, $dataset_config["base_file_name"] );
+	if( $dataset_config["data_dir"] ) {
+		$data_dir = __DIR__."/../".$dataset_config["data_dir"];
+	} else {
+		$data_dir = __DIR__."/../data";
+	} 
+	$dataset_file = latest_file_with_prefix( $data_dir, $dataset_config["base_file_name"] );
         if( !isset( $dataset_config["format"]) || $dataset_config["format"] == "csv" ) {
 		$table = read_csv( $dataset_file );
         } elseif( $dataset_config["format"] == "xlsx" ) {
