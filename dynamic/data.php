@@ -3,7 +3,6 @@
 # THis assumes that numbered field values are in the correct order in the source file.
 
 $CONFIG_FILE = __DIR__."/../config.json";
-$DATA_DIR = __DIR__."/../data";
 
 ini_set("auto_detect_line_endings", "1");
 header( "Content-type: text/json" );
@@ -13,6 +12,12 @@ $config = json_decode( file_get_contents( $CONFIG_FILE ), true );
 if( !$config ) {
 	exit_with_error( "Failed to read JSON config file" );
 }
+
+if( $config["data_dir"] ) {
+	$DATA_DIR = __DIR__."/../".$config["data_dir"];
+} else {
+	$DATA_DIR = __DIR__."/../data";
+} 
 
 # read source file(s)
 $datasets = array();
