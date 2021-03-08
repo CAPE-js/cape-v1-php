@@ -3,7 +3,6 @@
 # THis assumes that numbered field values are in the correct order in the source file.
 
 $CONFIG_FILE = __DIR__."/../config.json";
-$DATA_DIR = __DIR__."/../data";
 $DATA_FILE = __DIR__."/../site-data.json";
 
 ini_set("auto_detect_line_endings", "1");
@@ -18,7 +17,12 @@ if( !$config ) {
 # read source file(s)
 $datasets = array();
 foreach( $config["datasets"] as $dataset_config ) {
-	$dataset_file = latest_file_with_prefix( $DATA_DIR, $dataset_config["base_file_name"] );
+	if( $dataset_config["data_dir"] ) {
+		$data_dir = __DIR__."/../".$dataset_config["data_dir"];
+	} else {
+		$data_dir = __DIR__."/../data";
+	} 
+	$dataset_file = latest_file_with_prefix( $data_dir, $dataset_config["base_file_name"] );
         if( !isset( $dataset_config["format"]) || $dataset_config["format"] == "csv" ) {
 		$table = read_csv( $dataset_file );
         } elseif( $dataset_config["format"] == "xlsx" ) {
