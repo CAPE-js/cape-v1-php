@@ -4,6 +4,7 @@
 
 $CONFIG_FILE = __DIR__."/../config.json";
 $DATA_DIR = __DIR__."/../data";
+$DATA_FILE = __DIR__."/../site-data.json";
 
 ini_set("auto_detect_line_endings", "1");
 header( "Content-type: text/json" );
@@ -32,7 +33,9 @@ foreach( $config["datasets"] as $dataset_config ) {
 }
 
 # output json file
-print json_encode( array( "status"=>"OK", "datasets"=>$datasets ), JSON_NUMERIC_CHECK|JSON_PRETTY_PRINT );
+$output = json_encode( array( "status"=>"OK", "datasets"=>$datasets ), JSON_NUMERIC_CHECK|JSON_PRETTY_PRINT );
+print $output;
+file_put_contents( $DATA_FILE, $output );
 
 exit;
 
