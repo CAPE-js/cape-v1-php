@@ -2,8 +2,11 @@
 # This file does *some* checking of the validity of config.json file but not exhaustedly
 # THis assumes that numbered field values are in the correct order in the source file.
 
-$CONFIG_FILE = __DIR__."/../config.json";
-$DATA_FILE = __DIR__."/../site-data.json";
+# using SERVER script filename as it might be symlinked and then __DIR__ gives the location
+# of the real file not the symlink
+$BASE_DIR = dirname(dirname($_SERVER['SCRIPT_FILENAME']));
+$CONFIG_FILE = $BASE_DIR."/config.json";
+$DATA_FILE = $BASE_DIR."/site-data.json";
 
 ini_set("auto_detect_line_endings", "1");
 header( "Content-type: text/json" );
@@ -18,9 +21,9 @@ if( !$config ) {
 $datasets = array();
 foreach( $config["datasets"] as $dataset_config ) {
 	if( $dataset_config["data_dir"] ) {
-		$data_dir = __DIR__."/../".$dataset_config["data_dir"];
+		$data_dir = $BASE_DIR."/".$dataset_config["data_dir"];
 	} else {
-		$data_dir = __DIR__."/../data";
+		$data_dir = $BASE_DIR."/data";
 	} 
 	$dataset_file = latest_file_with_prefix( $data_dir, $dataset_config["base_file_name"] );
         if( !isset( $dataset_config["format"]) || $dataset_config["format"] == "csv" ) {
