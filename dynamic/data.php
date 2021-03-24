@@ -25,17 +25,33 @@ foreach( $config["datasets"] as $dataset_config ) {
 	} else {
 		$data_dir = $BASE_DIR."/data";
 	} 
-	$dataset_file = latest_file_with_prefix( $data_dir, $dataset_config["base_file_name"] );
-        if( !isset( $dataset_config["format"]) || $dataset_config["format"] == "csv" ) {
-		$table = read_csv( $dataset_file );
-        } elseif( $dataset_config["format"] == "xlsx" ) {
-		$table = read_xlsx( $dataset_file );
+
+	# if base_file_name is a singular turn it into a one item array	
+	if( is_array( $dataset_config["base_file_name"] ) ) {
+		$base_files = $dataset_config["base_file_name"];
 	} else {
-		exit_with_error( "Unknown format: ".$dataset_config["format"] );
+		$base_files = [$dataset_config["base_file_name"]];
 	}
-	$raw_dataset = table_to_objects( $table );
-	$dataset = map_dataset( $dataset_config, $raw_dataset );
-	$dataset["source_file"] = $dataset_file;
+	$records = [ "headings"=>[], "records"=>[] ];
+	$source_files = [];
+	foreach( $base_files as $base_file ) {
+		$dataset_file = latest_file_with_prefix( $data_dir, $base_file );
+		if( !isset( $dataset_config["format"]) || $dataset_config["format"] == "csv" ) {
+			$table = read_csv( $dataset_file );
+		} elseif( $dataset_config["format"] == "xlsx" ) {
+			$table = read_xlsx( $dataset_file );
+		} else {
+			exit_with_error( "Unknown format: ".$dataset_config["format"] );
+		}
+		$source_files []= $dataset_file;
+		$records_from_file = table_to_objects( $table );
+		$records = [ 
+			"headings"=>array_merge( $records["headings"], $records_from_file["headings"] ),
+			"records"=>array_merge( $records["records"], $records_from_file["records"] ) 
+		];
+	}
+	$dataset = map_dataset( $dataset_config, $records );
+	$dataset["source_files"] = $source_files;;
 	$datasets []= $dataset;
 }
 
