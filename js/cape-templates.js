@@ -27,17 +27,16 @@ Vue.component("debounced-input", {
 });
 
 // field-label-and-value
-template = "<div>\n    <div class=\"field-label-and-value\">\n      <template v-if=\"typedValue.field.value != ''\">\n        <div class=\"field-label\" v-if=\"typedValue.field.description != null\" data-toggle=\"tooltip\" v-bind:title=\"typedValue.field.description\">{{typedValue.field.label}}<\/div>\n        <div class=\"field-label\" v-else>{{typedValue.field.label}}<\/div>\n        <field-value v-bind:typedValue=\"typedValue\"><\/field-value>\n      <\/template>\n    <\/div>\n<\/div>\n";
+template = "<div>\n    <div class=\"field-label-and-value\">\n      <template v-if=\"typedValue.field.value != ''\">\n        <div class=\"field-label\" v-if=\"typedValue.field.description != null\" data-toggle=\"tooltip\" v-bind:title=\"typedValue.field.description\">{{typedValue.field.label}}<\/div>\n        <div class=\"field-label\" v-else>{{typedValue.field.label}}<\/div>\n        <field-value v-bind:typedValue=\"typedValue\" v-bind:linkValue=\"linkValue\"><\/field-value>\n      <\/template>\n    <\/div>\n<\/div>\n";
 Vue.component("field-label-and-value", {
-    props: ["typedValue"],
-    //template: "#templateFieldLabelAndValue"
+    props: ["typedValue","linkValue"],
     template: template
 });
 
 
 // field-label-and-value-if-set
-template = "<field-label-and-value v-if=\"typedValue.value != '' && typedValue.value != null && !(typeof typedValue.value=='array' && typedValue.value.length==0)\" v-bind:typedValue=\"typedValue\"><\/field-label-and-value>\n";Vue.component("field-label-and-value-if-set", {
-    props: ["typedValue"],
+template = "<field-label-and-value v-if=\"typedValue.value != '' && typedValue.value != null && !(typeof typedValue.value=='array' && typedValue.value.length==0)\" v-bind:typedValue=\"typedValue\" v-bind:linkValue=\"linkValue\"><\/field-label-and-value>\n";Vue.component("field-label-and-value-if-set", {
+    props: ["typedValue","linkValue"],
     template: template
 });
 

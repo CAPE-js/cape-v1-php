@@ -1,7 +1,6 @@
 
 Vue.component("field-label-and-value", {
-    props: ["typedValue"],
-    //template: "#templateFieldLabelAndValue"
+    props: ["typedValue","linkValue"],
     template: template
 });
 
