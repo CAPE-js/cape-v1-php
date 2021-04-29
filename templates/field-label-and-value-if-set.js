@@ -1,4 +1,4 @@
 Vue.component("field-label-and-value-if-set", {
-    props: ["typedValue"],
+    props: ["typedValue","linkValue"],
     template: template
 });
