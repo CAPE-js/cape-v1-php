@@ -25,3 +25,11 @@
 
 }
 /* end style for tags on multiselect */
+
+/* cape errors */
+.cape-error {
+    background-color: orange;
+    color: black;
+    padding: 0.3em 1em;
+}
+/* end cape errors */
