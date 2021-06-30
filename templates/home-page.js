@@ -6,22 +6,11 @@ var HomePage = Vue.component("home-page", {
         var data = {};
         data.dataset = this.$root.defaultDataset;
         data.options = this.$root.defaultDatasetOptions;
-
         data.visible_filters = [];
-
-        if( this.$route.name=="browse" && this.$route.params.field != null && this.$route.params.value != null ) {
-            data.browse= { field:this.$route.params.field, value:this.$route.params.value };
-            data.options.filters_by_id[ data.browse.field ].mode = "is";
-            data.options.filters_by_id[ data.browse.field ].term = data.browse.value;
-        } else {
-            data.browse = null;
-        }
-
         return data;
     },
-    beforeRouteUpdate: function(to, from, next) {
-        // triggered when the params to the current route changes
-        this.onRouteUpdate( to );
+    beforeRouteEnter: function( to, from, next ) {
+        next((vm)=>{vm.onRouteUpdate(to);});
     },
     mounted: function() { 
         // triggered when the template dom is rendered the first time
@@ -42,6 +31,7 @@ var HomePage = Vue.component("home-page", {
     },
     methods: {
         onRouteUpdate: function(to) {
+            // this is called when a route is updated including on page load.
             // when the route is updated, update the filters
             if( to.name=="browse" && to.params.field != null && to.params.value != null ) {
                 this.options.show_all_filters = false;

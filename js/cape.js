@@ -1,4 +1,3 @@
-
 // format date
 Vue.filter('formatDate', function(value) {
     if (value) {
@@ -18,7 +17,8 @@ function makeFilter( field ) {
         case "date":    return new DateFilter( field ); 
         case "freetext":return new FreeTextFilter( field ); 
     }
-    console.log("No filter for field type "+field.type);
+    console.warn("Could not create a search filter for field type '"+field.type+"'");
+    return false;
 }
 
 /*
@@ -608,4 +608,4 @@ function make_pattern(search_string) {
 }
 
 
-//# sourceURL=site.js
+//# sourceURL=js/cape.js

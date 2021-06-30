@@ -70,22 +70,11 @@ var HomePage = Vue.component("home-page", {
         var data = {};
         data.dataset = this.$root.defaultDataset;
         data.options = this.$root.defaultDatasetOptions;
-
         data.visible_filters = [];
-
-        if( this.$route.name=="browse" && this.$route.params.field != null && this.$route.params.value != null ) {
-            data.browse= { field:this.$route.params.field, value:this.$route.params.value };
-            data.options.filters_by_id[ data.browse.field ].mode = "is";
-            data.options.filters_by_id[ data.browse.field ].term = data.browse.value;
-        } else {
-            data.browse = null;
-        }
-
         return data;
     },
-    beforeRouteUpdate: function(to, from, next) {
-        // triggered when the params to the current route changes
-        this.onRouteUpdate( to );
+    beforeRouteEnter: function( to, from, next ) {
+        next((vm)=>{vm.onRouteUpdate(to);});
     },
     mounted: function() { 
         // triggered when the template dom is rendered the first time
@@ -106,6 +95,7 @@ var HomePage = Vue.component("home-page", {
     },
     methods: {
         onRouteUpdate: function(to) {
+            // this is called when a route is updated including on page load.
             // when the route is updated, update the filters
             if( to.name=="browse" && to.params.field != null && to.params.value != null ) {
                 this.options.show_all_filters = false;
@@ -243,7 +233,7 @@ Vue.component("results-summary", {
 
 
 // zz-app
-template = "<div>\n    <template v-if=\"app_status == 'dev'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a development instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'pprd'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is the pre-production instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    \n    <template v-if=\"source_data.status == 'ERROR'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-error my-2\">\n          <div class=\"card-body text-center\">\n            <h2>Unable to load data<\/h2>\n            <p>An error has occurred. The error was: {{ source_data.error_message }}.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'LOADING'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-primary text-white my-2\">\n          <div class=\"card-body text-center\">\n            <div class=\"spinner-border\" role=\"status\">\n              <span class=\"sr-only\">Loading...<\/span>\n            <\/div>\n            <p>Please wait while the data loads.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'OK'\">\n        <dataset v-bind:dataset=\"defaultDataset\"><\/dataset>\n    <\/template>\n<\/div>\n";// zz just so this loads after all the other templates
+template = "<div>\n    <template v-if=\"app_status == 'test'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a testing instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'dev'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a development instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'pprd'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is the pre-production instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    \n    <template v-if=\"source_data.status == 'ERROR'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-error my-2\">\n          <div class=\"card-body text-center\">\n            <h2>Unable to load data<\/h2>\n            <p>An error has occurred. The error was: {{ source_data.error_message }}.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'LOADING'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-primary text-white my-2\">\n          <div class=\"card-body text-center\">\n            <div class=\"spinner-border\" role=\"status\">\n              <span class=\"sr-only\">Loading...<\/span>\n            <\/div>\n            <p>Please wait while the data loads.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'OK'\">\n        <dataset v-bind:dataset=\"defaultDataset\"><\/dataset>\n    <\/template>\n<\/div>\n";// zz just so this loads after all the other templates
 new Vue({
     el: '#app',
     data: {
@@ -251,7 +241,7 @@ new Vue({
             status: "LOADING"
         },
         app_status: (typeof app_status === 'undefined'?"dev":app_status),
-	git_info: git_info
+        git_info: git_info
     },
     template: template,
     created: function () {
@@ -399,12 +389,18 @@ new Vue({
         
                 for (field_i = 0; field_i < dataset.config.fields.length; ++field_i) {
                     var field = dataset.config.fields[field_i];
-                    if( field.filter === undefined ) { field.filter = true; };
-                    if( field.filter ) {
-                        var filter = makeFilter( field );
-                        options.filters_by_id[field.id] = filter;
-                        options.filters.push(filter);
+                    if( field.filter === undefined ) { 
+                        field.filter = true; 
+                    };
+                    if( !field.filter ) { 
+                        continue; 
                     }
+                    var filter = makeFilter( field );
+                    if( !filter ) { 
+                        continue; 
+                    }
+                    options.filters_by_id[field.id] = filter;
+                    options.filters.push(filter);
                 }
         
                 // expand sort field names into actual field objects for MVC

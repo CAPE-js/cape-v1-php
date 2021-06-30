@@ -24,6 +24,18 @@ $(document).ready(function() {
             "js/lodash.min.js", 
             "js/cape.js",
             "js/cape-templates.js" ],
+        test: [ 
+            "dynamic/gitinfo.php",
+            "js/popper.min.js", 
+            "js/vue.min.js", 
+            "js/vue-router.js", 
+            "js/vue-resource-1.5.1.js", 
+            "js/vue-multiselect.min.js",
+            "js/bootstrap.min.js", 
+            "js/moment.min.js", 
+            "js/lodash.min.js", 
+            "js/cape.js",
+            "js/cape-templates.js" ],
         dev:  [ 
             "dynamic/gitinfo.php",
             "js/popper.min.js", 
@@ -38,7 +50,7 @@ $(document).ready(function() {
             "dynamic/cape-templates-js.php" ]
     };
     var load_list = libs["dev"];
-    if( app_status == "prod" || app_status == "pprd") { 
+    if( libs[app_status] ) {
         load_list = libs[app_status];
     }
     load_next_script();

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAPE TEST</title>
+
+    <!-- css & js required by cape -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/vue-multiselect.min.css" rel="stylesheet">
+    <link href="css/cape.css" rel="stylesheet">
+    <script src="local.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/loader.js"></script>
+
+    <!-- additional css & js -->
+    <link href="css/theme.min.css" rel="stylesheet">
+    <!--<link href="site.css" rel="stylesheet">-->
+    <script src="js/theme.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5shiv.min.js"></script>
+    <script src="./js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+.test-box-label, .test-box-value {
+	border-bottom: dashed 1px grey;
+	padding: 0.5em;
+}
+.field-label {
+	display: inline-block;
+	font-weight: bold;
+}
+.field-label:after {
+   content: ":";
+}
+.field-value {
+	display: inline-block;
+}
+    </style>
+
+
+</head>
+<body>
+<div class="container" id='page'>
+
+  <div class="row small branding">
+    <div class="col">
+      <h1><a href="/" name="servicetitle" id="servicetitle">CAPE Test Environment</a></h1>
+      A sub heading.
+    </div>
+  </div>
+
+  <div id="app" class="content"></div>
+
+</div>
+
+</body>
+</html>
+
+<script type="text/x-template" id="templateDataset">
+    <div class="row content">
+        <div class="col">
+            <div class="container">
+                <nav class="row">
+                    <nav class="col">
+                        <p>
+                            <router-link to="/">Return to search results</router-link>
+                            |
+                            <router-link to="/data">Dataset schema and download</router-link>
+                        </p>
+                    </nav>
+                </nav>
+                <router-view></router-view>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateIntro">
+    <div>
+        <p>Intro goes here</p>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateData">
+    <div class="row">
+        <div class="col">
+            <h2>About the data</h2>
+            <p>This dataset has been created and shared with the intention it should be reused. The fields in the
+                dataset are described below.</p>
+            <p>This data is copyright <a v-bind:href="dataset.config.copyright.url">{{ dataset.config.copyright.name }}</a> and may be reused under the <a v-bind:href="dataset.config.license.url">{{ dataset.config.license.name }}</a> license.</p>
+            <p>This dataset was created by <span v-for="(creator, index) in dataset.config.creators"><span>{{ creator.name }}</span><span v-if="index+1 < dataset.config.creators.length">, </span></span>.</p>
+            <p>If using this data, please attribute it as "{{ dataset.config.attribution.text }}" with a link to <a v-bind:href="dataset.config.attribution.url">{{dataset.config.attribution.url}}</a>.</p>
+            <p>
+                <button v-on:click="downloadJSON" class="btn btn-secondary">Download JSON</button>
+                <button v-on:click="downloadCSV" class="btn btn-secondary">Download CSV</button>
+            </p>
+            <h2>About this software</h2>
+            <p>This website uses pure Javascript to provide interaction with a JSON datafile which contains the records and site configuration. It does not require any database or PHP -- all the searching is done inside the single page. Our working title for the toolkit to make this happen is <i>DATA CAPE</i>. In theory it could be reused for similar projects in future. DATA CAPE, and this website (OPERA CAPE), were created by <a href="https://www.ecs.soton.ac.uk/people/totl">Christopher Gutteridge</a> and David Pepper in the iSolutions Web &amp; Data Innovation team.</p>
+            <h2>Schema</h2>
+            <p>Field types may be text, date, integer or enum. An enum field is short for enumerated, which means a
+                limited set of terms rather than free text.</p>
+            <fields-table />
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateNoRecord">
+    <p>NO SUCH RECORD</p>
+</script>
+
+
+<script type="text/x-template" id="templateSummaryCard">
+    <div class="summary-card card mb-1">
+            <div class="card-body" v-on:click="showIndexCard" title="See full details.">
+                <div>templateSummaryCard</div>
+                <div class="row pb-1">
+                    <div class="col-sm-8 card-title">
+                        <field-value v-bind:linkValue="false" v-bind:typedValue="record.title"></field-value>
+                    </div>
+                    <div class="col-sm-4 text-sm-right">
+                        <field-value v-bind:linkValue="false" v-bind:typedValue="record.date"></field-value>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                    </div>
+                </div>
+            </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="templateIndexCard">
+    <div>
+        <div class="index-card-nav">
+            <a v-if="record.prev" v-bind:href="'#/record/'+record.prev">⬅️&nbsp;Previous</a>
+            &nbsp;
+            <a v-if="record.next" style='float:right;display:inline-block' v-bind:href="'#/record/'+record.next">Next&nbsp;➡️</a>
+        </div>
+        <div class="card index-card mb-2">
+            <div class="card-body">
+            <h5 class="card-title">Record #{{record.record_number.value}}</h5>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/raw/record_number</div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.record_number" v-bind:linkValue="false"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/raw/prev</div>
+                    <div class='col-md test-box-value'>{{record.prev}}</div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/raw/next</div>
+                    <div class='col-md test-box-value'>{{record.next}}</div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Text </div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.title" v-bind:linkValue="false"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Text Linked</div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.title" v-bind:linkValue="true"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Date </div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.date" v-bind:linkValue="false"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Date Linked</div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.date" v-bind:linkValue="true"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Int </div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.weight" v-bind:linkValue="false"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Int Linked</div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.weight" v-bind:linkValue="true"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Enum </div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.size" v-bind:linkValue="false"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Enum Linked</div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.size" v-bind:linkValue="true"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Multiple Enum </div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.colour" v-bind:linkValue="false"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Multiple Enum Linked</div>
+                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.colour" v-bind:linkValue="true"></field-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-label-and-value/Multiple Enum </div>
+                    <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.colour" ></field-label-and-value></div>
+                </div>
+                <div class='row'>
+                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-label-and-value-if-set/Multiple Enum </div>
+                    <div class='col-md test-box-value'><field-label-and-value-if-set v-bind:typedValue="record.colour" ></field-label-and-value-if-set></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+

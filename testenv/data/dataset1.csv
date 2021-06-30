@@ -1,0 +1,5 @@
+RECORD NUMBER,DATE,TITLE,SIZE,COLOUR,WEIGHT,JUNK
+1,2001-01-01,Record one,Small,Red;Blue,23,foo
+2,2002-02-02,Record two,Medium,Blue;Yellow;Pink,99,bar
+3,2003-04-05,Record three,Large,Red,66,baz
+4,,,,,,

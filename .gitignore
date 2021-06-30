@@ -82,12 +82,12 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/phpstorm
 
-local.js
-data/
-Assets/
-config.json
-index.html
-site.css
+/local.js
+/data
+/Assets
+/config.json
+/index.html
+/site.css
 
 index2.html
 nohup.out

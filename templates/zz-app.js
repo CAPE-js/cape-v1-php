@@ -6,7 +6,7 @@ new Vue({
             status: "LOADING"
         },
         app_status: (typeof app_status === 'undefined'?"dev":app_status),
-	git_info: git_info
+        git_info: git_info
     },
     template: template,
     created: function () {
@@ -154,12 +154,18 @@ new Vue({
         
                 for (field_i = 0; field_i < dataset.config.fields.length; ++field_i) {
                     var field = dataset.config.fields[field_i];
-                    if( field.filter === undefined ) { field.filter = true; };
-                    if( field.filter ) {
-                        var filter = makeFilter( field );
-                        options.filters_by_id[field.id] = filter;
-                        options.filters.push(filter);
+                    if( field.filter === undefined ) { 
+                        field.filter = true; 
+                    };
+                    if( !field.filter ) { 
+                        continue; 
                     }
+                    var filter = makeFilter( field );
+                    if( !filter ) { 
+                        continue; 
+                    }
+                    options.filters_by_id[field.id] = filter;
+                    options.filters.push(filter);
                 }
         
                 // expand sort field names into actual field objects for MVC
