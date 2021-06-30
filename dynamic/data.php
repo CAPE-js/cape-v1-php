@@ -63,7 +63,17 @@ file_put_contents( $DATA_FILE, $output );
 exit;
 
 function map_dataset( $config, $source ) {
-	$output = array();
+
+	# sanity check config makes sense
+	$id_hash = array();
+	foreach( $config["fields"] as $field ) {
+		if( array_key_exists( $field["id"], $id_hash ) ) {
+			exit_with_error( "Field ID '".$field["id"]."' appears more than once in config." );
+		}
+		$id_hash[$field["id"]] = 1;
+	}
+
+	# map fields
 	$output["config"] = $config;
 	$output["records"] = array();
 
@@ -75,7 +85,6 @@ function map_dataset( $config, $source ) {
 		$to_map[ $field["id"] ] = $field;
 	}
 
-	# map fields
 	$map = array();
 	$output["unmapped_headings"] = array();	
 	$output["missing_headings"] = array();	

@@ -1,4 +1,17 @@
 <div>
+    <template v-if="app_status == 'test'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-warning my-2">
+          <div class="card-body text-center">
+             This is a testing instance of this service.
+             <br />
+             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
     <template v-if="app_status == 'dev'">
         <div class="row content">
         <div class="col">

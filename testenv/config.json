@@ -1,0 +1,77 @@
+{
+	"datasets": [
+		{
+			"id":"testenv",
+			"title": "Test Environment",
+			"base_file_name":"dataset1",
+                        "format":"csv",
+			"data_dir":"data",
+			"sort": [ "title", "date" ],
+			"license": {
+				"url":"https://creativecommons.org/licenses/by/3.0/",
+				"name":"Creative Commons Attribution 3.0 Unported (CC BY 3.0)"
+			},
+			"copyright": {
+				"url":"https://www.southampton.ac.uk/",
+				"name":"University of Southampton"
+			},
+			"creators": [{
+				"name": "Marvin Fenderson",
+				"email": "marvin@totl.net"
+			}],
+			"attribution": {
+				"text": "TotL Project",
+				"url": "http://example.org/totl/"
+			},	
+        		"id_field":"record_number",
+			"fields":[
+				{
+					"id":"record_number",
+					"type":"integer",
+					"source_heading":"RECORD NUMBER",
+					"label":"Record number label",
+					"description":"Record number description"
+				},
+				{
+					"id":"date",
+					"type":"date",
+					"source_heading":"DATE",
+					"label":"Date label",
+					"description":"Date description",
+					"quick_search":true,
+					"placeholder":{ "is": "is placeholder", "between": [ "between placeholder a", "between placeholder b" ] }
+				},
+				{
+					"id":"title",
+					"type":"text",
+					"source_heading":"TITLE",
+					"label":"Title label",
+					"description":"Title description"
+				},
+				{
+					"id":"size",
+					"type":"enum",
+                			"source_heading":"SIZE",
+                			"label":"Size label",
+                			"description":"Size description"
+				},
+				{
+					"id":"colour",
+					"type":"enum",
+					"multiple":true,
+                			"source_heading":"COLOUR",
+					"source_split":"\\s*;\\s*",
+                			"label":"Colour label",
+                			"description":"Colour description"
+				},
+				{
+					"id":"weight",
+					"type":"integer",
+                			"source_heading":"WEIGHT",
+                			"label":"Weight label",
+                			"description":"Weight description"
+				}
+			]
+		}
+	]
+}
