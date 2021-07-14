@@ -9,8 +9,9 @@ var HomePage = Vue.component("home-page", {
         data.visible_filters = [];
         return data;
     },
+    // runs every time the route changes
     beforeRouteEnter: function( to, from, next ) {
-        next((vm)=>{vm.onRouteUpdate(to);});
+        next((vm)=>{ vm.onRouteUpdate(to); });
     },
     mounted: function() { 
         // triggered when the template dom is rendered the first time
@@ -18,7 +19,7 @@ var HomePage = Vue.component("home-page", {
     },
     watch: {
         '$route': function(to, from) {
-            // triggered when we move between named routes
+            // triggered when the fragment changes
             this.onRouteUpdate( to );
         },
         'options.show_all_filters': function( to, from ) {

@@ -73,8 +73,9 @@ var HomePage = Vue.component("home-page", {
         data.visible_filters = [];
         return data;
     },
+    // runs every time the route changes
     beforeRouteEnter: function( to, from, next ) {
-        next((vm)=>{vm.onRouteUpdate(to);});
+        next((vm)=>{ vm.onRouteUpdate(to); });
     },
     mounted: function() { 
         // triggered when the template dom is rendered the first time
@@ -82,7 +83,7 @@ var HomePage = Vue.component("home-page", {
     },
     watch: {
         '$route': function(to, from) {
-            // triggered when we move between named routes
+            // triggered when the fragment changes
             this.onRouteUpdate( to );
         },
         'options.show_all_filters': function( to, from ) {
@@ -233,7 +234,24 @@ Vue.component("results-summary", {
 
 
 // zz-app
-template = "<div>\n    <template v-if=\"app_status == 'test'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a testing instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'dev'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a development instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'pprd'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is the pre-production instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    \n    <template v-if=\"source_data.status == 'ERROR'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-error my-2\">\n          <div class=\"card-body text-center\">\n            <h2>Unable to load data<\/h2>\n            <p>An error has occurred. The error was: {{ source_data.error_message }}.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'LOADING'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-primary text-white my-2\">\n          <div class=\"card-body text-center\">\n            <div class=\"spinner-border\" role=\"status\">\n              <span class=\"sr-only\">Loading...<\/span>\n            <\/div>\n            <p>Please wait while the data loads.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'OK'\">\n        <dataset v-bind:dataset=\"defaultDataset\"><\/dataset>\n    <\/template>\n<\/div>\n";// zz just so this loads after all the other templates
+template = "<div id='app'>\n    <template v-if=\"app_status == 'test'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a testing instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'dev'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a development instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'pprd'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is the pre-production instance of this service.\n             <br \/>\n             {{ git_info.branch }}_{{ git_info.commit_date | formatDate }}_{{ git_info.commit_id }}\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    \n    <template v-if=\"source_data.status == 'ERROR'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-error my-2\">\n          <div class=\"card-body text-center\">\n            <h2>Unable to load data<\/h2>\n            <p>An error has occurred. The error was: {{ source_data.error_message }}.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'LOADING'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-primary text-white my-2\">\n          <div class=\"card-body text-center\">\n            <div class=\"spinner-border\" role=\"status\">\n              <span class=\"sr-only\">Loading...<\/span>\n            <\/div>\n            <p>Please wait while the data loads.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'OK'\">\n        <dataset v-bind:dataset=\"defaultDataset\"><\/dataset>\n    <\/template>\n<\/div>\n";
+var capeRouter = new VueRouter({
+    routes: [
+        {name: 'root', path: '/', component: HomePage},
+        {name: 'data', path: '/data', component: DataPage},
+        {name: 'record', path: '/record/:id', component: RecordPage},
+        {name: 'browse', path: '/browse/:field/:value', component: HomePage},
+    ]
+});
+capeRouter.afterEach((to, from, next) => {
+    if( from.name !== null ) {
+        // coming from an existing route, rather than a first time page load
+        var content_vertical_offset = $("#app").offset().top;
+        $('html,body').scrollTop(content_vertical_offset);
+    }
+});
+
+// zz just so this loads after all the other templates
 new Vue({
     el: '#app',
     data: {
@@ -434,14 +452,7 @@ new Vue({
     methods: {
     },
 
-    router: new VueRouter({
-        routes: [
-            {name: 'root', path: '/', component: HomePage},
-            {name: 'data', path: '/data', component: DataPage},
-            {name: 'record', path: '/record/:id', component: RecordPage},
-            {name: 'browse', path: '/browse/:field/:value', component: HomePage},
-        ]
-    })
+    router: capeRouter
 
 }); // end of app
 
