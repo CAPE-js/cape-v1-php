@@ -1,3 +1,20 @@
+
+var capeRouter = new VueRouter({
+    routes: [
+        {name: 'root', path: '/', component: HomePage},
+        {name: 'data', path: '/data', component: DataPage},
+        {name: 'record', path: '/record/:id', component: RecordPage},
+        {name: 'browse', path: '/browse/:field/:value', component: HomePage},
+    ]
+});
+capeRouter.afterEach((to, from, next) => {
+    if( from.name !== null ) {
+        // coming from an existing route, rather than a first time page load
+        var content_vertical_offset = $("#app").offset().top;
+        $('html,body').scrollTop(content_vertical_offset);
+    }
+});
+
 // zz just so this loads after all the other templates
 new Vue({
     el: '#app',
@@ -199,14 +216,7 @@ new Vue({
     methods: {
     },
 
-    router: new VueRouter({
-        routes: [
-            {name: 'root', path: '/', component: HomePage},
-            {name: 'data', path: '/data', component: DataPage},
-            {name: 'record', path: '/record/:id', component: RecordPage},
-            {name: 'browse', path: '/browse/:field/:value', component: HomePage},
-        ]
-    })
+    router: capeRouter
 
 }); // end of app
 
