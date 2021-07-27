@@ -141,68 +141,85 @@
             &nbsp;
             <a v-if="record.next" style='float:right;display:inline-block' v-bind:href="'#/record/'+record.next">Next&nbsp;➡️</a>
         </div>
-        <div class="card index-card mb-2">
+        <div class="card index-card mb-6">
             <div class="card-body">
-            <h5 class="card-title">Record #{{record.record_number.value}}</h5>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/raw/record_number</div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.record_number" v-bind:linkValue="false"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/raw/prev</div>
-                    <div class='col-md test-box-value'>{{record.prev}}</div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/raw/next</div>
-                    <div class='col-md test-box-value'>{{record.next}}</div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Text </div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.title" v-bind:linkValue="false"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Text Linked</div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.title" v-bind:linkValue="true"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Date </div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.date" v-bind:linkValue="false"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Date Linked</div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.date" v-bind:linkValue="true"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Int </div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.weight" v-bind:linkValue="false"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Int Linked</div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.weight" v-bind:linkValue="true"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Enum </div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.size" v-bind:linkValue="false"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Enum Linked</div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.size" v-bind:linkValue="true"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Multiple Enum </div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.colour" v-bind:linkValue="false"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Multiple Enum Linked</div>
-                    <div class='col-md test-box-value'><field-value v-bind:typedValue="record.colour" v-bind:linkValue="true"></field-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-label-and-value/Multiple Enum </div>
-                    <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.colour" ></field-label-and-value></div>
-                </div>
-                <div class='row'>
-                    <div class='col-md test-box-label'>{{record.record_number.value}}/field-label-and-value-if-set/Multiple Enum </div>
-                    <div class='col-md test-box-value'><field-label-and-value-if-set v-bind:typedValue="record.colour" ></field-label-and-value-if-set></div>
+                <h5 class="card-title">Record #{{record.record_number.value}}</h5>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h6>Record contents</h6>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.record_number" ></field-label-and-value></div>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.date" ></field-label-and-value></div>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.title" ></field-label-and-value></div>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.size" ></field-label-and-value></div>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.colour" ></field-label-and-value></div>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.weight" ></field-label-and-value></div>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.likes" ></field-label-and-value></div>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.foods" ></field-label-and-value></div>
+                        <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.drinks" ></field-label-and-value></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h6>Various views on data</h6>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/raw/record_number</div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.record_number" v-bind:linkValue="false"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/raw/prev</div>
+                            <div class='col-md test-box-value'>{{record.prev}}</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/raw/next</div>
+                            <div class='col-md test-box-value'>{{record.next}}</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Text </div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.title" v-bind:linkValue="false"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Text Linked</div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.title" v-bind:linkValue="true"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Date </div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.date" v-bind:linkValue="false"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Date Linked</div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.date" v-bind:linkValue="true"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Int </div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.weight" v-bind:linkValue="false"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Int Linked</div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.weight" v-bind:linkValue="true"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Enum </div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.size" v-bind:linkValue="false"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Single Enum Linked</div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.size" v-bind:linkValue="true"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Multiple Enum </div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.colour" v-bind:linkValue="false"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-value/Multiple Enum Linked</div>
+                            <div class='col-md test-box-value'><field-value v-bind:typedValue="record.colour" v-bind:linkValue="true"></field-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-label-and-value/Multiple Enum </div>
+                            <div class='col-md test-box-value'><field-label-and-value v-bind:typedValue="record.colour" ></field-label-and-value></div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md test-box-label'>{{record.record_number.value}}/field-label-and-value-if-set/Multiple Enum </div>
+                            <div class='col-md test-box-value'><field-label-and-value-if-set v-bind:typedValue="record.colour" ></field-label-and-value-if-set></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

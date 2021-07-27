@@ -5,7 +5,7 @@ var HomePage = Vue.component("home-page", {
     data: function () {
         var data = {};
         data.dataset = this.$root.defaultDataset;
-        data.options = this.$root.defaultDatasetOptions;
+        data.settings = this.$root.defaultDatasetSettings;
         data.visible_filters = [];
         return data;
     },
@@ -21,7 +21,7 @@ var HomePage = Vue.component("home-page", {
             // triggered when we move between named routes
             this.onRouteUpdate( to );
         },
-        'options.show_all_filters': function( to, from ) {
+        'settings.show_all_filters': function( to, from ) {
             this.setVisibleFilters();
         }
     },
@@ -34,11 +34,11 @@ var HomePage = Vue.component("home-page", {
             // this is called when a route is updated including on page load.
             // when the route is updated, update the filters
             if( to.name=="browse" && to.params.field != null && to.params.value != null ) {
-                this.options.show_all_filters = false;
+                this.settings.show_all_filters = false;
                 this.resetFilters();
                 this.browse= { field: to.params.field, value: to.params.value };
-                this.options.filters_by_id[ this.browse.field ].mode = "is";
-                this.options.filters_by_id[ this.browse.field ].term = this.browse.value;
+                this.settings.filters_by_id[ this.browse.field ].mode = "is";
+                this.settings.filters_by_id[ this.browse.field ].term = this.browse.value;
             } else {
                 this.browse = null;
             }
@@ -46,9 +46,9 @@ var HomePage = Vue.component("home-page", {
         },
         setVisibleFilters: function() {
             this.visible_filters = [];
-            for (var i = 0; i < this.options.filters.length; i++) {
-                var filter = this.options.filters[i];
-                if (( this.options.show_all_filters 
+            for (var i = 0; i < this.settings.filters.length; i++) {
+                var filter = this.settings.filters[i];
+                if (( this.settings.show_all_filters 
                    || filter.field.quick_search 
                    || ( this.browse!=null && filter.field.id==this.browse.field) )) {
                     this.visible_filters.push( filter );
@@ -58,10 +58,10 @@ var HomePage = Vue.component("home-page", {
         filterResults: function() {
             // build a list of filters to be applied
             var active_filters = [];
-            for (var i = 0; i < this.options.filters.length; i++) {
+            for (var i = 0; i < this.settings.filters.length; i++) {
                 // does the filter pass?
-                var filter = this.options.filters[i];
-                if (filter.isSet() && ( this.options.show_all_filters 
+                var filter = this.settings.filters[i];
+                if (filter.isSet() && ( this.settings.show_all_filters 
                                      || filter.field.quick_search 
                                      || ( this.browse!=null && filter.field.id==this.browse.field) )) {
                     active_filters.push(filter);
@@ -96,8 +96,8 @@ var HomePage = Vue.component("home-page", {
             // sort records based on sort field
             var component = this;
             results.sort( function(a,b) {
-                var av = a[component.options.sort_field].value;
-                var bv = b[component.options.sort_field].value;
+                var av = a[component.settings.sort_field].value;
+                var bv = b[component.settings.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
                 if(typeof bv === 'array') { bv = bv[0]; }
                 if( av == null ) { av = ""; }
@@ -105,15 +105,15 @@ var HomePage = Vue.component("home-page", {
                 av = av.toLowerCase();
                 bv = bv.toLowerCase();
                 if( av==bv ) { return 0; }
-                if( component.options.sort_dir == 'asc'  && av>bv ) { return 1; }
-                if( component.options.sort_dir == 'desc' && av<bv ) { return 1; }
+                if( component.settings.sort_dir == 'asc'  && av>bv ) { return 1; }
+                if( component.settings.sort_dir == 'desc' && av<bv ) { return 1; }
                 return -1;
             });
             return results;
         },
         resetFilters: function() {
-            for (var i = 0; i < this.options.filters.length; i++) {
-                this.options.filters[i].reset();
+            for (var i = 0; i < this.settings.filters.length; i++) {
+                this.settings.filters[i].reset();
             }
         },
         ignoreEnter: function(e) { e.stopPropagation(); return true; }

@@ -62,14 +62,14 @@ Vue.component("filter-form", {
 
 
 // home-page
-template = "    <form v-on:keypress.enter.prevent=\"ignoreEnter\">\n        <intro \/> \n        <div class=\"row\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n        <div class=\"row\">\n            <div class=\"col text-sm-right\">\n                <div class=\"switch switch-sm\">\n                    <input v-model=\"options.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-upper\" \/>\n                    <label for=\"show-all-filters-upper\">Advanced search<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <filter-form v-bind:filters=\"visible_filters\"><\/filter-form>\n            <\/div>\n        <\/div>\n        <div class=\"row\" v-if=\"options.show_all_filters\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n\n        <div class=\"row mb-1\">\n            <div class=\"col-sm-6\">\n                Order results by \n                <select v-model=\"options.sort_field\"><option v-for=\"field in options.sort_fields\" v-bind:value=\"field.id\">{{field.label}}<\/option><\/select>\n                <select v-model=\"options.sort_dir\"><option value=\"asc\">Ascending<\/option><option value=\"desc\">Decending<\/option><\/select>\n            <\/div>\n            <div class=\"col-sm-6 text-sm-right\">\n                <div class=\"switch switch-sm\" v-if=\"options.show_all_filters\">\n                  <input v-model=\"options.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                  <label for=\"show-all-filters-lower\">Show all filters<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <results v-bind:options=\"options\" v-bind:results=\"filteredAndSortedResults\"><\/results>\n            <\/div>\n        <\/div>\n    <\/form>\n";
+template = "    <form v-on:keypress.enter.prevent=\"ignoreEnter\">\n        <intro \/> \n        <div class=\"row\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n        <div class=\"row\">\n            <div class=\"col text-sm-right\">\n                <div class=\"switch switch-sm\">\n                    <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-upper\" \/>\n                    <label for=\"show-all-filters-upper\">Advanced search<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <filter-form v-bind:filters=\"visible_filters\"><\/filter-form>\n            <\/div>\n        <\/div>\n        <div class=\"row\" v-if=\"settings.show_all_filters\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n\n        <div class=\"row mb-1\">\n            <div class=\"col-sm-6\">\n                Order results by \n                <select v-model=\"settings.sort_field\"><option v-for=\"field in settings.sort_fields\" v-bind:value=\"field.id\">{{field.label}}<\/option><\/select>\n                <select v-model=\"settings.sort_dir\"><option value=\"asc\">Ascending<\/option><option value=\"desc\">Decending<\/option><\/select>\n            <\/div>\n            <div class=\"col-sm-6 text-sm-right\">\n                <div class=\"switch switch-sm\" v-if=\"settings.show_all_filters\">\n                  <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                  <label for=\"show-all-filters-lower\">Show all filters<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <results v-bind:options=\"settings\" v-bind:results=\"filteredAndSortedResults\"><\/results>\n            <\/div>\n        <\/div>\n    <\/form>\n";
 var currentSearchResults = null;
 
 var HomePage = Vue.component("home-page", {
     data: function () {
         var data = {};
         data.dataset = this.$root.defaultDataset;
-        data.options = this.$root.defaultDatasetOptions;
+        data.settings = this.$root.defaultDatasetSettings;
         data.visible_filters = [];
         return data;
     },
@@ -85,7 +85,7 @@ var HomePage = Vue.component("home-page", {
             // triggered when we move between named routes
             this.onRouteUpdate( to );
         },
-        'options.show_all_filters': function( to, from ) {
+        'settings.show_all_filters': function( to, from ) {
             this.setVisibleFilters();
         }
     },
@@ -98,11 +98,11 @@ var HomePage = Vue.component("home-page", {
             // this is called when a route is updated including on page load.
             // when the route is updated, update the filters
             if( to.name=="browse" && to.params.field != null && to.params.value != null ) {
-                this.options.show_all_filters = false;
+                this.settings.show_all_filters = false;
                 this.resetFilters();
                 this.browse= { field: to.params.field, value: to.params.value };
-                this.options.filters_by_id[ this.browse.field ].mode = "is";
-                this.options.filters_by_id[ this.browse.field ].term = this.browse.value;
+                this.settings.filters_by_id[ this.browse.field ].mode = "is";
+                this.settings.filters_by_id[ this.browse.field ].term = this.browse.value;
             } else {
                 this.browse = null;
             }
@@ -110,9 +110,9 @@ var HomePage = Vue.component("home-page", {
         },
         setVisibleFilters: function() {
             this.visible_filters = [];
-            for (var i = 0; i < this.options.filters.length; i++) {
-                var filter = this.options.filters[i];
-                if (( this.options.show_all_filters 
+            for (var i = 0; i < this.settings.filters.length; i++) {
+                var filter = this.settings.filters[i];
+                if (( this.settings.show_all_filters 
                    || filter.field.quick_search 
                    || ( this.browse!=null && filter.field.id==this.browse.field) )) {
                     this.visible_filters.push( filter );
@@ -122,10 +122,10 @@ var HomePage = Vue.component("home-page", {
         filterResults: function() {
             // build a list of filters to be applied
             var active_filters = [];
-            for (var i = 0; i < this.options.filters.length; i++) {
+            for (var i = 0; i < this.settings.filters.length; i++) {
                 // does the filter pass?
-                var filter = this.options.filters[i];
-                if (filter.isSet() && ( this.options.show_all_filters 
+                var filter = this.settings.filters[i];
+                if (filter.isSet() && ( this.settings.show_all_filters 
                                      || filter.field.quick_search 
                                      || ( this.browse!=null && filter.field.id==this.browse.field) )) {
                     active_filters.push(filter);
@@ -160,8 +160,8 @@ var HomePage = Vue.component("home-page", {
             // sort records based on sort field
             var component = this;
             results.sort( function(a,b) {
-                var av = a[component.options.sort_field].value;
-                var bv = b[component.options.sort_field].value;
+                var av = a[component.settings.sort_field].value;
+                var bv = b[component.settings.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
                 if(typeof bv === 'array') { bv = bv[0]; }
                 if( av == null ) { av = ""; }
@@ -169,15 +169,15 @@ var HomePage = Vue.component("home-page", {
                 av = av.toLowerCase();
                 bv = bv.toLowerCase();
                 if( av==bv ) { return 0; }
-                if( component.options.sort_dir == 'asc'  && av>bv ) { return 1; }
-                if( component.options.sort_dir == 'desc' && av<bv ) { return 1; }
+                if( component.settings.sort_dir == 'asc'  && av>bv ) { return 1; }
+                if( component.settings.sort_dir == 'desc' && av<bv ) { return 1; }
                 return -1;
             });
             return results;
         },
         resetFilters: function() {
-            for (var i = 0; i < this.options.filters.length; i++) {
-                this.options.filters[i].reset();
+            for (var i = 0; i < this.settings.filters.length; i++) {
+                this.settings.filters[i].reset();
             }
         },
         ignoreEnter: function(e) { e.stopPropagation(); return true; }
@@ -245,6 +245,7 @@ new Vue({
     },
     template: template,
     created: function () {
+
         if (typeof data_location === 'undefined') {
             this.source_data.status = "ERROR";
             this.source_data.error_message = "Please ensure that local.js sets the property data_location";
@@ -260,21 +261,20 @@ new Vue({
                 return;
             }
 
-            this.source_data = response.body;
-            if (this.source_data.status == "ERROR") {
+            if (response.body.status == "ERROR") {
                 return;
             }
 
             this.datasets_by_id = {};
-            this.dataset_options_by_id = {};
             // populate records by ID. Nb. This is using the wrong ID data for now. TODO
-            for (ds_i = 0; ds_i < this.source_data.datasets.length; ++ds_i) {
+            for (ds_i = 0; ds_i < response.body.datasets.length; ++ds_i) {
                 var dataset = {};
 
-                var source = this.source_data.datasets[ds_i];
+                var source = response.body.datasets[ds_i];
 
                 // add config to dataset
                 dataset.config = source.config;
+                // this is used for outputting as a JSON dataset
                 dataset.raw_records = source.records;
 
                 // initialise enum registries
@@ -358,6 +358,7 @@ new Vue({
                     dataset.records.push(record);
                     prev_id = id;
                 }
+
                 // add this list of enum values to each enum field
                 var enum_fields = Object.keys(enums);
                 for (var enum_i = 0; enum_i < enum_fields.length; enum_i++) {
@@ -378,17 +379,16 @@ new Vue({
                 }
 
                 /* Init options for this dataset, used by subcomponents */
-
-                var options = {};
-                options.filters_by_id = {};
-                options.filters = [];
-                options.show_all_filters = false;
+                var settings = {};
+                settings.filters_by_id = {};
+                settings.filters = [];
+                settings.show_all_filters = false;
         
                 var free_text_filter = makeFilter( { label:"Search", quick_search:true, type:"freetext", id:"freetext", description:"Search for terms anywhere in the record" } );
-                options.filters.push(free_text_filter);
-        
-                for (field_i = 0; field_i < dataset.config.fields.length; ++field_i) {
-                    var field = dataset.config.fields[field_i];
+                settings.filters.push(free_text_filter);
+		var field_ids = Object.keys( dataset.fields_by_id );
+                for (var i=0; i<field_ids.length; ++i ) {
+                    var field = dataset.fields_by_id[field_ids[i]];
                     if( field.filter === undefined ) { 
                         field.filter = true; 
                     };
@@ -399,31 +399,33 @@ new Vue({
                     if( !filter ) { 
                         continue; 
                     }
-                    options.filters_by_id[field.id] = filter;
-                    options.filters.push(filter);
+                    settings.filters_by_id[field.id] = filter;
+                    settings.filters.push(filter);
                 }
         
                 // expand sort field names into actual field objects for MVC
-                options.sort_dir = "asc"; // or desc
-                options.sort_fields = [];
+                settings.sort_dir = "asc"; // or desc
+                settings.sort_fields = [];
                 for( var i=0; i<dataset.config.sort.length; ++i ) {
                      var field = dataset.fields_by_id[ dataset.config.sort[i] ];
-                     options.sort_fields.push( field );
+                     settings.sort_fields.push( field );
                 }
-                options.sort_field = options.sort_fields[0].id;
+                settings.sort_field = settings.sort_fields[0].id;
 
 
                 // add dataset to our dataset collection
                 this.datasets_by_id[dataset.config.id] = dataset;
-                this.dataset_options_by_id[dataset.config.id] = options;
-
 
                 // first dataset becomes the default
                 if (ds_i == 0) {
                     this.defaultDataset = dataset;
-                    this.defaultDatasetOptions = options;
+                    this.defaultDatasetSettings = settings;
                 }
             }
+
+            // do this once everything is ready to prevent race conditions
+            this.source_data = response.body;
+
         }, function(response) {
             // error callback
             this.source_data.status = "ERROR"

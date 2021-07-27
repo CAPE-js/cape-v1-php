@@ -11,6 +11,6 @@ data_location = "dynamic/data.php";
 // and this file should have
 // data_location = "data.json";
 
-app_status='test'
+app_status='dev'
 // app_status='prod'
 // app_status='pprd'

@@ -16,6 +16,7 @@ function makeFilter( field ) {
         case "enum":    return new EnumFilter( field ); 
         case "date":    return new DateFilter( field ); 
         case "freetext":return new FreeTextFilter( field ); 
+        case "ignore":  return false;
     }
     console.warn("Could not create a search filter for field type '"+field.type+"'");
     return false;
