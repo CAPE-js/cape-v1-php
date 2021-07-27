@@ -173,28 +173,34 @@ function map_dataset( $config, $source ) {
 				continue;
 			}
 
+			// a field can be split over several actual headings in the source data, eg. Foo, Foo 1, Foo 2 etc.
 			foreach( $field["actual_headings"] as $actual_heading ) {
 				if( !array_key_exists( $actual_heading, $record ) ) { continue; }
 				if( !isset( $record[$actual_heading] ) ) { continue; }
 				
-				$values = [$record[$actual_heading]];
 				if( @$field["multiple"] && array_key_exists( "source_split", $field ) ) {
-					$values = preg_split( "/".$field["source_split"]."/", trim($values[0]) );
+					$values = preg_split( "/".$field["source_split"]."/", trim($record[$actual_heading]) );
+				} else {
+					$values = [ $record[$actual_heading] ];
 				}
-				foreach( $values as &$value ) {
+
+				$processed_values = [];
+				foreach( $values as $value ) {
 					# force value to be integer
 					if( $field["type"]=="integer" ) { $value = (int) $value; } 
 					# trim dates to 10 characters
 					if( $field["type"]=="date" ) {  $value = substr( $value, 0, 10 ); }
+					$processed_values []= $value;
 				}
-				if( @$field["multiple"] ) {
-					foreach( $values as $value ) {
-						$out_record[$field["id"]] []= $value;
+				foreach( $processed_values as $value ) {
+					if( !empty( $value ) ) { 
+						if( @$field["multiple"] ) {
+							$out_record[$field["id"]] []= $value;
+						} else {
+							// if this is a single value and we have a non empty value then we're done
+							$out_record[$field["id"]] = $values[0];
+						}
 					}	
-				} else {
-					// if this is not multiple then we take the first valid answer and stop looking
-					$out_record[$field["id"]] = $values[0];
-					break;
 				}
 			}		
 		}
