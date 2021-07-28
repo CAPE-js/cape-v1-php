@@ -18,7 +18,7 @@ if( !$config ) {
 }
 
 # read source file(s)
-$datasets = array();
+$datasets = [];
 foreach( $config["datasets"] as $dataset_config ) {
 	if( $dataset_config["data_dir"] ) {
 		$data_dir = $BASE_DIR."/".$dataset_config["data_dir"];
@@ -64,106 +64,151 @@ exit;
 
 function map_dataset( $config, $source ) {
 
+	$output = [];
+	# snapshot config to use in the output JSON before we add bits
+	$output["config"] = $config;
+
 	# sanity check config makes sense
-	$id_hash = array();
+	$id_hash = [];
+	$n=0;
+	$fields = [];
 	foreach( $config["fields"] as $field ) {
+		$n++;
+		if( !array_key_exists( "id", $field ) ) {
+			exit_with_error( "Field missing ID in field #$n" );
+		}
+		if( !array_key_exists( "type", $field ) ) {
+			exit_with_error( "Field ID '".$field["id"]."' is missing a type." );
+		}
 		if( array_key_exists( $field["id"], $id_hash ) ) {
 			exit_with_error( "Field ID '".$field["id"]."' appears more than once in config." );
 		}
 		$id_hash[$field["id"]] = 1;
-	}
 
-	# map fields
-	$output["config"] = $config;
-	$output["records"] = array();
-
-	# sort config by source_heading
-	$fields = array();
-	$to_map = array();
-	foreach( $config["fields"] as $field ) {
-		$fields[ $field["source_heading"] ] = $field;
-		$to_map[ $field["id"] ] = $field;
-	}
-
-	$map = array();
-	$output["unmapped_headings"] = array();	
-	$output["missing_headings"] = array();	
-	foreach( $source["headings"] as $heading ) {
-
-		if( $heading == "AUTO" ) {
-			#field will auto increment instead
-			unset( $to_map[$fields[$heading]["id"]] );
-			continue;
+		# defaults
+		if( !array_key_exists( "multiple", $field ) ) {
+			$field["multiple"] = false;
 		}
-		if( array_key_exists( $heading, $fields ) ) {
-			if( $fields[$heading]["type"] != "ignore" ) {
-				$map[$heading] = $fields[$heading];
-			}
-			unset( $to_map[$fields[$heading]["id"]] );
-			continue;
-		}
-		# OK, can we remove a trailing number and match a multiple heading?
-		$base_heading = preg_replace( "/\s+\d+$/", "", $heading );
-		if( $base_heading != $heading && array_key_exists( $base_heading, $fields ) && $fields[$base_heading]["multiple"]) {
-			$map[$heading] = $fields[$base_heading];
-			unset( $to_map[$fields[$base_heading]["id"]] );
-			continue;
-		}
-			
-		$output["unmapped_headings"] []= $heading;
-	}
-	$output["missing_headings"] = array_keys( $to_map );
 
-	# map records
-	$auto_incs = array();
-	foreach( $source["records"] as $record ) {
-		$out_record = array();
-		foreach( $config["fields"] as $field ) {
-			if( $field["type"] != "ignore" ) {
-				if( @$field["multiple"] ) {
-					$out_record[$field["id"]]=array();
-				} else {
-					$out_record[$field["id"]]=null;
+		# treat source_heading as a list always to simplify things
+		if( array_key_exists( "source_heading", $field ) && !is_array( $field["source_heading"]) ) {
+			$field["source_heading"] = [ $field["source_heading"] ];
+		}
+		# check if a multi heading field has AUTO (it shouldn't)
+		if( array_key_exists( "source_heading", $field ) && count( $field["source_heading"] )> 1) {
+			foreach( $field["source_heading"] as $heading ) {
+				if( $heading == "AUTO" ) {
+					exit_with_error( "Field ID '".$field["id"]."' has AUTO in a list of source_heading." );
 				}
 			}
-			if( $field["source_heading"] == "AUTO" ) {
+		}
+		$fields []= $field;
+	}
+
+
+	# map fields
+	$output["records"] = [];
+
+	# check mappings line up
+	$headings_to_be_mapped = [];
+	foreach( $source["headings"] as $heading ) {
+		$headings_to_be_mapped[$heading] = true;
+	}
+	$missing_headings  = [];
+
+	foreach( $fields as &$field ) {
+		if( $field["source_heading"][0] == "AUTO" ) {
+			$field['auto'] = true;
+		}
+
+		$field["actual_headings"] = [];	
+		foreach( $field["source_heading"] as $source_heading ) {
+			$found = false;
+			foreach( $source["headings"] as $heading ) {
+				if( $heading == $source_heading ) {
+					$field["actual_headings"] []= $heading;
+					unset( $headings_to_be_mapped[$heading] );
+					$found = true;
+					continue;
+				}
+				if( $field["multiple"] ) {
+					// multiple headings can be of the form Foo 1, Foo 2 etc. The numbers are assumed to be in the correct order
+					$base_heading = preg_replace( "/\s+\d+$/", "", $heading );
+					if( $base_heading == $source_heading ) {
+						$field["actual_headings"] []= $heading;
+						unset( $headings_to_be_mapped[$heading] );
+						$found = true;
+					}
+				}
+			}
+			if( !$found ) {
+				$missing_headings[$source_heading]=true;
+			}
+		}
+			
+	}
+	$output["unmapped_headings"] = array_keys( $headings_to_be_mapped );
+	$output["missing_headings"] = array_keys( $missing_headings );
+
+	# map records
+	$auto_incs = [];
+	foreach( $source["records"] as $record ) {
+		$out_record = [];
+		foreach( $fields as $field ) {
+			if( $field["type"] == "ignore" ) {
+				continue;
+			}
+
+			if( @$field["multiple"] ) {
+				$out_record[$field["id"]]=[];
+			} else {
+				$out_record[$field["id"]]=null;
+			}
+			if( $field["source_heading"][0] == "AUTO" ) {
 				if( !array_key_exists( $field["id"], $auto_incs ) ) {
 					$auto_incs[$field["id"]] = 0;
 				}
 				$auto_incs[$field["id"]]++;
 				$out_record[$field["id"]] = $auto_incs[$field["id"]];
+				continue;
 			}
-		}
-		foreach( $record as $heading=>$value ) {
-			if( @!$map[$heading] ) { continue; }
-			$field = $map[$heading];
-			if( empty( $value ) ) { continue; }
-			# strip any time data after the ISO date
-			if( $field["type"] == "date" ) { $value = substr( $value, 0, 10 ); }
-			if( @$field["multiple"] ) {
-				if( $field["source_split"] ) {
-					$parts = preg_split( "/".$field["source_split"]."/", trim($value) );
-					foreach( $parts as $part ) {
-						if( !empty( $part )) {
-							# force integers to be integers	
-							if( $field["type"]=="integer" ) { $part+=0; }
-							$out_record[$field["id"]] []= $part;
-						}
-					}
+
+			// a field can be split over several actual headings in the source data, eg. Foo, Foo 1, Foo 2 etc.
+			foreach( $field["actual_headings"] as $actual_heading ) {
+				if( !array_key_exists( $actual_heading, $record ) ) { continue; }
+				if( !isset( $record[$actual_heading] ) ) { continue; }
+				
+				if( @$field["multiple"] && array_key_exists( "source_split", $field ) ) {
+					$values = preg_split( "/".$field["source_split"]."/", trim($record[$actual_heading]) );
 				} else {
-					# force integers to be integers	
-					if( $field["type"]=="integer" && !empty($part) ) { $value+=0; }
-					$out_record[$field["id"]] []= $value;
+					$values = [ $record[$actual_heading] ];
 				}
-			} else {
-				$out_record[$field["id"]] = $value;
-			}
+
+				$processed_values = [];
+				foreach( $values as $value ) {
+					# force value to be integer
+					if( $field["type"]=="integer" ) { $value = (int) $value; } 
+					# trim dates to 10 characters
+					if( $field["type"]=="date" ) {  $value = substr( $value, 0, 10 ); }
+					$processed_values []= $value;
+				}
+				foreach( $processed_values as $value ) {
+					if( !empty( $value ) ) { 
+						if( @$field["multiple"] ) {
+							$out_record[$field["id"]] []= $value;
+						} else {
+							// if this is a single value and we have a non empty value then we're done
+							$out_record[$field["id"]] = $values[0];
+						}
+					}	
+				}
+			}		
 		}
 		$output["records"] []= $out_record;
 	}
 
-	# trim out fields of type "ignore"
-	$fields = array();
+	# Trim "ignore" fields from config
+	$out_fields = [];
 	foreach( $output["config"]["fields"] as $field ) {
 		if( $field["type"] != "ignore" ) {
 			$fields []= $field;
@@ -194,7 +239,7 @@ function read_csv( $file ) {
 	if( $handle===FALSE ) {
 		exit_with_error( "Can't open CSV file $file" );
 	}
-	$table = array();
+	$table = [];
 	while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
 		$table []= $row;
 	}
@@ -204,18 +249,18 @@ function read_csv( $file ) {
 
 function table_to_objects( $table ) {
 	$first_row = true;
-	$headings = array();
-	$records = array();
+	$headings = [];
+	$records = [];
 	foreach( $table as $row ) {
 		if( $first_row ) {
-			$headings = array();
+			$headings = [];
 			foreach( $row as $item ) { 
 				$headings []= trim($item);
 			};
 			$first_row = false;
 			continue;
 		}
-		$record = array();
+		$record = [];
 		for( $i=0;$i<count($row);++$i ) {
 			$record[ $headings[$i] ] = trim($row[$i]);
 		}
@@ -227,7 +272,7 @@ function table_to_objects( $table ) {
 function latest_file_with_prefix($dir,$prefix) {
 
 	# get all files with the prefix 
-	$candidate_files = array();
+	$candidate_files = [];
  	$handle = opendir($dir);
 	if( $handle===FALSE ) {
 		exit_with_error( "Can't open dir $dir" );

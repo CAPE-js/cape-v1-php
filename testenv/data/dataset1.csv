@@ -1,5 +1,5 @@
-RECORD NUMBER,DATE,TITLE,SIZE,COLOUR,WEIGHT,JUNK
-1,2001-01-01,Record one,Small,Red;Blue,23,foo
-2,2002-02-02,Record two,Medium,Blue;Yellow;Pink,99,bar
-3,2003-04-05,Record three,Large,Red,66,baz
-4,,,,,,
+RECORD NUMBER,DATE,TITLE,SIZE,COLOUR,COLOUR 2,WEIGHT,FOODS,DRINKS,JUNK,JUNK2
+1,01/01/2001,Record one,Small,Red,Blue,23,Pizza;Chips,Beer;Wine,foo,
+2,02/02/2002,Record two,Medium,Blue,Yellow,99,Chips,Water;Pop,bar,
+3,05/04/2003,Record three,Large,Red,,66,,Beer,baz,
+4,,,,,,,,,,

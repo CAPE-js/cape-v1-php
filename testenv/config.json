@@ -60,7 +60,6 @@
 					"type":"enum",
 					"multiple":true,
                 			"source_heading":"COLOUR",
-					"source_split":"\\s*;\\s*",
                 			"label":"Colour label",
                 			"description":"Colour description"
 				},
@@ -70,6 +69,38 @@
                 			"source_heading":"WEIGHT",
                 			"label":"Weight label",
                 			"description":"Weight description"
+				},
+				{
+					"id":"likes",
+					"type":"enum",
+					"multiple":true,
+                			"source_heading":["FOODS","DRINKS"],
+					"source_split":"\\s*;\\s*",
+                			"label":"Likes label",
+                			"description":"Likes description"
+				},
+				{
+					"id":"foods",
+					"type":"enum",
+					"multiple":true,
+                			"source_heading":"FOODS",
+					"source_split":"\\s*;\\s*",
+                			"label":"Foods label",
+                			"description":"Foods description"
+				},
+				{
+					"id":"drinks",
+					"type":"enum",
+					"multiple":true,
+                			"source_heading":"DRINKS",
+					"source_split":"\\s*;\\s*",
+                			"label":"Drinks label",
+                			"description":"Drinks description"
+				},
+				{
+					"id":"junk",
+					"type":"ignore",
+                			"source_heading":"JUNK"
 				}
 			]
 		}
