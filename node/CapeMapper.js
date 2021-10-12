@@ -12,11 +12,11 @@ module.exports = class CapeMapper {
         CapeValidate.validateObject( "Config", this.config );
         CapeValidate.validateNonEmptyArrayProperty( "Config", this.config, "datasets" );
 
-        this.datasetMappers = [];
-        for( var i=0; i<this.config.datasets.length; ++i ) {
-            var datasetMapper = new CapeDatasetMapper( this.config.datasets[i] );
-            this.datasetMappers.push( datasetMapper );
-        }
+        this.datasetMappers = {};
+        this.config.datasets.map( (datasetConfig) => {
+            var datasetMapper = new CapeDatasetMapper( datasetConfig );
+            this.datasetMappers[ datasetMapper.id ] = datasetMapper;
+        });
     }
 
     // load relevant files from filesystem and map them using the config. nb. this will not work with azure 
