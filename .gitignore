@@ -91,3 +91,7 @@ fabric.properties
 
 index2.html
 nohup.out
+
+# Node related
+
+/node/node_modules
