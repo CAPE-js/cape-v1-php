@@ -1,21 +1,29 @@
 
+const CapeValidate = require( "./CapeValidate" );
+const CapeValidationError = require( "./CapeValidationError" );
 
 module.exports = class CapeDatasetMapper {
 
     constructor( config ) { 
         this.config = config;
 
-	// check basic metadata
-        CapeDataset.validateStringProperty( "dataset", this.config, "id" );
-        CapeDataset.validateStringProperty( "dataset "+this.config.id, this.config, "title" );
-        CapeDataset.validateStringProperty( "dataset "+this.config.id, this.config, "id_field" );
+        // check basic metadata
+        CapeValidate.validateStringProperty( "dataset", this.config, "id" );
+        CapeValidate.validateStringProperty( "dataset "+this.config.id, this.config, "title" );
+        CapeValidate.validateStringProperty( "dataset "+this.config.id, this.config, "id_field" );
         // check dataset sort property
-        CapeDataset.validateNonEmptyArrayProperty( "dataset "+this.config.id, this.config, "sort" );
+        CapeValidate.validateNonEmptyArrayProperty( "dataset "+this.config.id, this.config, "sort" );
         for( var i=0; i<this.config.sort.length; ++i ) {
-            CapeDataset.validateString( "dataset "+this.config.id+" sort "+i, this.config.sort[i] );
+            CapeValidate.validateString( "dataset "+this.config.id+" sort "+i, this.config.sort[i] );
         }
         // check dataset has fields
-        CapeDataset.validateNonEmptyArrayProperty( "dataset "+this.config.id, this.config, "fields" );
+        CapeValidate.validateNonEmptyArrayProperty( "dataset "+this.config.id, this.config, "fields" );
+
+        // initialise field mappers
+
+        // check sort fields exist
+        // check id field exists
+        
 /*
        foreach( $config["fields"] as $field ) {
                 $n++;
