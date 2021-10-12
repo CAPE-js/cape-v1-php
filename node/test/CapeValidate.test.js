@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const CapeValidate = require('../CapeValidate');
 const CapeValidationError = require( '../CapeValidationError' );
 
+describe('MODULE: CapeValidation', ()=>{
 describe('validateString', ()=>{
     it('null throws error', () => {
         expect( ()=>{CapeValidate.validateString('tester',null)} ).to.throw( CapeValidationError );
@@ -101,3 +102,5 @@ describe('validateNonEmptyArrayProperty', ()=>{
         expect( ()=>{CapeValidate.validateNonEmptyArrayProperty('tester',{'foo':[]},'foo')} ).to.throw( CapeValidationError );
     });
 });
+});
+
