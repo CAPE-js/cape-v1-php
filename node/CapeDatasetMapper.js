@@ -9,15 +9,15 @@ module.exports = class CapeDatasetMapper {
 
         // check basic metadata
         CapeValidate.validateStringProperty( "dataset", this.config, "id" );
-        CapeValidate.validateStringProperty( "dataset "+this.config.id, this.config, "title" );
-        CapeValidate.validateStringProperty( "dataset "+this.config.id, this.config, "id_field" );
+        CapeValidate.validateStringProperty( `dataset ${this.config.id}`, this.config, "title" );
+        CapeValidate.validateStringProperty( `dataset ${this.config.id}`, this.config, "id_field" );
         // check dataset sort property
-        CapeValidate.validateNonEmptyArrayProperty( "dataset "+this.config.id, this.config, "sort" );
+        CapeValidate.validateNonEmptyArrayProperty( `dataset ${this.config.id}`, this.config, "sort" );
         for( var i=0; i<this.config.sort.length; ++i ) {
-            CapeValidate.validateString( "dataset "+this.config.id+" sort "+i, this.config.sort[i] );
+            CapeValidate.validateString( `dataset ${this.config.id} sort ${i}`, this.config.sort[i] );
         }
         // check dataset has fields
-        CapeValidate.validateNonEmptyArrayProperty( "dataset "+this.config.id, this.config, "fields" );
+        CapeValidate.validateNonEmptyArrayProperty( `dataset ${this.config.id}`, this.config, "fields" );
 
         // initialise field mappers
 
