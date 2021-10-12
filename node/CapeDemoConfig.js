@@ -9,5 +9,4 @@ module.exports = class CapeDemoConfig {
         ]
     };
     static full = { 'datasets': [ this.dataset ] };
-
 }

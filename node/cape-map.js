@@ -3,10 +3,10 @@
 const fs = require('fs');
 const CapeMapper = require( "./CapeMapper" );
 
-let rawData = fs.readFileSync('../config.json');
-let config = JSON.parse(rawData);
+const rawData = fs.readFileSync('../config.json');
+const config = JSON.parse(rawData);
 
-var mapper = new CapeMapper(config);
-var siteData = mapper.generateSiteData();
+let mapper = new CapeMapper(config);
+const siteData = mapper.generateSiteData();
 console.log( siteData );
 console.log( "OK\n" );
