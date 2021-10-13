@@ -13,7 +13,7 @@ module.exports = class CapeMapper {
         CapeValidate.validateNonEmptyArrayProperty( "Config", this.config, "datasets" );
 
         this.datasetMappers = {};
-        this.config.datasets.map( (datasetConfig) => {
+        this.config.datasets.forEach( (datasetConfig) => {
             var datasetMapper = new CapeDatasetMapper( datasetConfig );
             this.datasetMappers[ datasetMapper.id ] = datasetMapper;
         });
