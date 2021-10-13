@@ -13,7 +13,7 @@ module.exports = class CapeDatasetMapper {
         CapeValidate.validateStringProperty( `dataset ${this.config.id}`, this.config, "id_field" );
         // check dataset sort property
         CapeValidate.validateNonEmptyArrayProperty( `dataset ${this.config.id}`, this.config, "sort" );
-        this.config.sort.map( (sortField,i) => {
+        this.config.sort.forEach( (sortField,i) => {
             CapeValidate.validateString( `dataset ${this.config.id} sort ${i}`, sortField );
         });
         // check dataset has fields
