@@ -877,7 +877,7 @@ class SimpleXLSX {
 				}
 				if( $format == "dd/mm/yyyy" ) {
 					$dmy = preg_split( "/\//", $value );
-					$value = sprintf( "%04d-%02d-%02d", $dmy[2], $dmy[1], $dmy[0] );
+					$value = @sprintf( "%04d-%02d-%02d", $dmy[2], $dmy[1], $dmy[0] );
 				} else {
 					$value = $this->datetimeFormat ? gmdate( $this->datetimeFormat, $this->unixstamp( (float) $cell->v ) ) : (float) $cell->v;
 				} 
