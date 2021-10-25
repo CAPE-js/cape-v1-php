@@ -98,6 +98,15 @@
                 			"description":"Drinks description"
 				},
 				{
+					"id":"colour3",
+					"type":"enum",
+					"multiple":true,
+                			"source_heading":"COLOUR",
+                			"source_chars":3,
+                			"label":"3 char Colour label",
+                			"description":"Colour trimmed to 3 characters"
+				},
+				{
 					"id":"junk",
 					"type":"ignore",
                 			"source_heading":"JUNK"
