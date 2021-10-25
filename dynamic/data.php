@@ -186,19 +186,21 @@ function map_dataset( $config, $source ) {
 
 				$processed_values = [];
 				foreach( $values as $value ) {
+					# only keep N chars?
+					if( isset($field["source_chars"]) ) { $value = substr( $value, 0, $field["source_chars"] ); }
 					# force value to be integer
 					if( $field["type"]=="integer" ) { $value = (int) $value; } 
 					# trim dates to 10 characters
 					if( $field["type"]=="date" ) {  $value = substr( $value, 0, 10 ); }
 					$processed_values []= $value;
 				}
-				foreach( $processed_values as $value ) {
-					if( !empty( $value ) ) { 
+				foreach( $processed_values as $processed_value ) {
+					if( !empty( $processed_value ) ) { 
 						if( @$field["multiple"] ) {
-							$out_record[$field["id"]] []= $value;
+							$out_record[$field["id"]] []= $processed_value;
 						} else {
 							// if this is a single value and we have a non empty value then we're done
-							$out_record[$field["id"]] = $values[0];
+							$out_record[$field["id"]] = $processed_value;
 						}
 					}	
 				}
