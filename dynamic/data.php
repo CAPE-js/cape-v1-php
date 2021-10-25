@@ -20,7 +20,7 @@ if( !$config ) {
 # read source file(s)
 $datasets = [];
 foreach( $config["datasets"] as $dataset_config ) {
-	if( $dataset_config["data_dir"] ) {
+	if( isset($dataset_config["data_dir"] )) {
 		$data_dir = $BASE_DIR."/".$dataset_config["data_dir"];
 	} else {
 		$data_dir = $BASE_DIR."/data";
@@ -117,6 +117,9 @@ function map_dataset( $config, $source ) {
 	$missing_headings  = [];
 
 	foreach( $fields as &$field ) {
+		if( $field["type"] == "ignore" ) {
+			continue;
+		}
 		if( $field["source_heading"][0] == "AUTO" ) {
 			$field['auto'] = true;
 		}
@@ -131,7 +134,7 @@ function map_dataset( $config, $source ) {
 					$found = true;
 					continue;
 				}
-				if( $field["multiple"] ) {
+				if( isset($field["multiple"]) && $field["multiple"] ) {
 					// multiple headings can be of the form Foo 1, Foo 2 etc. The numbers are assumed to be in the correct order
 					$base_heading = preg_replace( "/\s+\d+$/", "", $heading );
 					if( $base_heading == $source_heading ) {
