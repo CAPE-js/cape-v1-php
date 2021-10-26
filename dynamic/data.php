@@ -56,7 +56,7 @@ foreach( $config["datasets"] as $dataset_config ) {
 }
 
 # output json file
-$output = json_encode( array( "status"=>"OK", "datasets"=>$datasets ), JSON_NUMERIC_CHECK|JSON_PRETTY_PRINT );
+$output = json_encode( array( "status"=>"OK", "datasets"=>$datasets ), JSON_PRETTY_PRINT );
 print $output;
 file_put_contents( $DATA_FILE, $output );
 
@@ -192,7 +192,11 @@ function map_dataset( $config, $source ) {
 					# only keep N chars?
 					if( isset($field["source_chars"]) ) { $value = substr( $value, 0, $field["source_chars"] ); }
 					# force value to be integer
-					if( $field["type"]=="integer" ) { $value = (int) $value; } 
+					if( $field["type"]=="integer" ) { 
+						$value = (int) $value; 
+					}  else {
+						$value = "$value";
+					} 
 					# trim dates to 10 characters
 					if( $field["type"]=="date" ) {  $value = substr( $value, 0, 10 ); }
 					$processed_values []= $value;
