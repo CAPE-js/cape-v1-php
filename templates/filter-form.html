@@ -6,7 +6,7 @@
             </div>
             <template v-if="filter.field.type=='text'">
                 <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                    <select v-model.trim="filter.mode" class="filter-form-field-searchtype ">
                         <option value="is">is</option>
                         <option value="contains">contains</option>
                         <option value="set">is present</option>
@@ -15,13 +15,13 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is' || filter.mode=='contains'">
-                        <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder[filter.mode]" class="form-control form-control-sm"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder[filter.mode]" class=" "></debounced-input>
                     </template>
                 </div>
             </template>
             <template v-else-if="filter.field.type=='integer'">
                 <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                    <select v-model.trim="filter.mode" class="filter-form-field-searchtype ">
                         <option value="is">is</option>
                         <option value="between">is between</option>
                         <option value="set">is present</option>
@@ -30,18 +30,18 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is'">
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class=" " v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
                     </template>
                     <template v-if="filter.mode=='between'">
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="  between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
                         and
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" v-bind:placeholder="filter.placeholder.between[1]"  class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input> 
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" v-bind:placeholder="filter.placeholder.between[1]"  class="  between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input> 
                     </template>
                 </div>
             </template>
             <template v-else-if="filter.field.type=='date'">
                 <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
+                    <select v-model.trim="filter.mode" class="filter-form-field-searchtype " v-bind:id="'filter-'+filter.field.id">
                         <option value="is">is</option>
                         <option value="between">is between</option>
                         <option value="set">is present</option>
@@ -50,18 +50,18 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is'">
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class=" " v-bind:id="'filter-'+filter.field.id"></debounced-input>
                     </template>
                     <template v-if="filter.mode=='between'">
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-to-'+filter.field.id"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="  between-number-filter" v-bind:id="'filter-to-'+filter.field.id"></debounced-input>
                         and
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term2" v-bind:placeholder="filter.placeholder.between[1]" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-from-'+filter.field.id"></debounced-input>
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term2" v-bind:placeholder="filter.placeholder.between[1]" class="  between-number-filter" v-bind:id="'filter-from-'+filter.field.id"></debounced-input>
                     </template>
                 </div>
             </template>
             <template v-else-if="filter.field.type=='enum'">
                 <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                    <select v-model.trim="filter.mode" class="filter-form-field-searchtype ">
                         <option value="is">is</option>
                         <option value="one-of">one of</option>
                         <option value="set">is present</option>
@@ -70,13 +70,13 @@
                 </div>
                 <div class="col-sm-8">
                     <template v-if="filter.mode=='is'">
-                        <select v-model="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
+                        <select v-model="filter.term" class="" v-bind:id="'filter-'+filter.field.id">
                             <option selected="selected" value="">Select</option>
                             <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
                         </select>
                     </template>
                     <template v-if="filter.mode=='one-of'">
-                        <multiselect v-model="filter.terms" :options="filter.field.multiselectOptions" :multiple="true" :close-on-select="true" :clear-on-select="false" :preserve-search="true" placeholder="Pick some" label="name" track-by="name" >
+                        <multiselect v-model="filter.terms" :options="filter.field.multiselectOptions" :multiple="true" :close-on-select="true" :clear-on-select="false" :preserve-search="true" placeholder="Select (1 or more)" label="name" track-by="name" >
                             <template slot="tag" slot-scope="{ option, remove }"><span class="custom__tag"><span>{{ option.name }}</span><span class="custom__remove" @click="remove(option)">❌</span></span></template>
                         </multiselect>
                     </template>
@@ -84,7 +84,7 @@
             </template>
             <template v-else-if="filter.field.type=='freetext'">
                 <div class="col-sm-10">
-                    <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
+                    <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class=" " v-bind:id="'filter-'+filter.field.id"></debounced-input>
                 </div>
             </template>
             <template v-else>
