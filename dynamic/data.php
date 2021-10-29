@@ -34,6 +34,7 @@ foreach( $config["datasets"] as $dataset_config ) {
 	}
 	$records = [ "headings"=>[], "records"=>[] ];
 	$source_files = [];
+	$seen_headings = [];
 	foreach( $base_files as $base_file ) {
 		$dataset_file = latest_file_with_prefix( $data_dir, $base_file );
 		if( !isset( $dataset_config["format"]) || $dataset_config["format"] == "csv" ) {
@@ -45,10 +46,14 @@ foreach( $config["datasets"] as $dataset_config ) {
 		}
 		$source_files []= $dataset_file;
 		$records_from_file = table_to_objects( $table );
-		$records = [ 
-			"headings"=>array_merge( $records["headings"], $records_from_file["headings"] ),
-			"records"=>array_merge( $records["records"], $records_from_file["records"] ) 
-		];
+		
+		foreach( $records_from_file["headings"] as $heading ) {
+			if( !empty( $heading ) && !array_key_exists( $heading, $seen_headings ) ) {
+				$seen_headings[$heading] = true;
+				$records["headings"] []= $heading;
+			}
+		}
+		$records["records"] = array_merge( $records["records"], $records_from_file["records"] ) ;
 	}
 	$dataset = map_dataset( $dataset_config, $records );
 	$dataset["source_files"] = $source_files;;
@@ -124,7 +129,9 @@ function map_dataset( $config, $source ) {
 			$field['auto'] = true;
 		}
 
+		# work out the source headings used to populate this field
 		$field["actual_headings"] = [];	
+		# for each source field configured as a source for this field
 		foreach( $field["source_heading"] as $source_heading ) {
 			$found = false;
 			foreach( $source["headings"] as $heading ) {
