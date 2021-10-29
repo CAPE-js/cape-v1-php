@@ -522,15 +522,21 @@ function table_to_csv( table ) {
     var process_row = function (row) {
         var final_val = '';
         for (var j = 0; j < row.length; j++) {
-            var inner_val = row[j] === null ? '' : row[j].toString();
-            if (row[j] instanceof Date) {
-                inner_val = row[j].toLocaleString();
-            };
+            var inner_val = '';
+            if( row[j] !== null && row[j] !== undefined) {
+                if (row[j] instanceof Date) {
+                    inner_val = row[j].toLocaleString();
+                } else {
+                    inner_val = row[j].toString();
+                }
+            }
             var result = inner_val.replace(/"/g, '""').replace(/\r\n/g, "\n");
-            if (result.search(/("|,|\n)/g) >= 0)
+            if (result.search(/("|,|\n)/g) >= 0) {
                 result = '"' + result + '"';
-            if (j > 0)
+            }
+            if (j > 0) {
                 final_val += ',';
+            }
             final_val += result;
         }
         return final_val + '\n';
