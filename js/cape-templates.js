@@ -62,7 +62,7 @@ Vue.component("filter-form", {
 
 
 // home-page
-template = "    <form v-on:keypress.enter.prevent=\"ignoreEnter\">\n        <intro \/> \n        <div class=\"row\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n        <div class=\"row\">\n            <div class=\"col text-sm-right\">\n                <div class=\"switch switch-sm\">\n                    <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-upper\" \/>\n                    <label for=\"show-all-filters-upper\">Advanced search<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <filter-form v-bind:filters=\"visible_filters\"><\/filter-form>\n            <\/div>\n        <\/div>\n        <div class=\"row\" v-if=\"settings.show_all_filters\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n\n        <div class=\"row mb-1\">\n            <div class=\"col-sm-6\">\n                Order results by \n                <select v-model=\"settings.sort_field\"><option v-for=\"field in settings.sort_fields\" v-bind:value=\"field.id\">{{field.label}}<\/option><\/select>\n                <select v-model=\"settings.sort_dir\"><option value=\"asc\">Ascending<\/option><option value=\"desc\">Decending<\/option><\/select>\n            <\/div>\n            <div class=\"col-sm-6 text-sm-right\">\n                <div class=\"switch switch-sm\" v-if=\"settings.show_all_filters\">\n                  <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                  <label for=\"show-all-filters-lower\">Show all filters<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <results v-bind:options=\"settings\" v-bind:results=\"filteredAndSortedResults\"><\/results>\n            <\/div>\n        <\/div>\n    <\/form>\n";
+template = "    <form v-on:keypress.enter.prevent=\"ignoreEnter\">\n        <intro \/> \n        <div class=\"row\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n        <div class=\"row\">\n            <div class=\"col text-sm-right\">\n                <div class=\"switch switch-sm\">\n                    <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-upper\" \/>\n                    <label for=\"show-all-filters-upper\">Advanced search<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <filter-form v-bind:filters=\"visible_filters\"><\/filter-form>\n            <\/div>\n        <\/div>\n        <div class=\"row\" v-if=\"settings.show_all_filters\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n\n        <div v-if=\"showResults\">\n            <div class=\"row mb-1\">\n                <div class=\"col-sm-6\">\n                    Order results by \n                    <select v-model=\"settings.sort_field\"><option v-for=\"field in settings.sort_fields\" v-bind:value=\"field.id\">{{field.label}}<\/option><\/select>\n                    <select v-model=\"settings.sort_dir\"><option value=\"asc\">Ascending<\/option><option value=\"desc\">Decending<\/option><\/select>\n                <\/div>\n                <div class=\"col-sm-6 text-sm-right\">\n                    <div class=\"switch switch-sm\" v-if=\"settings.show_all_filters\">\n                      <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                      <label for=\"show-all-filters-lower\">Show all filters<\/label>\n                    <\/div>\n                <\/div>\n            <\/div>\n            <div class=\"row mb-1\">\n                <div class=\"col\">\n                    <results v-bind:options=\"settings\" v-bind:results=\"filteredAndSortedResults\"><\/results>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div v-else class=\"row\"><div class=\"col\"><div class=\"card\"><div class=\"card-body\">Start typing in the form above to search this dataset.<\/div><\/div><\/div><\/div>\n    <\/form>\n";
 var currentSearchResults = null;
 
 var HomePage = Vue.component("home-page", {
@@ -120,7 +120,7 @@ var HomePage = Vue.component("home-page", {
                 }
             } 
         },
-        filterResults: function() {
+        activeFilters: function() {  
             // build a list of filters to be applied
             var active_filters = [];
             for (var i = 0; i < this.settings.filters.length; i++) {
@@ -132,6 +132,10 @@ var HomePage = Vue.component("home-page", {
                     active_filters.push(filter);
                 }
             }
+            return active_filters;
+        },
+        filterResults: function() {
+            var active_filters = this.activeFilters();
 
             // iterate over each record
             var records_to_show = [];
@@ -191,6 +195,17 @@ var HomePage = Vue.component("home-page", {
             // argh, this is a side effect! It lets the record view know the prev and next result
             currentSearchResults = {};
             return results;
+        },
+        // show the results if either result_mode is "filter" (default is filter)
+        // or else "search" mode only show results IF one or more filters is specified
+        showResults: function() {  
+            if( this.dataset.config["result_mode"] != "search" ) {
+                // filter mode starts showing everything
+                return true;
+            }
+            // search mode only shows results once they start typing
+            var active_filters = this.activeFilters();
+            return( active_filters.length > 0 );
         }
     },
     template: template

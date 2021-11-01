@@ -56,7 +56,7 @@ var HomePage = Vue.component("home-page", {
                 }
             } 
         },
-        filterResults: function() {
+        activeFilters: function() {  
             // build a list of filters to be applied
             var active_filters = [];
             for (var i = 0; i < this.settings.filters.length; i++) {
@@ -68,6 +68,10 @@ var HomePage = Vue.component("home-page", {
                     active_filters.push(filter);
                 }
             }
+            return active_filters;
+        },
+        filterResults: function() {
+            var active_filters = this.activeFilters();
 
             // iterate over each record
             var records_to_show = [];
@@ -127,6 +131,17 @@ var HomePage = Vue.component("home-page", {
             // argh, this is a side effect! It lets the record view know the prev and next result
             currentSearchResults = {};
             return results;
+        },
+        // show the results if either result_mode is "filter" (default is filter)
+        // or else "search" mode only show results IF one or more filters is specified
+        showResults: function() {  
+            if( this.dataset.config["result_mode"] != "search" ) {
+                // filter mode starts showing everything
+                return true;
+            }
+            // search mode only shows results once they start typing
+            var active_filters = this.activeFilters();
+            return( active_filters.length > 0 );
         }
     },
     template: template
