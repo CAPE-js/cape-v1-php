@@ -51,6 +51,7 @@
 				{
 					"id":"size",
 					"type":"enum",
+					"style":{"one-of":"checkbox"},
                 			"source_heading":"SIZE",
                 			"label":"Size label",
                 			"description":"Size description"
