@@ -97,17 +97,22 @@ var HomePage = Vue.component("home-page", {
             // sort records based on sort field
             var component = this;
             results.sort( function(a,b) {
-                var av = a[component.settings.sort_field].value;
-                var bv = b[component.settings.sort_field].value;
-                if(typeof av === 'array') { av = av[0]; }
-                if(typeof bv === 'array') { bv = bv[0]; }
-                if( av == null ) { av = ""; }
-                if( bv == null ) { bv = ""; }
-                av = av.toLowerCase();
-                bv = bv.toLowerCase();
-                if( av==bv ) { return 0; }
-                if( component.settings.sort_dir == 'asc'  && av>bv ) { return 1; }
-                if( component.settings.sort_dir == 'desc' && av<bv ) { return 1; }
+                var aValue = a[component.settings.sort_field].value;
+                var bValue = b[component.settings.sort_field].value;
+
+		// if the value is a list of values, we sort by the first
+                if(typeof aValue === 'array') { aValue = aValue[0]; }
+                if(typeof bValue === 'array') { bValue = bValue[0]; }
+
+		// null and empty values always sort last no matter the sort_dir
+                if( aValue == null || aValue.trim() == "" ) { return 1; }
+                if( bValue == null || bValue.trim() == "" ) { return -1; }
+
+                aValue = aValue.toLowerCase();
+                bValue = bValue.toLowerCase();
+                if( aValue==bValue ) { return 0; }
+                if( component.settings.sort_dir == 'asc'  && aValue>bValue ) { return 1; }
+                if( component.settings.sort_dir == 'desc' && aValue<bValue ) { return 1; }
                 return -1;
             });
             return results;
