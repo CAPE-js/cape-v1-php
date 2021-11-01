@@ -24,6 +24,9 @@
 .multiselect__tags {
 
 }
+.multiselect__placeholder {
+    color: #989a9b;
+}
 /* end style for tags on multiselect */
 
 /* cape errors */
@@ -33,3 +36,14 @@
     padding: 0.3em 1em;
 }
 /* end cape errors */
+
+
+.filter-form-field-searchtype {
+    width: 100%; 
+}
+select {
+    background-color: #efefef;
+    border: solid 1px #a8a8a8;
+    border-radius: 5px;
+}
+	

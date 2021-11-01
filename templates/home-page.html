@@ -1,15 +1,13 @@
     <form v-on:keypress.enter.prevent="ignoreEnter">
         <intro /> 
         <div class="row">
-            <div class="col text-sm-right pb-3 pt-3">
-                <button v-on:click="resetFilters" class="btn btn-secondary btn-sm">New search</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col text-sm-right">
-                <div class="switch switch-sm">
-                    <input v-model="settings.show_all_filters" type="checkbox" class="switch" id="show-all-filters-upper" />
-                    <label for="show-all-filters-upper">Advanced search</label>
+            <div class="col text-right">
+                <div>
+                    <button v-on:click="resetFilters" class="btn btn-secondary ">New search</button>
+                </div>
+                <div class="switch mb-3 mt-3">
+                    <input v-model="settings.show_all_filters" type="checkbox" class="switch" id="show-all-filters-lower" />
+                    <label for="show-all-filters-lower">Advanced search</label>
                 </div>
             </div>
         </div>
@@ -18,22 +16,21 @@
                 <filter-form v-bind:filters="visible_filters"></filter-form>
             </div>
         </div>
-        <div class="row" v-if="settings.show_all_filters">
-            <div class="col text-sm-right pb-3 pt-3">
-                <button v-on:click="resetFilters" class="btn btn-secondary btn-sm">New search</button>
-            </div>
-        </div>
 
-        <div class="row mb-1">
-            <div class="col-sm-6">
+        <div class="row mb-3">
+             
+            <div class="col-sm-9">
                 Order results by 
                 <select v-model="settings.sort_field"><option v-for="field in settings.sort_fields" v-bind:value="field.id">{{field.label}}</option></select>
                 <select v-model="settings.sort_dir"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
             </div>
-            <div class="col-sm-6 text-sm-right">
-                <div class="switch switch-sm" v-if="settings.show_all_filters">
-                  <input v-model="settings.show_all_filters" type="checkbox" class="switch" id="show-all-filters-lower" />
-                  <label for="show-all-filters-lower">Show all filters</label>
+            <div class="col-sm-3 text-right" v-if="settings.show_all_filters">
+                <div>
+                    <button v-on:click="resetFilters" class="btn btn-secondary ">New search</button>
+                </div>
+                <div class="switch mb-3 mt-3">
+                    <input v-model="settings.show_all_filters" type="checkbox" class="switch" id="show-all-filters-lower" />
+                    <label for="show-all-filters-lower">Advanced search</label>
                 </div>
             </div>
         </div>
