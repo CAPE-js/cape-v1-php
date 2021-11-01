@@ -101,8 +101,11 @@ var HomePage = Vue.component("home-page", {
                 var bv = b[component.settings.sort_field].value;
                 if(typeof av === 'array') { av = av[0]; }
                 if(typeof bv === 'array') { bv = bv[0]; }
-                if( av == null ) { av = ""; }
-                if( bv == null ) { bv = ""; }
+
+		// null and empty values always sort last no matter the sort_dir
+                if( av == null || av.trim() == "" ) { return 1; }
+                if( bv == null || bv.trim() == "" ) { return -1; }
+
                 av = av.toLowerCase();
                 bv = bv.toLowerCase();
                 if( av==bv ) { return 0; }
