@@ -519,27 +519,21 @@ function records_to_table( fields, records ) {
 
 
 function table_to_csv( table ) {
-    var process_row = function (row) {
-        var final_val = '';
-        for (var j = 0; j < row.length; j++) {
-            var inner_val = row[j] === null ? '' : row[j].toString();
-            if (row[j] instanceof Date) {
-                inner_val = row[j].toLocaleString();
-            };
-            var result = inner_val.replace(/"/g, '""').replace(/\r\n/g, "\n");
-            if (result.search(/("|,|\n)/g) >= 0)
-                result = '"' + result + '"';
-            if (j > 0)
-                final_val += ',';
-            final_val += result;
-        }
-        return final_val + '\n';
-    };
-    var csv_file = '';
-    for (var i = 0; i < table.length; i++) {
-        csv_file += process_row(table[i]);
-    }
-    return csv_file;
+    var csv_rows = table.map( (row) => {
+        var csv_cells = row.map( (cell) => {
+            var csv_cell = '';
+            if( cell !== null && cell !== undefined) {
+                if (cell instanceof Date) {
+                    csv_cell = cell.toLocaleString();
+                } else {
+                    csv_cell = cell.toString();
+                }
+            }
+            return csv_cell.replace(/"/g, '""').replace(/\r\n/g, "\n");
+        });
+        return '"'+csv_cells.join( "\",\"" )+"\"\n";
+    });
+    return csv_rows.join( '' );
 }
 
 /* this function creates a download of a file with a given filename and mimetype. */
