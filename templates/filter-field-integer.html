@@ -1,0 +1,21 @@
+            <div class="form-row mb-1">
+                <filter-field-label v-bind:filter="filter"></filter-field-label>
+                <div class="col-sm-2">
+                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                        <option value="is">is</option>
+                        <option value="between">is between</option>
+                        <option value="set">is present</option>
+                        <option value="not-set">is not present</option>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <template v-if="filter.mode=='is'">
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
+                    </template>
+                    <template v-if="filter.mode=='between'">
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
+                        and
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" v-bind:placeholder="filter.placeholder.between[1]"  class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input> 
+                    </template>
+                </div>
+            </div>

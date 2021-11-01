@@ -1,92 +1,10 @@
     <div class='filter-form'>
-        <div v-for="filter in filters" :key="filter.field.id" class="form-row mb-1">
-            <div class="col-sm-2 text-sm-right">
-                <label v-if="filter.field.description != null" data-toggle="tooltip" v-bind:title="filter.field.description" v-bind:for="'filter-'+filter.field.id">{{filter.field.label}}</label>
-                <label v-else v-bind:for="'filter-'+filter.field.id">{{filter.field.label}}</label>
-            </div>
-            <template v-if="filter.field.type=='text'">
-                <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
-                        <option value="is">is</option>
-                        <option value="contains">contains</option>
-                        <option value="set">is present</option>
-                        <option value="not-set">is not present</option>
-                    </select>
-                </div>
-                <div class="col-sm-8">
-                    <template v-if="filter.mode=='is' || filter.mode=='contains'">
-                        <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder[filter.mode]" class="form-control form-control-sm"></debounced-input>
-                    </template>
-                </div>
-            </template>
-            <template v-else-if="filter.field.type=='integer'">
-                <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
-                        <option value="is">is</option>
-                        <option value="between">is between</option>
-                        <option value="set">is present</option>
-                        <option value="not-set">is not present</option>
-                    </select>
-                </div>
-                <div class="col-sm-8">
-                    <template v-if="filter.mode=='is'">
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
-                    </template>
-                    <template v-if="filter.mode=='between'">
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input>
-                        and
-                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" v-bind:placeholder="filter.placeholder.between[1]"  class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max"></debounced-input> 
-                    </template>
-                </div>
-            </template>
-            <template v-else-if="filter.field.type=='date'">
-                <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
-                        <option value="is">is</option>
-                        <option value="between">is between</option>
-                        <option value="set">is present</option>
-                        <option value="not-set">is not present</option>
-                    </select>
-                </div>
-                <div class="col-sm-8">
-                    <template v-if="filter.mode=='is'">
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
-                    </template>
-                    <template v-if="filter.mode=='between'">
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-to-'+filter.field.id"></debounced-input>
-                        and
-                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term2" v-bind:placeholder="filter.placeholder.between[1]" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-from-'+filter.field.id"></debounced-input>
-                    </template>
-                </div>
-            </template>
-            <template v-else-if="filter.field.type=='enum'">
-                <div class="col-sm-2">
-                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
-                        <option value="is">is</option>
-                        <option value="one-of">one of</option>
-                        <option value="set">is present</option>
-                        <option value="not-set">is not present</option>
-                    </select>
-                </div>
-                <div class="col-sm-8">
-                    <template v-if="filter.mode=='is'">
-                        <select v-model="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
-                            <option selected="selected" value="">Select</option>
-                            <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
-                        </select>
-                    </template>
-                    <template v-if="filter.mode=='one-of'">
-                        <multiselect v-model="filter.terms" :options="filter.field.multiselectOptions" :multiple="true" :close-on-select="true" :clear-on-select="false" :preserve-search="true" placeholder="Pick some" label="name" track-by="name" >
-                            <template slot="tag" slot-scope="{ option, remove }"><span class="custom__tag"><span>{{ option.name }}</span><span class="custom__remove" @click="remove(option)">❌</span></span></template>
-                        </multiselect>
-                    </template>
-                </div>
-            </template>
-            <template v-else-if="filter.field.type=='freetext'">
-                <div class="col-sm-10">
-                    <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
-                </div>
-            </template>
+        <div v-for="filter in filters" :key="filter.field.id">
+            <filter-field-text          v-if="filter.field.type=='text'"     v-bind:filter="filter"></filter-field-text>
+            <filter-field-integer  v-else-if="filter.field.type=='integer'"  v-bind:filter="filter"></filter-field-integer>
+            <filter-field-date     v-else-if="filter.field.type=='date'"     v-bind:filter="filter"></filter-field-date>
+            <filter-field-enum     v-else-if="filter.field.type=='enum'"     v-bind:filter="filter"></filter-field-enum>
+            <filter-field-freetext v-else-if="filter.field.type=='freetext'" v-bind:filter="filter"></filter-field-freetext>
             <template v-else>
                 <div class="col-sm-10">
                    Unknown filter type.

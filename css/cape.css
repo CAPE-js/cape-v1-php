@@ -1,4 +1,10 @@
 
+/* style for filter */
+.between-number-filter {
+    display:inline-block !important;
+    width:auto !important;
+}
+/* end style for filter */
 
 /* style for multiselect */
 .custom__tag {

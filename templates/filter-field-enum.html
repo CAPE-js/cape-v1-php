@@ -1,0 +1,24 @@
+            <div class="form-row mb-1">
+                <filter-field-label v-bind:filter="filter"></filter-field-label>
+                <div class="col-sm-2">
+                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                        <option value="is">is</option>
+                        <option value="one-of">one of</option>
+                        <option value="set">is present</option>
+                        <option value="not-set">is not present</option>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <template v-if="filter.mode=='is'">
+                        <select v-model="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
+                            <option selected="selected" value="">Select</option>
+                            <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
+                        </select>
+                    </template>
+                    <template v-if="filter.mode=='one-of'">
+                        <multiselect v-model="filter.terms" :options="filter.field.multiselectOptions" :multiple="true" :close-on-select="true" :clear-on-select="false" :preserve-search="true" placeholder="Pick some" label="name" track-by="name" >
+                            <template slot="tag" slot-scope="{ option, remove }"><span class="custom__tag"><span>{{ option.name }}</span><span class="custom__remove" @click="remove(option)">❌</span></span></template>
+                        </multiselect>
+                    </template>
+                </div>
+            </div>

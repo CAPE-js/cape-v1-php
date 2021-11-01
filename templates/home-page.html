@@ -24,13 +24,15 @@
             </div>
         </div>
 
-        <div class="row mb-1">
-            <div class="col-sm-6">
+        <div class="form-row mb-1">
+            <div class="col-sm-2 text-sm-right">
                 Order results by 
+            </div>
+            <div class="col-sm-6">
                 <select v-model="settings.sort_field"><option v-for="field in settings.sort_fields" v-bind:value="field.id">{{field.label}}</option></select>
                 <select v-model="settings.sort_dir"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
             </div>
-            <div class="col-sm-6 text-sm-right">
+            <div class="col-sm-4 text-sm-right">
                 <div class="switch switch-sm" v-if="settings.show_all_filters">
                   <input v-model="settings.show_all_filters" type="checkbox" class="switch" id="show-all-filters-lower" />
                   <label for="show-all-filters-lower">Show all filters</label>
