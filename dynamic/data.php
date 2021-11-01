@@ -227,10 +227,10 @@ function map_dataset( $config, $source ) {
 	$out_fields = [];
 	foreach( $output["config"]["fields"] as $field ) {
 		if( $field["type"] != "ignore" ) {
-			$fields []= $field;
+			$out_fields []= $field;
 		}
 	}
-	$output["config"]["fields"] = $fields;
+	$output["config"]["fields"] = $out_fields;
 
 	return $output;	
 }
