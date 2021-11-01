@@ -1,4 +1,5 @@
 
+
 const CapeValidationError = require( './CapeValidationError' );
 
 module.exports = class CapeValidate {
@@ -19,6 +20,9 @@ module.exports = class CapeValidate {
     static validateObject( label, value ) {
         if( value === null ) {
             throw new CapeValidationError( `${label} must be an object (got null)` );
+        }
+        if( Array.isArray( value ) ) {
+            throw new CapeValidationError( `${label} must be an object (got array)` );
         }
         var type = typeof value;
         if( type !== 'object' ) {
