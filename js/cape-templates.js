@@ -108,7 +108,7 @@ template = "            <div class=\"form-row mb-1\">\n                <filter-f
 });
 
 // filter-form
-template = "    <div class='filter-form'>\n        <div v-for=\"filter in filters\" :key=\"filter.field.id\">\n            <filter-field-text          v-if=\"filter.field.type=='text'\"     v-bind:filter=\"filter\"><\/filter-field-text>\n            <filter-field-integer  v-else-if=\"filter.field.type=='integer'\"  v-bind:filter=\"filter\"><\/filter-field-integer>\n            <filter-field-date     v-else-if=\"filter.field.type=='date'\"     v-bind:filter=\"filter\"><\/filter-field-date>\n            <filter-field-enum     v-else-if=\"filter.field.type=='enum'\"     v-bind:filter=\"filter\"><\/filter-field-enum>\n            <filter-field-freetext v-else-if=\"filter.field.type=='freetext'\" v-bind:filter=\"filter\"><\/filter-field-freetext>\n            <template v-else>\n                <div class=\"col-sm-10\">\n                   Unknown filter type.\n                <\/div>\n            <\/template>\n        <\/div>\n    <\/div>\n";
+template = "    <div class='filter-form'>\n        <div v-for=\"filter in filters\" :key=\"filter.field.id\">\n            <filter-field-text          v-if=\"filter.field.type=='text'\"     v-bind:filter=\"filter\"><\/filter-field-text>\n            <filter-field-integer  v-else-if=\"filter.field.type=='integer'\"  v-bind:filter=\"filter\"><\/filter-field-integer>\n            <filter-field-date     v-else-if=\"filter.field.type=='date'\"     v-bind:filter=\"filter\"><\/filter-field-date>\n            <filter-field-enum     v-else-if=\"filter.field.type=='enum'\"     v-bind:filter=\"filter\"><\/filter-field-enum>\n            <filter-field-freetext v-else-if=\"filter.field.type=='freetext'\" v-bind:filter=\"filter\"><\/filter-field-freetext>\n            <template v-else>\n                <div class=\"col-sm-10\">\n                   Unknown filter type.\n                <\/div>\n            <\/template>\n        <\/div>\n    \n<\/div>\n";
 Vue.component("filter-form", {
     data: function () {
         return {filter: this.$root.defaultDataset.filter};
@@ -119,7 +119,7 @@ Vue.component("filter-form", {
 
 
 // home-page
-template = "    <form v-on:keypress.enter.prevent=\"ignoreEnter\">\n        <intro \/> \n        <div class=\"row\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n        <div class=\"row\">\n            <div class=\"col text-sm-right\">\n                <div class=\"switch switch-sm\">\n                    <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-upper\" \/>\n                    <label for=\"show-all-filters-upper\">Advanced search<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <filter-form v-bind:filters=\"visible_filters\"><\/filter-form>\n            <\/div>\n        <\/div>\n        <div class=\"row\" v-if=\"settings.show_all_filters\">\n            <div class=\"col text-sm-right pb-3 pt-3\">\n                <button v-on:click=\"resetFilters\" class=\"btn btn-secondary btn-sm\">New search<\/button>\n            <\/div>\n        <\/div>\n\n        <div class=\"form-row mb-1\">\n            <div class=\"col-sm-2 text-sm-right\">\n                Order results by \n            <\/div>\n            <div class=\"col-sm-6\">\n                <select v-model=\"settings.sort_field\"><option v-for=\"field in settings.sort_fields\" v-bind:value=\"field.id\">{{field.label}}<\/option><\/select>\n                <select v-model=\"settings.sort_dir\"><option value=\"asc\">Ascending<\/option><option value=\"desc\">Decending<\/option><\/select>\n            <\/div>\n            <div class=\"col-sm-4 text-sm-right\">\n                <div class=\"switch switch-sm\" v-if=\"settings.show_all_filters\">\n                  <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                  <label for=\"show-all-filters-lower\">Show all filters<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <results v-bind:options=\"settings\" v-bind:results=\"filteredAndSortedResults\"><\/results>\n            <\/div>\n        <\/div>\n    <\/form>\n";
+template = "    <form v-on:keypress.enter.prevent=\"ignoreEnter\">\n        <intro \/> \n        <div class=\"row\">\n            <div class=\"col text-right\">\n                <div>\n                    <button v-on:click=\"resetFilters\" class=\"btn btn-secondary \">New search<\/button>\n                <\/div>\n                <div class=\"switch mb-3 mt-3\">\n                    <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                    <label for=\"show-all-filters-lower\">Advanced search<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <filter-form v-bind:filters=\"visible_filters\"><\/filter-form>\n            <\/div>\n        <\/div>\n\n        <div class=\"form-row mb-1\">\n            <div class=\"col-sm-2 text-sm-right\">\n                Order results by \n            <\/div>\n            <div class=\"col-sm-6\">\n                <select v-model=\"settings.sort_field\"><option v-for=\"field in settings.sort_fields\" v-bind:value=\"field.id\">{{field.label}}<\/option><\/select>\n                <select v-model=\"settings.sort_dir\"><option value=\"asc\">Ascending<\/option><option value=\"desc\">Decending<\/option><\/select>\n            <\/div>\n            <div class=\"col-sm-4 text-sm-right\" v-if=\"settings.show_all_filters\">\n                <div>\n                    <button v-on:click=\"resetFilters\" class=\"btn btn-secondary \">New search<\/button>\n                <\/div>\n                <div class=\"switch mb-3 mt-3\">\n                    <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                    <label for=\"show-all-filters-lower\">Advanced search<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <results v-bind:options=\"settings\" v-bind:results=\"filteredAndSortedResults\"><\/results>\n            <\/div>\n        <\/div>\n    <\/form>\n";
 var currentSearchResults = null;
 
 var HomePage = Vue.component("home-page", {
@@ -218,17 +218,22 @@ var HomePage = Vue.component("home-page", {
             // sort records based on sort field
             var component = this;
             results.sort( function(a,b) {
-                var av = a[component.settings.sort_field].value;
-                var bv = b[component.settings.sort_field].value;
-                if(typeof av === 'array') { av = av[0]; }
-                if(typeof bv === 'array') { bv = bv[0]; }
-                if( av == null ) { av = ""; }
-                if( bv == null ) { bv = ""; }
-                av = av.toLowerCase();
-                bv = bv.toLowerCase();
-                if( av==bv ) { return 0; }
-                if( component.settings.sort_dir == 'asc'  && av>bv ) { return 1; }
-                if( component.settings.sort_dir == 'desc' && av<bv ) { return 1; }
+                var aValue = a[component.settings.sort_field].value;
+                var bValue = b[component.settings.sort_field].value;
+
+		// if the value is a list of values, we sort by the first
+                if(typeof aValue === 'array') { aValue = aValue[0]; }
+                if(typeof bValue === 'array') { bValue = bValue[0]; }
+
+		// null and empty values always sort last no matter the sort_dir
+                if( aValue == null || aValue.trim() == "" ) { return 1; }
+                if( bValue == null || bValue.trim() == "" ) { return -1; }
+
+                aValue = aValue.toLowerCase();
+                bValue = bValue.toLowerCase();
+                if( aValue==bValue ) { return 0; }
+                if( component.settings.sort_dir == 'asc'  && aValue>bValue ) { return 1; }
+                if( component.settings.sort_dir == 'desc' && aValue<bValue ) { return 1; }
                 return -1;
             });
             return results;
