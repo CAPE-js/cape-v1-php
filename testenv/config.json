@@ -68,6 +68,7 @@
 					"id":"weight",
 					"type":"integer",
                 			"source_heading":"WEIGHT",
+					"step": 5,
                 			"label":"Weight label",
                 			"description":"Weight description"
 				},
