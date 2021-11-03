@@ -17,25 +17,30 @@
             </div>
         </div>
 
-        <div v-if="showResults">
-            <div class="row mb-1">
-                <div class="col-sm-6">
-                    Order results by 
-                    <select v-model="settings.sort_field"><option v-for="field in settings.sort_fields" v-bind:value="field.id">{{field.label}}</option></select>
-                    <select v-model="settings.sort_dir"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
-                </div>
-                <div class="col-sm-6 text-sm-right">
-                    <div class="switch switch-sm" v-if="settings.show_all_filters">
+        <template v-if="showResults">
+           <div class="row mb-1 form-row">
+              <div class="col-sm-2 text-sm-right">
+                  Order results by 
+              </div>
+              <div class="col-sm-4">
+                  <select v-model="settings.sort_field" style="width:auto; display: inline-block" class="form-control form-control-sm"><option v-for="field in settings.sort_fields" v-bind:value="field.id">{{field.label}}</option></select>
+                  <select v-model="settings.sort_dir" style="width:auto; display: inline-block" class="form-control form-control-sm"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
+              </div>
+              <div class="col-sm-6 text-sm-right" v-if="settings.show_all_filters">
+                  <div>
+                      <button v-on:click="resetFilters" class="btn btn-sm btn-secondary ">New search</button>
+                  </div>
+                  <div class="switch switch-sm mb-3 mt-3">
                       <input v-model="settings.show_all_filters" type="checkbox" class="switch" id="show-all-filters-lower" />
-                      <label for="show-all-filters-lower">Show all filters</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-1">
-                <div class="col">
-                    <results v-bind:options="settings" v-bind:results="filteredAndSortedResults"></results>
-                </div>
-            </div>
-        </div>
+                      <label for="show-all-filters-lower">Advanced search</label>
+                  </div>
+              </div>
+           </div>
+           <div class="row mb-1">
+               <div class="col">
+                   <results v-bind:options="settings" v-bind:results="filteredAndSortedResults"></results>
+               </div>
+           </div>
+        </template>
         <div v-else class="row"><div class="col"><div class="card"><div class="card-body">Use the form above to search this dataset.</div></div></div></div>
     </form>
