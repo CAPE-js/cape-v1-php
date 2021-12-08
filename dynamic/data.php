@@ -121,31 +121,31 @@ function map_dataset( $config, $source ) {
 	}
 	$missing_headings  = [];
 
-	foreach( $fields as &$field ) {
-		if( $field["type"] == "ignore" ) {
+	foreach( $fields as &$field_to_alter ) {
+		if( $field_to_alter["type"] == "ignore" ) {
 			continue;
 		}
-		if( $field["source_heading"][0] == "AUTO" ) {
-			$field['auto'] = true;
+		if( $field_to_alter["source_heading"][0] == "AUTO" ) {
+			$field_to_alter['auto'] = true;
 		}
 
 		# work out the source headings used to populate this field
-		$field["actual_headings"] = [];	
+		$field_to_alter["actual_headings"] = [];	
 		# for each source field configured as a source for this field
-		foreach( $field["source_heading"] as $source_heading ) {
+		foreach( $field_to_alter["source_heading"] as $source_heading ) {
 			$found = false;
 			foreach( $source["headings"] as $heading ) {
 				if( $heading == $source_heading ) {
-					$field["actual_headings"] []= $heading;
+					$field_to_alter["actual_headings"] []= $heading;
 					unset( $headings_to_be_mapped[$heading] );
 					$found = true;
 					continue;
 				}
-				if( isset($field["multiple"]) && $field["multiple"] ) {
+				if( isset($field_to_alter["multiple"]) && $field_to_alter["multiple"] ) {
 					// multiple headings can be of the form Foo 1, Foo 2 etc. The numbers are assumed to be in the correct order
 					$base_heading = preg_replace( "/\s+\d+$/", "", $heading );
 					if( $base_heading == $source_heading ) {
-						$field["actual_headings"] []= $heading;
+						$field_to_alter["actual_headings"] []= $heading;
 						unset( $headings_to_be_mapped[$heading] );
 						$found = true;
 					}
@@ -159,7 +159,6 @@ function map_dataset( $config, $source ) {
 	}
 	$output["unmapped_headings"] = array_keys( $headings_to_be_mapped );
 	$output["missing_headings"] = array_keys( $missing_headings );
-
 	# map records
 	$auto_incs = [];
 	foreach( $source["records"] as $record ) {
