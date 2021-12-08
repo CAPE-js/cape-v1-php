@@ -34,6 +34,10 @@ function Filter( field ) {
     if( field["placeholder"] && field["placeholder"]["is"] ) {
         this.placeholder.is = field["placeholder"]["is"];
     }
+    this.change_filter_mode = true;
+    if( field["change_filter_mode"] === false ) {
+        this.change_filter_mode = false;
+    }
 }
 
 Filter.prototype.isSet = function() {

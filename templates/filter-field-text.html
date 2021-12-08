@@ -1,6 +1,6 @@
             <div class="form-row mb-1">
                 <filter-field-label v-bind:filter="filter"></filter-field-label>
-                <div class="col-sm-2">
+                <div v-if="filter.change_filter_mode" class="col-sm-2">
                     <select v-model.trim="filter.mode" class="form-control form-control-sm">
                         <option value="is">is</option>
                         <option value="contains">contains</option>
@@ -8,7 +8,7 @@
                         <option value="not-set">is not present</option>
                     </select>
                 </div>
-                <div class="col-sm-8">
+                <div v-bind:class="'col-sm-'+(filter.change_filter_mode?'8':'10')">
                     <template v-if="filter.mode=='is' || filter.mode=='contains'">
                         <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder[filter.mode]" class="form-control form-control-sm"></debounced-input>
                     </template>
