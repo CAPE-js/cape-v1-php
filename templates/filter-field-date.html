@@ -8,7 +8,7 @@
                         <option value="not-set">is not present</option>
                     </select>
                 </div>
-                <div v-bind:class="'col-sm-'+(filter.change_filter_mode?'8':'10')">
+                <div v-bind:class="'col-sm-'+columns">
                     <template v-if="filter.mode=='is'">
                         <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
                     </template>
