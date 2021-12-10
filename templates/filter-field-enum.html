@@ -10,7 +10,7 @@
                     </select>
                 </div>
 
-                <div v-bind:class="'col-sm-'+columns">
+                <div v-bind:class="'col-sm-'+num_of_cols_for_main_search_area">
                     <template v-if="filter.mode=='is'">
                         <div v-if="filterStyle['is'] == 'radio'">
                             <div v-for="option in filter.field.options" class="form-check form-check-inline">
