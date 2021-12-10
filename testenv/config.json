@@ -89,6 +89,8 @@
                 			"source_heading":"FOODS",
 					"source_split":"\\s*;\\s*",
                 			"label":"Foods label",
+					"quick_search":true,
+					"change_filter_mode":false,
                 			"description":"Foods description"
 				},
 				{
@@ -98,6 +100,7 @@
                 			"source_heading":"DRINKS",
 					"source_split":"\\s*;\\s*",
                 			"label":"Drinks label",
+					"quick_search":true,
                 			"description":"Drinks description"
 				},
 				{

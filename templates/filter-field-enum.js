@@ -14,6 +14,9 @@ Vue.component("filter-field-enum", {
                 if( this.filter.field['style']['one-of'] == 'checkbox' ) { style['one-of'] = "checkbox"; }
             };
             return style;
+        },
+        num_of_cols_for_main_search_area: function () {
+		return( this.filter.change_filter_mode ? 8 : 10 );
         }
     },
     template: template,
