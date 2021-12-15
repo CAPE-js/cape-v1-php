@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div v-if="filterStyle['one-of'] == 'multiselect'">
-                            <multiselect v-model="filter.terms" :options="filter.field.multiselectOptions" :multiple="true" :close-on-select="true" :clear-on-select="false" :preserve-search="true" placeholder="Pick some" label="name" track-by="name" >
+                            <multiselect v-model="filter.terms" :options="filter.field.multiselectOptions" :multiple="true" :close-on-select="true" :clear-on-select="false" :preserve-search="true" placeholder="Select (1 or more)" label="name" track-by="name" >
                                 <template slot="tag" slot-scope="{ option, remove }"><span class="custom__tag"><span>{{ option.name }}</span><span class="custom__remove" @click="remove(option)">❌</span></span></template>
                             </multiselect>
                         </div>
