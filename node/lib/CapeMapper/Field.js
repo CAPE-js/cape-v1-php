@@ -1,16 +1,16 @@
 
-const CapeValidate = require( "./CapeValidate" );
-const CapeValidationError = require( "./CapeValidationError" );
+const Validate = require( "./Validate" );
+const ValidationError = require( "./ValidationError" );
 
 
-class CapeFieldMapper {
+class Field {
     data = {}
     /**
      * Maps data from a tabular source to a single field in a record in a CAPE system.
      * @param {Object} config - the JSON structure defining a single field
-     * @throws {CapeValidationError}
+     * @throws {ValidationError}
      */
-    constructor($config) {
+    constructor(config) {
 
     }
 
@@ -52,4 +52,4 @@ class CapeFieldMapper {
 
 }
 
-module.exports = CapeFieldMapper;
+module.exports = Field;

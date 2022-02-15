@@ -5,7 +5,7 @@ This is a command line tool to test the cape mapper is working. It's intended to
  */
 
 const fs = require('fs');
-const CapeMapper = require( "./lib/CapeMapper" );
+const CapeMapper = require( "./lib/CapeMapper/Site" );
 
 const rawData = fs.readFileSync('../config.json').toString();
 let config = JSON.parse(rawData);

@@ -1,9 +1,9 @@
 
-const CapeValidate = require( "./CapeValidate" );
-const CapeValidationError = require( "./CapeValidationError" );
-const CapeFieldMapper = require( "./CapeFieldMapper" );
+const CapeValidate = require( "./Validate" );
+const CapeValidationError = require( "./ValidationError" );
+const CapeFieldMapper = require( "./Field" );
 
-class CapeDatasetMapper {
+class Dataset {
     data = {}
     fieldMappers = []
     /**
@@ -42,4 +42,4 @@ class CapeDatasetMapper {
 
 }
 
-module.exports = CapeDatasetMapper;
+module.exports = Dataset;

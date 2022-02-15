@@ -1,12 +1,12 @@
 
-const CapeValidationError = require( './CapeValidationError' );
+const CapeValidationError = require( './ValidationError' );
 
 
 /**
  * Utility class to validate data. This probably is reinventing an existing wheel, but it's not a very big wheel.
- * @type {CapeValidate}
+ * @type {Validate}
  */
-class CapeValidate {
+class Validate {
 
     /**
      * Validate a string is a string
@@ -60,7 +60,7 @@ class CapeValidate {
      * @throws {CapeValidationError}
      */
     static validateProperty(label, value, field_name ) {
-        CapeValidate.validateObject( label, value );
+        Validate.validateObject( label, value );
         if( ! value.hasOwnProperty( field_name ) ) {
             throw new CapeValidationError( `${label} must have a property named ${field_name}` );
         }
@@ -74,8 +74,8 @@ class CapeValidate {
      * @throws {CapeValidationError}
      */
     static validateStringProperty( label, object, field_name ) {
-        CapeValidate.validateProperty( label, object, field_name );
-        CapeValidate.validateString( label, object[field_name] );
+        Validate.validateProperty( label, object, field_name );
+        Validate.validateString( label, object[field_name] );
     }
 
     /**
@@ -86,8 +86,8 @@ class CapeValidate {
      * @throws {CapeValidationError}
      */
     static validateArrayProperty( label, value, field_name ) {
-        CapeValidate.validateProperty( label, value, field_name );
-        CapeValidate.validateArray( `${label}->${field_name}`, value[field_name] );
+        Validate.validateProperty( label, value, field_name );
+        Validate.validateArray( `${label}->${field_name}`, value[field_name] );
     }
 
     /**
@@ -98,11 +98,11 @@ class CapeValidate {
      * @throws {CapeValidationError}
      */
     static validateNonEmptyArrayProperty( label, value, field_name ) {
-        CapeValidate.validateArrayProperty( label, value, field_name );
+        Validate.validateArrayProperty( label, value, field_name );
         if( value[field_name].length === 0 ) {
             throw new CapeValidationError( `${label}->${field_name} must not be empty` );
         }
     }       
 }
 
-module.exports=CapeValidate;
+module.exports=Validate;
