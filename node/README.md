@@ -6,11 +6,19 @@ The top-level of the JSON config file is an object with a single parameter "data
 
 "datasets" is an array of objects. Currently, the system only understands a single dataset but this may change in a future version.
 
-Properties in the dataset object:
-* data_dir - Optional. Ignored. This property is used by the dynamic PHP version.
-* base_file_name - Optional. Ignored. This property is used by the dynamic PHP version.
-* format - The format of the tabular data. Allowed values: 'xlsx', 'csv'. Default: 'csv'.
-* fields - an array of field descriptions (see below)
+Properties in the dataset object
+* Required by the NODE mapper:
+** format - The format of the tabular data. Allowed values: 'xlsx', 'csv'. Default: 'csv'.
+** fields - Required. An array of field description objects (see below).
+* Used by the PHP mapper only.
+** data_dir - Optional. String. Ignored. 
+** base_file_name - Optional. String. Ignored.
+* Used by CAPE, checked and passed through as-is by the mapper
+** title - Required. String. Title of the dataset.
+** id_field - Required. String. The ID of a field that is to be used for the record IDs
+** sort - Required. Array of Strings. A list of the IDs one or more field that will be used to sort the dataset.
+ 
+ 
 
 Properties in the field object:
 * id - String. Required. Must be unique within this dataset. 
