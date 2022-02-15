@@ -1,10 +1,14 @@
 'use strict';
 
-const fs = require('fs');
-const CapeMapper = require( "./CapeMapper" );
+/*
+This is a command line tool to test the cape mapper is working. It's intended to usually be used via a Azure pipeline
+ */
 
-const rawData = fs.readFileSync('../config.json');
-const config = JSON.parse(rawData);
+const fs = require('fs');
+const CapeMapper = require( "./lib/CapeMapper" );
+
+const rawData = fs.readFileSync('../config.json').toString();
+let config = JSON.parse(rawData);
 
 let mapper = new CapeMapper(config);
 const siteData = mapper.generateSiteData();

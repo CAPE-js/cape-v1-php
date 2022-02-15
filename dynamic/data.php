@@ -213,6 +213,7 @@ function map_dataset( $config, $source ) {
 							$out_record[$field["id"]] []= $processed_value;
 						} else {
 							// if this is a single value and we have a non empty value then we're done
+							// TODO: does this need a LAST here to use the first value not the last?
 							$out_record[$field["id"]] = $processed_value;
 						}
 					}	

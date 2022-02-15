@@ -1,0 +1,24 @@
+This tool converts a JSON config file, and an Excel document into a CAPE JSON file.
+
+Much of the config file is passed through to the final JSON file.
+
+The top-level of the JSON config file is an object with a single parameter "datasets".
+
+"datasets" is an array of objects. Currently, the system only understands a single dataset but this may change in a future version.
+
+Properties in the dataset object:
+* data_dir - Optional. Ignored. This property is used by the dynamic PHP version.
+* base_file_name - Optional. Ignored. This property is used by the dynamic PHP version.
+* format - The format of the tabular data. Allowed values: 'xlsx', 'csv'. Default: 'csv'.
+* fields - an array of field descriptions (see below)
+
+Properties in the field object:
+* id - String. Required. Must be unique within this dataset. 
+* type - String. Allowed values: 'string', 'date', 'integer', 'enum', 'ignore'. Ignore is used to indicate source headings to intentionally ignore as an unreferenced heading will generate a warning.
+* multiple - Boolean. Default: false. Indicates if the values are single or a list.
+* source_heading - String. Optional. Indicates the column heading(s) to take the value of this field from. This may be a list of columns if so then all values are returned if the field is multiple, or the first non-null value if it is not. Any columns with this heading plus a space and number are also added. So "Author" would include values from "Author 1", "Author 2" etc. This field may also be set to 'AUTO' in which case the values will be automatically set as a sequence of integers. This is a work around for datasets without a unique ID but is not recommended as deletions will renumber records. 
+* source_split - String. Optional. A regular expression used to split values for a multiple field. If multiple headings are specified this will apply to all the values. eg. '/s*;/s*'
+
+Notes:
+* integer fields will be forced to be integers. 
+

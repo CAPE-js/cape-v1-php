@@ -2,22 +2,26 @@
 const CapeValidate = require( "./CapeValidate" );
 const CapeValidationError = require( "./CapeValidationError" );
 
-module.exports = class CapeDatasetMapper {
-
+class CapeDatasetMapper {
+    id;
+    /**
+     * Maps a single dataset in a CAPE system.
+     * @param {Object} config - the JSON structure defining a single dataset
+     * @throws {CapeValidationError}
+     */
     constructor( config ) { 
-        this.config = config;
 
         // check basic metadata
-        CapeValidate.validateStringProperty( "dataset", this.config, "id" );
-        CapeValidate.validateStringProperty( `dataset ${this.config.id}`, this.config, "title" );
-        CapeValidate.validateStringProperty( `dataset ${this.config.id}`, this.config, "id_field" );
+        CapeValidate.validateStringProperty( "dataset", config, "id" );
+        CapeValidate.validateStringProperty( `dataset ${config.id}`, config, "title" );
+        CapeValidate.validateStringProperty( `dataset ${config.id}`, config, "id_field" );
         // check dataset sort property
-        CapeValidate.validateNonEmptyArrayProperty( `dataset ${this.config.id}`, this.config, "sort" );
-        this.config.sort.forEach( (sortField,i) => {
-            CapeValidate.validateString( `dataset ${this.config.id} sort ${i}`, sortField );
+        CapeValidate.validateNonEmptyArrayProperty( `dataset ${config.id}`, config, "sort" );
+        config.sort.forEach( (sortField,i) => {
+            CapeValidate.validateString( `dataset ${config.id} sort ${i}`, sortField );
         });
         // check dataset has fields
-        CapeValidate.validateNonEmptyArrayProperty( `dataset ${this.config.id}`, this.config, "fields" );
+        CapeValidate.validateNonEmptyArrayProperty( `dataset ${config.id}`, config, "fields" );
 
         // initialise field mappers
 
@@ -63,7 +67,6 @@ module.exports = class CapeDatasetMapper {
     }
 
 
-    generateDatasetData() {
-    }
 }
 
+module.exports = CapeDatasetMapper;
