@@ -1,5 +1,4 @@
 
-const CapeValidate = require( "./Validate" );
 const CapeValidationError = require( "./ValidationError" );
 const CapeFieldMapper = require( "./Field" );
 

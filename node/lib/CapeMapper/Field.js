@@ -1,5 +1,4 @@
 
-const Validate = require( "./Validate" );
 const ValidationError = require( "./ValidationError" );
 
 

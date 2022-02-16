@@ -1,5 +1,4 @@
 const CapeDatasetMapper = require("./Dataset");
-const CapeValidate = require("./Validate");
 const CapeValidationError = require("./ValidationError");
 let Ajv = require('ajv')
 let ajv = new Ajv({ allErrors:true, allowUnionTypes:true, removeAdditional:'all' })
