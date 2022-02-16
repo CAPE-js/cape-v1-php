@@ -4,7 +4,7 @@ const ValidationError = require( "./ValidationError" );
 
 
 class Field {
-    data = {}
+    config = {}
     /**
      * Maps data from a tabular source to a single field in a record in a CAPE system.
      * @param {Object} config - the JSON structure defining a single field

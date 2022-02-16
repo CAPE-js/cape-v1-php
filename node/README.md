@@ -12,12 +12,12 @@ Properties in the dataset object
 ** fields - Required. An array of field description objects (see below).
 * Used by the PHP mapper only.
 ** data_dir - Optional. String. Ignored. 
-** base_file_name - Optional. String. Ignored.
+** base_file_name - Optional. String|Array of String. Ignored.
 * Used by CAPE, checked and passed through as-is by the mapper
 ** title - Required. String. Title of the dataset.
 ** id_field - Required. String. The ID of a field that is to be used for the record IDs
 ** sort - Required. Array of Strings. A list of the IDs one or more field that will be used to sort the dataset.
- 
+** result_mode - Optional. Allowed values 'search', 'filter'. Default: 'filter.
  
 
 Properties in the field object:
