@@ -6,7 +6,7 @@ const capeSchema = require('../../schema.json')
 const validate = ajv.compile(capeSchema);
 
 class Site {
-    datasetMappers = {};
+    datasetMappers = [];
 
     /**
      * Construct a new mapper class using the given config, taken from config.json
@@ -20,16 +20,21 @@ class Site {
 
         config['datasets'].forEach((datasetConfig) => {
             let datasetMapper = new DatasetMapper(datasetConfig);
-            this.datasetMappers[datasetMapper['config']['id']] = datasetMapper;
+            this.datasetMappers.push( datasetMapper );
         });
     }
 
     /**
      *  load relevant files from filesystem and map them using the config. nb. this will not work with azure
-     *  @return {number}
+     *  @param {Object.<string,string[]>} source_data. An array of bytestreams to import for each dataset. The key is the ID of the dataset.
+     *  @return {Object}
      */
-    generateSiteData() {
-        return 23;
+    generate(source_data) {
+        let output = { status:"OK", datasets: []};
+        this.datasetMappers.forEach( (dataset_mapper) => {
+           output.datasets.push( dataset_mapper.generate( source_data[ dataset_mapper.config.id ] ));
+        });
+        return output;
     }
 
 }

@@ -10,7 +10,10 @@ const CapeMapper = require( "./lib/CapeMapper/Site" );
 const rawData = fs.readFileSync('../config.json').toString();
 let config = JSON.parse(rawData);
 
+const csvData = fs.readFileSync('../testenv/data/dataset1.csv').toString();
+
+
 let mapper = new CapeMapper(config);
-const siteData = mapper.generateSiteData();
-console.log( siteData );
-console.log( "OK\n" );
+const siteData = mapper.generate({ "testenv":[csvData]});
+console.log( JSON.stringify(siteData,{},4 ));
+
