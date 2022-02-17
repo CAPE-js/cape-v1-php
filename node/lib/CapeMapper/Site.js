@@ -1,5 +1,5 @@
-const CapeDatasetMapper = require("./Dataset");
-const CapeValidationError = require("./ValidationError");
+const DatasetMapper = require("./Dataset");
+const ValidationError = require("./ValidationError");
 let Ajv = require('ajv')
 let ajv = new Ajv({ allErrors:true, allowUnionTypes:true, removeAdditional:'all' })
 const capeSchema = require('../../schema.json')
@@ -11,15 +11,15 @@ class Site {
     /**
      * Construct a new mapper class using the given config, taken from config.json
      * @param {Object} config
-     * @throws {CapeValidationError}
+     * @throws {ValidationError}
      */
     constructor(config) {
         if (!validate(config)) {
-            throw new CapeValidationError(ajv.errorsText(validate.errors))
+            throw new ValidationError(ajv.errorsText(validate.errors))
         }
 
         config['datasets'].forEach((datasetConfig) => {
-            let datasetMapper = new CapeDatasetMapper(datasetConfig);
+            let datasetMapper = new DatasetMapper(datasetConfig);
             this.datasetMappers[datasetMapper['config']['id']] = datasetMapper;
         });
     }
