@@ -27,7 +27,7 @@ tabular_files.forEach( (filename)=>{
 let mapper = new CapeMapper(config);
 const first_dataset_id = config['datasets'][0]['id'];
 
-const siteData = mapper.generate({ "testenv":tabular_datasets});
+const siteData = mapper.generate({ first_dataset_id:tabular_datasets});
 
 // Pretty print the site JSON file to STDOUT
 console.log( JSON.stringify(siteData,{},4 ));
