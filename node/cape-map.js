@@ -16,7 +16,7 @@ args.shift(); // this script
 const json_config_file = args.shift();
 const tabular_files = args;
 
-const rawData = fs.readFileSync('../config.json').toString();
+const rawData = fs.readFileSync(json_config_file).toString();
 let config = JSON.parse(rawData);
 
 let tabular_datasets = [];
