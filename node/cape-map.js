@@ -21,13 +21,16 @@ let config = JSON.parse(rawData);
 
 let tabular_datasets = [];
 tabular_files.forEach( (filename)=>{
-    tabular_datasets.push( fs.readFileSync( filename ).toString() );
+    let buffer = fs.readFileSync( filename );
+    tabular_datasets.push( buffer );
 })
 
 let mapper = new CapeMapper(config);
 const first_dataset_id = config['datasets'][0]['id'];
+let site_datasets = {};
+site_datasets[first_dataset_id] = tabular_datasets;
 
-const siteData = mapper.generate({ first_dataset_id:tabular_datasets});
+const site_data = mapper.generate(site_datasets );
 
 // Pretty print the site JSON file to STDOUT
-console.log( JSON.stringify(siteData,{},4 ));
+console.log( JSON.stringify(site_data,{},4 ));
