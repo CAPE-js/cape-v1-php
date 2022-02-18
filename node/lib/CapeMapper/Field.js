@@ -14,7 +14,6 @@ class Field {
      */
     constructor(config) {
         this.config = config;
-        console.log(this.config)
 
         // additional validation on top of what the schema can do
         if (this.config['type'] !== 'ignore' && !this.config.hasOwnProperty('label')) {
@@ -119,7 +118,6 @@ class Field {
         if( this.config.multiple ) {
             result.value = [];
         }
-        console.log(actual_headings)
 
         let processed_values = [];
         actual_headings.forEach( (actual_heading)=>{
@@ -130,7 +128,7 @@ class Field {
             const cell_value = incoming_record[actual_heading];
 
             let raw_values;
-            if( this.config.multiple && this.source_split !== null && this.source_split !== "" ) {
+            if( this.config.multiple && this.source_split != undefined ) {
                 raw_values = cell_value.split( new RegExp(this.source_split));
             } else {
                 raw_values = [cell_value];
@@ -165,6 +163,7 @@ class Field {
 
         });
 
+        // if we are not a multiple field, the use the first non-null value we found
         if( this.config.multiple ) {
             result.value = processed_values
         } else if( processed_values.length > 0 ) {
