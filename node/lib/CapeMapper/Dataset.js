@@ -90,8 +90,11 @@ class Dataset {
 
             incoming_records.forEach((incoming_record) => {
                 auto_increment++;
-                const outgoing_record = this.mapRecord(incoming_record, auto_increment);
-                output.records.push(outgoing_record);
+                const record_result = this.mapRecord(incoming_record, auto_increment);
+                output.records.push(record_result.record);
+                // TODO do something clever with missing fields and unused fields
+                // make a list of all headings used by this record
+                // make a list of all missing headings for this record
             })
         });
 
@@ -99,7 +102,17 @@ class Dataset {
     }
 
     mapRecord( incoming_record, auto_increment ) {
-        return "fnord";
+        let result = { record: {}, used_headings:{}, missing_headings:{}};
+        this.fieldMappers.forEach((field_mapper)=>{
+            let field_result = field_mapper.generate(incoming_record, auto_increment);
+            if( field_result.value !== null ) {
+                result.record[field_mapper.config.id] = field_result.value;
+            }
+            // TODO do something clever with missing fields and unused fields
+            // make a list of all headings used by this record
+            // make a list of all missing headings for this record
+        })
+        return result;
     }
 }
 

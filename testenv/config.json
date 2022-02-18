@@ -34,6 +34,13 @@
 					"description":"Record number description"
 				},
 				{
+					"id":"auto",
+					"type":"integer",
+					"source_heading":"AUTO",
+					"label":"Auto label",
+					"description":"Auto description"
+				},
+				{
 					"id":"date",
 					"type":"date",
 					"source_heading":"DATE",

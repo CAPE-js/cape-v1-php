@@ -58,7 +58,10 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id","type"],
+              "required": [
+                "id",
+                "type"
+              ],
               "properties": {
                 "id": {
                   "type": "string"
@@ -67,12 +70,20 @@
                   "type": "string"
                 },
                 "type": {
-                  "enum":["text","integer","enum","date","ignore"]
+                  "enum": [
+                    "text",
+                    "integer",
+                    "enum",
+                    "date",
+                    "ignore"
+                  ]
                 },
                 "placeholder": {
                   "type": "object",
                   "properties": {
-                    "is": { "type": "string" },
+                    "is": {
+                      "type": "string"
+                    },
                     "contains": {
                       "type": "string"
                     },
@@ -80,12 +91,18 @@
                       "type": "array",
                       "minItems": 2,
                       "maxItems": 2,
-                      "items": {"type": "string"}
+                      "items": {
+                        "type": "string"
+                      }
                     }
                   }
                 },
-                "change_filter_mode": {"type": "boolean"},
-                "multiple": {"type": "boolean"},
+                "change_filter_mode": {
+                  "type": "boolean"
+                },
+                "multiple": {
+                  "type": "boolean"
+                },
                 "description": {
                   "type": "string"
                 },
@@ -93,10 +110,16 @@
                   "type": "object",
                   "properties": {
                     "is": {
-                      "enum": ["radio","select"]
+                      "enum": [
+                        "radio",
+                        "select"
+                      ]
                     },
                     "one-of": {
-                      "enum": ["checkbox","multiselect"]
+                      "enum": [
+                        "checkbox",
+                        "multiselect"
+                      ]
                     }
                   }
                 },
@@ -111,6 +134,14 @@
                 },
                 "quick_search": {
                   "type": "boolean"
+                },
+                "source_heading": {
+                },
+                "source_split": {
+                  "type": "string"
+                },
+                "source_chars": {
+                  "type": "integer"
                 }
               }
             }
