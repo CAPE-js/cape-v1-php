@@ -26,6 +26,7 @@ class Dataset {
             }
             ids[fieldMapper.config.id] = fieldMapper;
         });
+        delete this.config['fields']
 
         // check the sort fields exist
         this.config['sort'].forEach((field_id, i) => {
