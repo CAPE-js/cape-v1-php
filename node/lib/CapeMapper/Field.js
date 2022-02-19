@@ -121,7 +121,7 @@ class Field {
 
         let processed_values = [];
         actual_headings.forEach( (actual_heading)=>{
-            if( incoming_record[actual_heading] === null ) {
+            if( incoming_record[actual_heading] == null ) {
                 return; // skip null values
             }
 
