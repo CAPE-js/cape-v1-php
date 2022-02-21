@@ -1,7 +1,6 @@
 const ValidationError = require("./ValidationError");
 const FieldMapper = require("./Field");
-const {parse: CSVParse} = require('csv-parse/sync');
-const xlsx = require('node-xlsx').default;
+const BufferToTable = require("./BufferToTable");
 
 class Dataset {
     config = {}
@@ -79,22 +78,13 @@ class Dataset {
         let missing_headings = {};
 
         bytestreams.forEach((bytestream) => {
-            let incoming_rows;
+            const incoming_rows = BufferToTable.convert( this.format, bytestream );
 
-            if (this.format === 'csv') {
-                incoming_rows = CSVParse(bytestream, {
-                    skip_empty_lines: true
-                });
-            } else {
-                let workbook = xlsx.parse(bytestream);
-                incoming_rows = workbook[0]['data'];
-            }
-
-            // start with a list of all headings and check them off as we see them
-            // used.
+            // start with a list of all headings and check them off as we see them used.
             let unmapped_headings_in_table = {};
             incoming_rows[0].forEach( (heading) => { unmapped_headings_in_table[heading.trim()] = 1; } );
 
+            
             // convert tabular data to records
             let incoming_records = [];
             for (let i = 1; i < incoming_rows.length; ++i) {
