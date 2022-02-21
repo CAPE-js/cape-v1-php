@@ -1,7 +1,7 @@
 const ValidationError = require("./ValidationError");
 
 
-class Field {
+class FieldMapper {
     config = {}
     source_headings = []
     source_split
@@ -176,4 +176,4 @@ class Field {
     }
 }
 
-module.exports = Field;
+module.exports = FieldMapper;

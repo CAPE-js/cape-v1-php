@@ -1,11 +1,11 @@
-const DatasetMapper = require("./Dataset");
+const DatasetMapper = require("./DatasetMapper");
 const ValidationError = require("./ValidationError");
 let Ajv = require('ajv')
 let ajv = new Ajv({ allErrors:true, allowUnionTypes:true, removeAdditional:'all' })
 const capeSchema = require('../../schema.json')
 const validate = ajv.compile(capeSchema);
 
-class Site {
+class SiteMapper {
     datasetMappers = [];
 
     /**
@@ -39,4 +39,4 @@ class Site {
 
 }
 
-module.exports = Site;
+module.exports = SiteMapper;

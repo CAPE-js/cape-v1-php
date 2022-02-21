@@ -8,7 +8,7 @@ Usage:
 node cape-map.js <config.json> <dataset1> (<dataset2> ...)
  */
 const fs = require('fs');
-const CapeMapper = require("./lib/CapeMapper/Site");
+const CapeMapper = require("./lib/CapeMapper/SiteMapper");
 
 let args = process.argv;
 args.shift(); // node

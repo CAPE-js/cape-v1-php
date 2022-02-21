@@ -1,8 +1,8 @@
 const ValidationError = require("./ValidationError");
-const FieldMapper = require("./Field");
+const FieldMapper = require("./FieldMapper");
 const BufferToTable = require("./BufferToTable");
 
-class Dataset {
+class DatasetMapper {
     config = {}
     fieldMappers = []
     format = "csv"
@@ -84,7 +84,7 @@ class Dataset {
             let unmapped_headings_in_table = {};
             incoming_rows[0].forEach( (heading) => { unmapped_headings_in_table[heading.trim()] = 1; } );
 
-            const incoming_records = Dataset.tableToRecords( incoming_rows );
+            const incoming_records = DatasetMapper.tableToRecords( incoming_rows );
 
             incoming_records.forEach((incoming_record) => {
                 auto_increment++;
@@ -149,4 +149,4 @@ class Dataset {
 }
 
 
-module.exports = Dataset;
+module.exports = DatasetMapper;
