@@ -18,7 +18,7 @@ class Dataset {
         this.config = config;
 
         let ids = {};
-        this.config['fields'].forEach((fieldConfig, i) => {
+        this.config['fields'].forEach((fieldConfig) => {
             let fieldMapper = new FieldMapper(fieldConfig);
             this.fieldMappers.push(fieldMapper);
             // check the ids are unique
@@ -30,7 +30,7 @@ class Dataset {
         delete this.config['fields']
 
         // check the sort fields exist
-        this.config['sort'].forEach((field_id, i) => {
+        this.config['sort'].forEach((field_id) => {
             if (!ids.hasOwnProperty(field_id)) {
                 throw new ValidationError("Invalid sort field ${field_id}")
             }

@@ -33,4 +33,4 @@ site_datasets[first_dataset_id] = tabular_datasets;
 const site_data = mapper.generate(site_datasets );
 
 // Pretty print the site JSON file to STDOUT
-console.log( JSON.stringify(site_data,{},4 ));
+console.log( JSON.stringify(site_data,null,4 ));

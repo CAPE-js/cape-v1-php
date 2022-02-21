@@ -59,7 +59,7 @@ class Field {
      * columns that were expected but not found
      * @param {object} incoming_record - the record from the tabular data source
      * @param {integer} auto_increment - the next ID for an autoincrement field
-     * @return {{ value: string|integer|boolean|string[]|integer[]|boolean[], used_headings: {}.<string,boolean>>, missing_headings: {}.<string,boolean> }}
+     * @return {{ value: any, used_headings: {}.<string,boolean>, missing_headings: {}.<string,boolean> }}
      */
     generate(incoming_record, auto_increment) {
         let result = {
@@ -128,6 +128,8 @@ class Field {
             const cell_value = incoming_record[actual_heading];
 
             let raw_values;
+            // noinspection EqualityComparisonWithCoercionJS
+            // if it's any kind of null value then it's not valid
             if( this.config.multiple && this.source_split != undefined ) {
                 raw_values = cell_value.split( new RegExp(this.source_split));
             } else {
