@@ -84,17 +84,7 @@ class Dataset {
             let unmapped_headings_in_table = {};
             incoming_rows[0].forEach( (heading) => { unmapped_headings_in_table[heading.trim()] = 1; } );
 
-            
-            // convert tabular data to records
-            let incoming_records = [];
-            for (let i = 1; i < incoming_rows.length; ++i) {
-                let record = {};
-                // iterate over headings in first row
-                for (let j = 0; j < incoming_rows[0].length; ++j) {
-                    record[incoming_rows[0][j].trim()] = incoming_rows[i][j];
-                }
-                incoming_records.push(record);
-            }
+            const incoming_records = Dataset.tableToRecords( incoming_rows );
 
             incoming_records.forEach((incoming_record) => {
                 auto_increment++;
@@ -137,6 +127,24 @@ class Dataset {
             })
         })
         return result;
+    }
+
+    /**
+     * @param {Array<Array<any>>} table
+     * @return {Array<Object<string,any>>}
+     */
+    static tableToRecords( table ) {
+        // convert tabular data to records
+        let records = [];
+        for (let i = 1; i < table.length; ++i) {
+            let record = {};
+            // iterate over headings in first row
+            for (let j = 0; j < table[0].length; ++j) {
+                record[table[0][j].trim()] = table[i][j];
+            }
+            records.push(record);
+        }
+        return records;
     }
 }
 
