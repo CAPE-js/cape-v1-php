@@ -55,20 +55,20 @@ class Dataset {
      * increment the auto_increment property used by fields who's source is set to AUTO.
      * This uses the format specified by the format parameter of the dataset config.
      * @param {String|String[]} bytestreams
-     * @returns {{missing_headers: [], records: [], unmapped_headings: [], config: {}}} an array of CAPE records
+     * @returns {{records: [], missing_headings: [], unmapped_headings: [], config: {}}} an array of CAPE records
      */
     generate(bytestreams) {
 
         let output = {
             config: this.config,
             unmapped_headings: [],
-            missing_headers: [],
+            missing_headings: [],
             records: []
         }
 
         output.config['fields'] = [];
-        this.fieldMappers.forEach( (fieldMapper)=>{
-           output.config['fields'].push( fieldMapper.config );
+        this.fieldMappers.forEach((fieldMapper) => {
+            output.config['fields'].push(fieldMapper.config);
         });
 
         if (!Array.isArray(bytestreams)) {
@@ -76,40 +76,58 @@ class Dataset {
         }
 
         let auto_increment = 0;
+        let missing_headings = {};
 
         bytestreams.forEach((bytestream) => {
-            let incoming_records;
+            let incoming_rows;
 
             if (this.format === 'csv') {
-                incoming_records = CSVParse(bytestream, {
-                    columns: true,
+                incoming_rows = CSVParse(bytestream, {
                     skip_empty_lines: true
                 });
             } else {
                 let workbook = xlsx.parse(bytestream);
-                const sheet = workbook[0]['data'];
+                incoming_rows = workbook[0]['data'];
+            }
 
-                // convert workbook to records
-                incoming_records = [];
-                for( let i=1; i<sheet.length; ++i ) {
-                    let record = {};
-                    // iterate over headings in first row
-                    for( let j=0; j<sheet[0].length; ++j ) {
-                        record[sheet[0][j]] = sheet[i][j];
-                    }
-                    incoming_records.push(record);
+            // start with a list of all headings and check them off as we see them
+            // used.
+            let unmapped_headings_in_table = {};
+            incoming_rows[0].forEach( (heading) => { unmapped_headings_in_table[heading.trim()] = 1; } );
+
+            // convert tabular data to records
+            let incoming_records = [];
+            for (let i = 1; i < incoming_rows.length; ++i) {
+                let record = {};
+                // iterate over headings in first row
+                for (let j = 0; j < incoming_rows[0].length; ++j) {
+                    record[incoming_rows[0][j].trim()] = incoming_rows[i][j];
                 }
+                incoming_records.push(record);
             }
 
             incoming_records.forEach((incoming_record) => {
                 auto_increment++;
                 const record_result = this.mapRecord(incoming_record, auto_increment);
                 output.records.push(record_result.record);
-                // TODO do something clever with missing fields and unused fields
-                // make a list of all headings used by this record
-                // make a list of all missing headings for this record
-            })
-        });
+                // tick-off headings we've used
+                Object.keys(record_result.used_headings).forEach((heading) => {
+                    delete unmapped_headings_in_table[heading];
+                });
+
+                // note any headings we expected in this table but didn't find
+                Object.keys(record_result.missing_headings).forEach((heading) => {
+                    missing_headings[heading] = true;
+                });
+            }); // end of foreach incoming_record
+
+            // note any headings that were never used once we've done the whole table
+            output.unmapped_headings.push(Object.keys(unmapped_headings_in_table));
+            // ... and any headings we were missing
+            output.missing_headings.push(Object.keys( missing_headings ));
+
+        }); // end of foreach bytestream
+
 
         return output;
     }
@@ -121,9 +139,12 @@ class Dataset {
             if (field_result.value !== null) {
                 result.record[field_mapper.config.id] = field_result.value;
             }
-            // TODO do something clever with missing fields and unused fields
-            // make a list of all headings used by this record
-            // make a list of all missing headings for this record
+            Object.keys(field_result.used_headings).forEach((key) => {
+                result.used_headings[key] = true;
+            })
+            Object.keys(field_result.missing_headings).forEach((key) => {
+                result.missing_headings[key] = true;
+            })
         })
         return result;
     }
