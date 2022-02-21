@@ -54,7 +54,7 @@ class Dataset {
      * Map one or more bytestreams into a list of records for this dataset. This is not stateless as it will
      * increment the auto_increment property used by fields who's source is set to AUTO.
      * This uses the format specified by the format parameter of the dataset config.
-     * @param {String|String[]} bytestreams
+     * @param {Buffer|Buffer[]} bytestreams
      * @returns {{records: [], missing_headings: [], unmapped_headings: [], config: {}}} an array of CAPE records
      */
     generate(bytestreams) {

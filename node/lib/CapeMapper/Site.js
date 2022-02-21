@@ -26,7 +26,7 @@ class Site {
 
     /**
      *  load relevant files from filesystem and map them using the config. nb. this will not work with azure
-     *  @param {Object.<string,string[]>} source_data. An array of bytestreams to import for each dataset. The key is the ID of the dataset.
+     *  @param {Object.<string,Buffer|Buffer[]>} source_data. An array of bytestreams to import for each dataset. The key is the ID of the dataset.
      *  @return {Object}
      */
     generate(source_data) {
