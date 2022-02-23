@@ -1,5 +1,5 @@
-const {parse: CSVParse} = require('csv-parse/sync');
-const xlsx = require('node-xlsx').default;
+import { parse } from 'csv-parse/sync';
+import xlsx from 'node-xlsx';
 
 class BufferToTable {
 
@@ -14,7 +14,7 @@ class BufferToTable {
         let table = null;
 
         if (format === 'csv') {
-            table = CSVParse(bytestream, {
+            table = parse(bytestream, {
                 skip_empty_lines: true
             });
         }
@@ -28,4 +28,4 @@ class BufferToTable {
     }
 }
 
-module.exports = BufferToTable;
+export { BufferToTable };

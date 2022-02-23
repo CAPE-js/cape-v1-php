@@ -1,6 +1,6 @@
-const ValidationError = require("./ValidationError");
-const FieldMapper = require("./FieldMapper");
-const BufferToTable = require("./BufferToTable");
+import {ValidationError} from "./ValidationError.js";
+import {FieldMapper} from "./FieldMapper.js";
+import {BufferToTable} from "./BufferToTable.js";
 
 class DatasetMapper {
     config = {}
@@ -48,6 +48,23 @@ class DatasetMapper {
 
     }
 
+    /**
+     * @param {Array<Array<any>>} table
+     * @return {Array<Object<string,any>>}
+     */
+    static tableToRecords(table) {
+        // convert tabular data to records
+        let records = [];
+        for (let i = 1; i < table.length; ++i) {
+            let record = {};
+            // iterate over headings in first row
+            for (let j = 0; j < table[0].length; ++j) {
+                record[table[0][j].trim()] = table[i][j];
+            }
+            records.push(record);
+        }
+        return records;
+    }
 
     /**
      * Map one or more bytestreams into a list of records for this dataset. This is not stateless as it will
@@ -78,13 +95,15 @@ class DatasetMapper {
         let missing_headings = {};
 
         bytestreams.forEach((bytestream) => {
-            const incoming_rows = BufferToTable.convert( this.format, bytestream );
+            const incoming_rows = BufferToTable.convert(this.format, bytestream);
 
             // start with a list of all headings and check them off as we see them used.
             let unmapped_headings_in_table = {};
-            incoming_rows[0].forEach( (heading) => { unmapped_headings_in_table[heading.trim()] = 1; } );
+            incoming_rows[0].forEach((heading) => {
+                unmapped_headings_in_table[heading.trim()] = 1;
+            });
 
-            const incoming_records = DatasetMapper.tableToRecords( incoming_rows );
+            const incoming_records = DatasetMapper.tableToRecords(incoming_rows);
 
             incoming_records.forEach((incoming_record) => {
                 auto_increment++;
@@ -104,7 +123,7 @@ class DatasetMapper {
             // note any headings that were never used once we've done the whole table
             output.unmapped_headings.push(Object.keys(unmapped_headings_in_table));
             // ... and any headings we were missing
-            output.missing_headings.push(Object.keys( missing_headings ));
+            output.missing_headings.push(Object.keys(missing_headings));
 
         }); // end of foreach bytestream
 
@@ -128,25 +147,6 @@ class DatasetMapper {
         })
         return result;
     }
-
-    /**
-     * @param {Array<Array<any>>} table
-     * @return {Array<Object<string,any>>}
-     */
-    static tableToRecords( table ) {
-        // convert tabular data to records
-        let records = [];
-        for (let i = 1; i < table.length; ++i) {
-            let record = {};
-            // iterate over headings in first row
-            for (let j = 0; j < table[0].length; ++j) {
-                record[table[0][j].trim()] = table[i][j];
-            }
-            records.push(record);
-        }
-        return records;
-    }
 }
 
-
-module.exports = DatasetMapper;
+export {DatasetMapper};

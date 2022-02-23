@@ -1,8 +1,12 @@
-const DatasetMapper = require("./DatasetMapper");
-const ValidationError = require("./ValidationError");
-let Ajv = require('ajv')
+import { DatasetMapper } from "./DatasetMapper.js";
+import { ValidationError } from "./ValidationError.js"
+
+import Ajv from 'ajv';
 let ajv = new Ajv({ allErrors:true, allowUnionTypes:true, removeAdditional:'all' })
-const capeSchema = require('../../schema.json')
+import { readFileSync } from 'fs';
+const rawJsonConfig = readFileSync("schema.json");
+
+const capeSchema  = JSON.parse(rawJsonConfig);
 const validate = ajv.compile(capeSchema);
 
 class SiteMapper {
@@ -39,4 +43,4 @@ class SiteMapper {
 
 }
 
-module.exports = SiteMapper;
+export { SiteMapper };

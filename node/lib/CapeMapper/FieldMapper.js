@@ -1,4 +1,4 @@
-const ValidationError = require("./ValidationError");
+import { ValidationError } from "./ValidationError.js";
 
 
 class FieldMapper {
@@ -176,4 +176,4 @@ class FieldMapper {
     }
 }
 
-module.exports = FieldMapper;
+export { FieldMapper };
