@@ -1,4 +1,4 @@
-This tool converts a JSON config file, and an Excel document into a CAPE JSON file.
+This tool converts a JSON config file, and one or more CSV or Excel documents, into a CAPE JSON file.
 
 Much of the config file is passed through to the final JSON file.
 
