@@ -1,4 +1,5 @@
 import { ValidationError } from "./ValidationError.js";
+import {Helpers} from "./Helpers.js";
 
 
 class FieldMapper {
@@ -27,11 +28,7 @@ class FieldMapper {
         // remove mapper-specific properties from config and put them into object properties
         if (this.config.hasOwnProperty('source_heading')) {
 
-            if (Array.isArray(this.config['source_heading'])) {
-                this.source_headings = this.config["source_heading"];
-            } else {
-                this.source_headings = [this.config["source_heading"]];
-            }
+            this.source_headings = Helpers.ensureArray(this.config["source_heading"]);
 
             // AUTO can't be part of a list of source headings
             if (this.source_headings > 1) {
@@ -128,8 +125,8 @@ class FieldMapper {
             const cell_value = incoming_record[actual_heading];
 
             let raw_values;
-            // noinspection EqualityComparisonWithCoercionJS
             // if it's any kind of null value then it's not valid
+            // noinspection EqualityComparisonWithCoercionJS
             if( this.config.multiple && this.source_split != undefined ) {
                 raw_values = cell_value.split( new RegExp(this.source_split));
             } else {

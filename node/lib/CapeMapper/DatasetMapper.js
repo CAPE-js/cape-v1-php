@@ -1,6 +1,8 @@
 import {ValidationError} from "./ValidationError.js";
 import {FieldMapper} from "./FieldMapper.js";
 import {BufferToTable} from "./BufferToTable.js";
+import {Helpers} from "./Helpers.js";
+
 
 class DatasetMapper {
     config = {}
@@ -88,9 +90,7 @@ class DatasetMapper {
             output.config['fields'].push(fieldMapper.config);
         });
 
-        if (!Array.isArray(byteStream)) {
-            byteStream = [byteStream];
-        }
+        byteStream = Helpers.ensureArray(byteStream);
 
         let auto_increment_counter = 0;
         let missing_headings = {};
