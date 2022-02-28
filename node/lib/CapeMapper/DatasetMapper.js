@@ -67,18 +67,19 @@ class DatasetMapper {
     }
 
     /**
-     * Map one or more bytestreams into a list of records for this dataset. This is not stateless as it will
+     * Map one or more byte streams into a list of records for this dataset. This is not stateless as it will
      * increment the auto_increment property used by fields who's source is set to AUTO.
      * This uses the format specified by the format parameter of the dataset config.
-     * @param {Buffer|Buffer[]} bytestreams
+     * @param {Buffer|Buffer[]} byteStream
      * @returns {{records: [], missing_headings: [], unmapped_headings: [], config: {}}} an array of CAPE records
      */
-    generate(bytestreams) {
+    generate(byteStream) {
 
         let output = {
             config: this.config,
             unmapped_headings: [],
             missing_headings: [],
+
             records: []
         }
 
@@ -87,14 +88,14 @@ class DatasetMapper {
             output.config['fields'].push(fieldMapper.config);
         });
 
-        if (!Array.isArray(bytestreams)) {
-            bytestreams = [bytestreams];
+        if (!Array.isArray(byteStream)) {
+            byteStream = [byteStream];
         }
 
         let auto_increment = 0;
         let missing_headings = {};
 
-        bytestreams.forEach((bytestream) => {
+        byteStream.forEach((bytestream) => {
             const incoming_rows = BufferToTable.convert(this.format, bytestream);
 
             // start with a list of all headings and check them off as we see them used.

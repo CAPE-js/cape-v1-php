@@ -7,22 +7,22 @@ class BufferToTable {
     /**
      * Convert incoming data into a two dimensional tabular format. Currently will handle CSV & XLSX.
      * @param {string} format
-     * @param {number} bytestream
+     * @param {number} byteStream
      * @return {Array.<Array.<string|integer>>}
      * @throws {FormatError}
      */
-    static convert(format, bytestream) {
+    static convert(format, byteStream) {
         let table = null;
 
         switch (format) {
 
             case 'csv':
-                table = parse(bytestream, {
+                table = parse(byteStream, {
                     skip_empty_lines: true
                 });
                 break;
             case 'xlsx':
-                let workbook = xlsx.parse(bytestream);
+                let workbook = xlsx.parse(byteStream);
                 table = workbook[0]['data'];
                 break;
             default:
