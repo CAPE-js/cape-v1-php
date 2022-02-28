@@ -1,6 +1,5 @@
-import { ValidationError } from "./ValidationError.js";
+import {ValidationError} from "./ValidationError.js";
 import {Helpers} from "./Helpers.js";
-
 
 class FieldMapper {
     config = {}
@@ -46,7 +45,7 @@ class FieldMapper {
             delete this.config['source_split']
         }
         if (this.config.hasOwnProperty('source_chars')) {
-            this.source_split = this.config['source_chars']
+            this.source_chars = this.config['source_chars']
             delete this.config['source_chars']
         }
     }
@@ -67,15 +66,93 @@ class FieldMapper {
 
         // if this field is an auto_increment_counter style field we just return that right away. No real source headings are
         // used.
-        if( this.source_headings[0] === "AUTO" ) {
+        if (this.source_headings[0] === "AUTO") {
             result.value = auto_increment_counter
-            return result;
+        } else {
+            const source_headings_used_in_this_field = this.select_source_headings(incoming_record, result);
+            if (this.config.type !== "ignore") {
+                if (this.config.multiple) {
+                    result.value = this.process_raw_values(source_headings_used_in_this_field, incoming_record)
+                } else {
+                    let processed_values = this.process_raw_values(source_headings_used_in_this_field, incoming_record);
+                    if (processed_values.length > 0) {
+                        result.value = processed_values[0];
+                    }
+                }
+            }
+        }
+        return result;
+
+    }
+
+    /**
+     * Use the list of source headings to process the raw tabular cells into values for our
+     * cape dataset.
+     * @param {string[]} source_headings_used_in_this_field
+     * @param {Object} incoming_record
+     * @returns {Array.<string|integer>}
+     */
+    process_raw_values(source_headings_used_in_this_field, incoming_record) {
+        let processed_values = [];
+        source_headings_used_in_this_field.forEach((actual_heading) => {
+            if (incoming_record[actual_heading] != null) {
+                let raw_values;
+                // if it's any kind of null value then it's not valid
+                // noinspection EqualityComparisonWithCoercionJS
+                if (this.config.multiple && this.source_split != undefined) {
+                    raw_values = incoming_record[actual_heading].split(new RegExp(this.source_split));
+                } else {
+                    raw_values = [incoming_record[actual_heading]];
+                }
+
+                // a few types of field go through a little filtering now
+                raw_values.forEach((value) => {
+                    if (value !== "" && value !== null) {
+                        processed_values.push(this.process_single_raw_value(value));
+                    }
+                });
+            }
+        });
+        return processed_values;
+    }
+
+    /**
+     * Do any processing needed to turn a single source value into a cape value, including casting to correct type,
+     * trimming dates to 10 characters and doing the source_chars trimming, if needed.
+     * @param {string | number }
+     * @return {string | number}
+     */
+    process_single_raw_value(value) {
+        // trim if source_chars was set
+        if (this.source_chars) {
+            value = value.substring(0, this.source_chars);
         }
 
-        // work out all the headings in the incoming record we actually want to look at.
-        // we also use this to set the headings we used, but that's a hash, but we need
-        // this to be an ordered array
-        let actual_headings = [];
+        // cast to a string (unless it's an integer)
+        if (this.config.type === "integer") {
+            value = Number(value);
+        } else {
+            value = String(value);
+        }
+
+        // trim date to 10 characters (assumes ISO8601 format date)
+        if (this.config.type === "date") {
+            value = value.substring(0, 10);
+        }
+        return value;
+    }
+
+    /**
+     * Work out all the headings in the incoming record we actually want to look at.
+     * we also use this to set the headings we used.
+     * @param {Object} incoming_record
+     * @param {{used_headings: {}, missing_headings: {}, value: integer|string}} result
+     * @return {string[]}
+     */
+    select_source_headings(incoming_record, result) {
+
+        let source_headings_used_in_this_field = [];
+
         this.source_headings.forEach((source_heading) => {
             let found = false;
             // sorting should ensure numbers from 1-9 are in order, it might need a natural sort instead to
@@ -83,14 +160,16 @@ class FieldMapper {
             const incoming_headings = Object.keys(incoming_record).sort();
             incoming_headings.forEach((incoming_heading) => {
                 if (source_heading === incoming_heading) {
-                    actual_headings.push(incoming_heading);
+                    source_headings_used_in_this_field.push(incoming_heading);
+                    result.used_headings[incoming_heading] = true;
                     found = true;
                 } else if (this.config.multiple) {
                     // if the field is multiple, any headings with the source_heading plus a space an number on the end
                     // are in scope too.
                     const base_heading = incoming_heading.replace(/\s+\d+$/, "");
                     if (source_heading === base_heading) {
-                        actual_headings.push(incoming_heading);
+                        source_headings_used_in_this_field.push(incoming_heading);
+                        result.used_headings[incoming_heading] = true;
                         found = true;
                     }
                 }
@@ -100,77 +179,8 @@ class FieldMapper {
                 result.missing_headings[source_heading] = true;
             }
         })
-
-        // set the keys of the used_headings hash to the headings we're looking at
-        actual_headings.forEach((actual_heading) => {
-            result.used_headings[actual_heading] = true;
-        });
-
-        // if this is an ignore field, that just does the work with the headings and returns
-        if (this.config.type === "ignore") {
-            return result;
-        }
-
-        // default value for a multiple field is an empty list rather than null
-        if( this.config.multiple ) {
-            result.value = [];
-        }
-
-        let processed_values = [];
-        actual_headings.forEach( (actual_heading)=>{
-            if( incoming_record[actual_heading] == null ) {
-                return; // skip null values
-            }
-
-            const cell_value = incoming_record[actual_heading];
-
-            let raw_values;
-            // if it's any kind of null value then it's not valid
-            // noinspection EqualityComparisonWithCoercionJS
-            if( this.config.multiple && this.source_split != undefined ) {
-                raw_values = cell_value.split( new RegExp(this.source_split));
-            } else {
-                raw_values = [cell_value];
-            }
-
-            // a few types of field go through a little filtering now
-            raw_values.forEach( (value) => {
-                // skip null values
-                if( value === "" || value === null ) {
-                    return;
-                }
-
-                // trim if source_chars was set
-                if( this.config.hasOwnProperty('source_chars') ) {
-                    value = value.substr(0, this.config['source_chars']);
-                }
-
-                // cast to a string (unless it's an integer)
-                if( this.config.type === "integer") {
-                    value = Number(value);
-                } else {
-                    value = String(value);
-                }
-
-                // trim date to 10 characters (assumes ISO8601 format date)
-                if( this.config.type === "date" ) {
-                    value = value.substr(0, 10);
-                }
-
-                processed_values.push( value );
-            });
-
-        });
-
-        // if we are not a multiple field, the use the first non-null value we found
-        if( this.config.multiple ) {
-            result.value = processed_values
-        } else if( processed_values.length > 0 ) {
-            result.value = processed_values[0];
-        }
-
-        return result;
+        return source_headings_used_in_this_field;
     }
 }
 
-export { FieldMapper };
+export {FieldMapper};
