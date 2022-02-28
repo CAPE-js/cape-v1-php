@@ -10,7 +10,7 @@ class DatasetMapper {
     /**
      * Maps a single dataset in a CAPE system.
      * @param {Object} config - the JSON structure defining a single dataset
-     * @throws {ValidationError}
+     * @throws {ValidationError} 
      */
     constructor(config) {
 
