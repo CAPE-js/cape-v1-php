@@ -126,7 +126,7 @@ class DatasetMapper {
             // ... and any headings we were missing
             output.missing_headings.push(Object.keys(missing_headings));
 
-        }); // end of foreach bytestream
+        }); // end of foreach byteStream
 
 
         return output;
