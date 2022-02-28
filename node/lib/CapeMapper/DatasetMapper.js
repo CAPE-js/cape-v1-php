@@ -68,7 +68,7 @@ class DatasetMapper {
 
     /**
      * Map one or more byte streams into a list of records for this dataset. This is not stateless as it will
-     * increment the auto_increment property used by fields who's source is set to AUTO.
+     * increment the auto_increment_counter property used by fields who's source is set to AUTO.
      * This uses the format specified by the format parameter of the dataset config.
      * @param {Buffer|Buffer[]} byteStream
      * @returns {{records: [], missing_headings: [], unmapped_headings: [], config: {}}} an array of CAPE records
@@ -92,11 +92,11 @@ class DatasetMapper {
             byteStream = [byteStream];
         }
 
-        let auto_increment = 0;
+        let auto_increment_counter = 0;
         let missing_headings = {};
 
-        byteStream.forEach((bytestream) => {
-            const incoming_rows = BufferToTable.convert(this.format, bytestream);
+        byteStream.forEach((byteStream) => {
+            const incoming_rows = BufferToTable.convert(this.format, byteStream);
 
             // start with a list of all headings and check them off as we see them used.
             let unmapped_headings_in_table = {};
@@ -107,8 +107,8 @@ class DatasetMapper {
             const incoming_records = DatasetMapper.tableToRecords(incoming_rows);
 
             incoming_records.forEach((incoming_record) => {
-                auto_increment++;
-                const record_result = this.mapRecord(incoming_record, auto_increment);
+                auto_increment_counter++;
+                const record_result = this.mapRecord(incoming_record, auto_increment_counter);
                 output.records.push(record_result.record);
                 // tick-off headings we've used
                 Object.keys(record_result.used_headings).forEach((heading) => {
@@ -132,10 +132,10 @@ class DatasetMapper {
         return output;
     }
 
-    mapRecord(incoming_record, auto_increment) {
+    mapRecord(incoming_record, auto_increment_counter) {
         let result = {record: {}, used_headings: {}, missing_headings: {}};
         this.fieldMappers.forEach((field_mapper) => {
-            let field_result = field_mapper.generate(incoming_record, auto_increment);
+            let field_result = field_mapper.generate(incoming_record, auto_increment_counter);
             if (field_result.value !== null) {
                 result.record[field_mapper.config.id] = field_result.value;
             }

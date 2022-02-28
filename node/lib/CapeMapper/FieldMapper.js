@@ -58,20 +58,20 @@ class FieldMapper {
      * returns the value for this field based on the single incoming record, and which headings were used and any
      * columns that were expected but not found
      * @param {object} incoming_record - the record from the tabular data source
-     * @param {integer} auto_increment - the next ID for an autoincrement field
-     * @return {{ value: any, used_headings: {}.<string,boolean>, missing_headings: {}.<string,boolean> }}
+     * @param {integer} auto_increment_counter - the next ID for an autoincrement field
+     * @return {{ value: any, used_headings: {}, missing_headings: {} }}
      */
-    generate(incoming_record, auto_increment) {
+    generate(incoming_record, auto_increment_counter) {
         let result = {
             value: null,
             used_headings: {},
             missing_headings: {}
         };
 
-        // if this field is an auto_increment style field we just return that right away. No real source headings are
+        // if this field is an auto_increment_counter style field we just return that right away. No real source headings are
         // used.
         if( this.source_headings[0] === "AUTO" ) {
-            result.value = auto_increment
+            result.value = auto_increment_counter
             return result;
         }
 
