@@ -1,0 +1,154 @@
+{
+  "type": "object",
+  "required": [
+    "datasets"
+  ],
+  "properties": {
+    "datasets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "id_field",
+          "fields",
+          "sort"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "id_field": {
+            "type": "string"
+          },
+          "base_file_name": {
+            "type": [
+              "string",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "format": {
+            "enum": [
+              "xlsx",
+              "csv"
+            ]
+          },
+          "sort": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "result_mode": {
+            "enum": [
+              "filter",
+              "search"
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "type"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "type": {
+                  "enum": [
+                    "text",
+                    "integer",
+                    "enum",
+                    "date",
+                    "ignore"
+                  ]
+                },
+                "placeholder": {
+                  "type": "object",
+                  "properties": {
+                    "is": {
+                      "type": "string"
+                    },
+                    "contains": {
+                      "type": "string"
+                    },
+                    "between": {
+                      "type": "array",
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "change_filter_mode": {
+                  "type": "boolean"
+                },
+                "multiple": {
+                  "type": "boolean"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "style": {
+                  "type": "object",
+                  "properties": {
+                    "is": {
+                      "enum": [
+                        "radio",
+                        "select"
+                      ]
+                    },
+                    "one-of": {
+                      "enum": [
+                        "checkbox",
+                        "multiselect"
+                      ]
+                    }
+                  }
+                },
+                "min": {
+                  "type": "integer"
+                },
+                "max": {
+                  "type": "integer"
+                },
+                "step": {
+                  "type": "integer"
+                },
+                "quick_search": {
+                  "type": "boolean"
+                },
+                "source_heading": {
+                },
+                "source_split": {
+                  "type": "string"
+                },
+                "source_chars": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
