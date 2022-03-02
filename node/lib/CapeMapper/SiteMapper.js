@@ -4,7 +4,7 @@ import { ValidationError } from "./ValidationError.js"
 import Ajv from 'ajv';
 let ajv = new Ajv({ allErrors:true, allowUnionTypes:true, removeAdditional:'all' })
 import { readFileSync } from 'fs';
-const rawJsonConfig = readFileSync("schema.json");
+const rawJsonConfig = readFileSync(new URL("../../schema.json", import.meta.url));
 
 const capeSchema  = JSON.parse(rawJsonConfig);
 const validate = ajv.compile(capeSchema);
