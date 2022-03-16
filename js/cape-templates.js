@@ -354,7 +354,6 @@ new Vue({
             status: "LOADING"
         },
         app_status: (typeof app_status === 'undefined'?"dev":app_status),
-        git_info: git_info
     },
     template: template,
     created: function () {
