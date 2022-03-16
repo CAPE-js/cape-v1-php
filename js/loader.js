@@ -1,7 +1,6 @@
 $(document).ready(function() {
     var libs = {
         prod: [ 
-            "js/gitinfo.js", 
             "js/popper.min.js", 
             "js/vue.min.js", 
             "js/vue-router.js", 
@@ -13,7 +12,6 @@ $(document).ready(function() {
             "js/cape.js",
             "js/cape-templates.js" ],
         pprd: [ 
-            "dynamic/gitinfo.php",
             "js/popper.min.js", 
             "js/vue.min.js", 
             "js/vue-router.js", 
@@ -25,7 +23,6 @@ $(document).ready(function() {
             "js/cape.js",
             "js/cape-templates.js" ],
         test: [ 
-            "dynamic/gitinfo.php",
             "js/popper.min.js", 
             "js/vue.min.js", 
             "js/vue-router.js", 
@@ -37,7 +34,6 @@ $(document).ready(function() {
             "js/cape.js",
             "js/cape-templates.js" ],
         dev:  [ 
-            "dynamic/gitinfo.php",
             "js/popper.min.js", 
             "js/vue.js",     
             "js/vue-router.js", 
