@@ -43,7 +43,7 @@ $(document).ready(function() {
             "js/moment.min.js", 
             "js/lodash.min.js", 
             "js/cape.js",
-            "dynamic/cape-templates-js.php" ]
+            "js/cape-templates.js" ],
     };
     var load_list = libs["dev"];
     if( libs[app_status] ) {

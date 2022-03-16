@@ -1,5 +1,13 @@
-// debounced-input
-template = "<input v-bind:placeholder=\"input_placeholder\" v-bind:type=\"input_type\" v-bind:value=\"input_value\" v-bind:id=\"input_id\" v-on:input=\"debounce_input\">\n";
+
+/************************************************************
+ * debounced-input
+ ************************************************************/
+
+template = `
+<input v-bind:placeholder="input_placeholder" v-bind:type="input_type" v-bind:value="input_value" v-bind:id="input_id" v-on:input="debounce_input">
+`;
+
+
 Vue.component("debounced-input", {
     props: { type:String, value:[String,Number], id:String, placeholder: {"type":String,"default":""}},
     // note: use computed to expose props as local values, this avoids bad practice vue warning.
@@ -26,22 +34,75 @@ Vue.component("debounced-input", {
     }
 });
 
-// field-label-and-value
-template = "<div>\n    <div class=\"field-label-and-value\">\n      <div v-if=\"!typedValue\" class='cape-error'>[Error, trying to render non-existant field]<\/div>\n      <template v-else-if=\"typedValue.field.value != ''\">\n        <div class=\"field-label\" v-if=\"typedValue.field.description != null\" data-toggle=\"tooltip\" v-bind:title=\"typedValue.field.description\">{{typedValue.field.label}}<\/div>\n        <div class=\"field-label\" v-else>{{typedValue.field.label}}<\/div>\n        <field-value v-bind:typedValue=\"typedValue\" v-bind:linkValue=\"linkValue\"><\/field-value>\n      <\/template>\n    <\/div>\n<\/div>\n";
+
+/************************************************************
+ * field-label-and-value
+ ************************************************************/
+
+template = `
+<div>
+    <div class="field-label-and-value">
+      <div v-if="!typedValue" class='cape-error'>[Error, trying to render non-existant field]</div>
+      <template v-else-if="typedValue.field.value != ''">
+        <div class="field-label" v-if="typedValue.field.description != null" data-toggle="tooltip" v-bind:title="typedValue.field.description">{{typedValue.field.label}}</div>
+        <div class="field-label" v-else>{{typedValue.field.label}}</div>
+        <field-value v-bind:typedValue="typedValue" v-bind:linkValue="linkValue"></field-value>
+      </template>
+    </div>
+</div>
+`;
+
+
 Vue.component("field-label-and-value", {
     props: ["typedValue","linkValue"],
     template: template
 });
 
 
-// field-label-and-value-if-set
-template = "<div>\n  <div v-if=\"!typedValue\" class='cape-error'>[Error, trying to render non-existant field]<\/div>\n  <field-label-and-value v-else-if=\"typedValue.value != '' && typedValue.value != null && !(typeof typedValue.value=='array' && typedValue.value.length==0)\" v-bind:typedValue=\"typedValue\" v-bind:linkValue=\"linkValue\"><\/field-label-and-value>\n<\/div>\n";Vue.component("field-label-and-value-if-set", {
+
+/************************************************************
+ * field-label-and-value-if-set
+ ************************************************************/
+
+template = `
+<div>
+  <div v-if="!typedValue" class='cape-error'>[Error, trying to render non-existant field]</div>
+  <field-label-and-value v-else-if="typedValue.value != '' && typedValue.value != null && !(typeof typedValue.value=='array' && typedValue.value.length==0)" v-bind:typedValue="typedValue" v-bind:linkValue="linkValue"></field-label-and-value>
+</div>
+`;
+
+Vue.component("field-label-and-value-if-set", {
     props: ["typedValue","linkValue"],
     template: template
 });
 
-// fields-table
-template = "            <table class=\"table\">\n                <thead>\n                <tr>\n                    <th scope=\"col\">Field id<\/th>\n                    <th scope=\"col\">Field name<\/th>\n                    <th scope=\"col\">Field type<\/th>\n                    <th scope=\"col\">Description<\/th>\n                <\/tr>\n                <\/thead>\n                <tbody>\n                <tr v-for=\"field in dataset.config.fields\">\n                    <td>{{ field.id }}<\/td>\n                    <td>{{ field.label }}<\/td>\n                    <td>{{ field.type }} <span v-if=\"field.multiple\"> list<\/span><\/td>\n                    <td>{{ field.description }}<\/td>\n                <\/tr>\n                <\/tbody>\n            <\/table>\n";Vue.component("fields-table", {
+
+/************************************************************
+ * fields-table
+ ************************************************************/
+
+template = `
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Field id</th>
+                    <th scope="col">Field name</th>
+                    <th scope="col">Field type</th>
+                    <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="field in dataset.config.fields">
+                    <td>{{ field.id }}</td>
+                    <td>{{ field.label }}</td>
+                    <td>{{ field.type }} <span v-if="field.multiple"> list</span></td>
+                    <td>{{ field.description }}</td>
+                </tr>
+                </tbody>
+            </table>
+`;
+
+Vue.component("fields-table", {
     data: function () {
         var data = {};
         data.dataset = this.$root.defaultDataset;
@@ -50,8 +111,36 @@ template = "            <table class=\"table\">\n                <thead>\n      
     template: template
 });
 
-// filter-field-date
-template = "            <div class=\"form-row mb-1\">\n                <filter-field-label v-bind:filter=\"filter\"><\/filter-field-label>\n                <div v-if=\"filter.change_filter_mode\" class=\"col-sm-2\">\n                    <select v-model.trim=\"filter.mode\" class=\"form-control form-control-sm\" v-bind:id=\"'filter-'+filter.field.id\">\n                        <option value=\"is\">is<\/option>\n                        <option value=\"between\">is between<\/option>\n                        <option value=\"set\">is present<\/option>\n                        <option value=\"not-set\">is not present<\/option>\n                    <\/select>\n                <\/div>\n                <div v-bind:class=\"'col-sm-'+num_of_cols_for_main_search_area\">\n                    <template v-if=\"filter.mode=='is'\">\n                        <debounced-input v-bind:type=\"'text'\" v-model.trim=\"filter.term\" v-bind:placeholder=\"filter.placeholder.is\" class=\"form-control form-control-sm\" v-bind:id=\"'filter-'+filter.field.id\"><\/debounced-input>\n                    <\/template>\n                    <template v-if=\"filter.mode=='between'\">\n                        <debounced-input v-bind:type=\"'text'\" v-model.trim=\"filter.term\" v-bind:placeholder=\"filter.placeholder.between[0]\" class=\"form-control form-control-sm between-number-filter\" v-bind:id=\"'filter-to-'+filter.field.id\"><\/debounced-input>\n                        and\n                        <debounced-input v-bind:type=\"'text'\" v-model.trim=\"filter.term2\" v-bind:placeholder=\"filter.placeholder.between[1]\" class=\"form-control form-control-sm between-number-filter\" v-bind:id=\"'filter-from-'+filter.field.id\"><\/debounced-input>\n                    <\/template>\n                <\/div>\n            <\/div>\n";Vue.component("filter-field-date", {
+
+/************************************************************
+ * filter-field-date
+ ************************************************************/
+
+template = `
+            <div class="form-row mb-1">
+                <filter-field-label v-bind:filter="filter"></filter-field-label>
+                <div v-if="filter.change_filter_mode" class="col-sm-2">
+                    <select v-model.trim="filter.mode" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
+                        <option value="is">is</option>
+                        <option value="between">is between</option>
+                        <option value="set">is present</option>
+                        <option value="not-set">is not present</option>
+                    </select>
+                </div>
+                <div v-bind:class="'col-sm-'+num_of_cols_for_main_search_area">
+                    <template v-if="filter.mode=='is'">
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
+                    </template>
+                    <template v-if="filter.mode=='between'">
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-to-'+filter.field.id"></debounced-input>
+                        and
+                        <debounced-input v-bind:type="'text'" v-model.trim="filter.term2" v-bind:placeholder="filter.placeholder.between[1]" class="form-control form-control-sm between-number-filter" v-bind:id="'filter-from-'+filter.field.id"></debounced-input>
+                    </template>
+                </div>
+            </div>
+`;
+
+Vue.component("filter-field-date", {
     props: ["filter"],
     computed: {
         num_of_cols_for_main_search_area: function () {
@@ -62,8 +151,62 @@ template = "            <div class=\"form-row mb-1\">\n                <filter-f
 });
 
 
-// filter-field-enum
-template = "            <div class=\"form-row mb-1\">\n\n                <filter-field-label v-bind:filter=\"filter\"><\/filter-field-label>\n                <div v-if=\"filter.change_filter_mode\" class=\"col-sm-2\">\n                    <select v-model.trim=\"filter.mode\" class=\"form-control form-control-sm\">\n                        <option value=\"is\">is<\/option>\n                        <option value=\"one-of\">one of<\/option>\n                        <option value=\"set\">is present<\/option>\n                        <option value=\"not-set\">is not present<\/option>\n                    <\/select>\n                <\/div>\n\n                <div v-bind:class=\"'col-sm-'+num_of_cols_for_main_search_area\">\n                    <template v-if=\"filter.mode=='is'\">\n                        <div v-if=\"filterStyle['is'] == 'radio'\">\n                            <div v-for=\"option in filter.field.options\" class=\"form-check form-check-inline\">\n                                <input v-model=\"filter.term\" class=\"form-check-input\" type=\"radio\" v-bind:id=\"'filter-'+filter.field.id+'-'+option\" v-bind:value=\"option\">\n                                <label class=\"form-check-label\" v-bind:for=\"'filter-'+filter.field.id+'-'+option\">{{option}}<\/label>\n                            <\/div>\n                            <div class=\"form-check form-check-inline\">\n                                <input v-model=\"filter.term\" class=\"form-check-input\" type=\"radio\" v-bind:id=\"'filter-'+filter.field.id+'-'\" value=\"\">\n                                <label class=\"form-check-label\" v-bind:for=\"'filter-'+filter.field.id+'-'\"><em>any<\/em><\/label>\n                            <\/div>\n                        <\/div>\n                        <div v-if=\"filterStyle['is'] == 'select'\">\n                            <select v-model=\"filter.term\" class=\"form-control form-control-sm\" v-bind:id=\"'filter-'+filter.field.id\">\n                                <option selected=\"selected\" value=\"\">Select<\/option>\n                                <option v-for=\"option in filter.field.options\" v-bind:value=\"option\">{{ option }}<\/option>\n                            <\/select>\n                        <\/div>\n                    <\/template>\n    \n                    <template v-if=\"filter.mode=='one-of'\">\n                        <div v-if=\"filterStyle['one-of'] == 'checkbox'\">\n                            <div v-for=\"option in filter.field.options\" class=\"form-check form-check-inline\">\n                                <input v-model=\"filter.terms\" class=\"form-check-input\" type=\"checkbox\" v-bind:id=\"'filter-'+filter.field.id+'-'+option\" v-bind:value=\"{'name':option}\">\n                                <label class=\"form-check-label\" v-bind:for=\"'filter-'+filter.field.id+'-'+option\">{{option}}<\/label>\n                            <\/div>\n                        <\/div>\n                        <div v-if=\"filterStyle['one-of'] == 'multiselect'\">\n                            <multiselect v-model=\"filter.terms\" :options=\"filter.field.multiselectOptions\" :multiple=\"true\" :close-on-select=\"true\" :clear-on-select=\"false\" :preserve-search=\"true\" placeholder=\"Select (1 or more)\" label=\"name\" track-by=\"name\" >\n                                <template slot=\"tag\" slot-scope=\"{ option, remove }\"><span class=\"custom__tag\"><span>{{ option.name }}<\/span><span class=\"custom__remove\" @click=\"remove(option)\">\u274c<\/span><\/span><\/template>\n                            <\/multiselect>\n                        <\/div>\n                    <\/template>\n                <\/div>\n            <\/div>\n";Vue.component("filter-field-enum", {
+
+/************************************************************
+ * filter-field-enum
+ ************************************************************/
+
+template = `
+            <div class="form-row mb-1">
+
+                <filter-field-label v-bind:filter="filter"></filter-field-label>
+                <div v-if="filter.change_filter_mode" class="col-sm-2">
+                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                        <option value="is">is</option>
+                        <option value="one-of">one of</option>
+                        <option value="set">is present</option>
+                        <option value="not-set">is not present</option>
+                    </select>
+                </div>
+
+                <div v-bind:class="'col-sm-'+num_of_cols_for_main_search_area">
+                    <template v-if="filter.mode=='is'">
+                        <div v-if="filterStyle['is'] == 'radio'">
+                            <div v-for="option in filter.field.options" class="form-check form-check-inline">
+                                <input v-model="filter.term" class="form-check-input" type="radio" v-bind:id="'filter-'+filter.field.id+'-'+option" v-bind:value="option">
+                                <label class="form-check-label" v-bind:for="'filter-'+filter.field.id+'-'+option">{{option}}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input v-model="filter.term" class="form-check-input" type="radio" v-bind:id="'filter-'+filter.field.id+'-'" value="">
+                                <label class="form-check-label" v-bind:for="'filter-'+filter.field.id+'-'"><em>any</em></label>
+                            </div>
+                        </div>
+                        <div v-if="filterStyle['is'] == 'select'">
+                            <select v-model="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id">
+                                <option selected="selected" value="">Select</option>
+                                <option v-for="option in filter.field.options" v-bind:value="option">{{ option }}</option>
+                            </select>
+                        </div>
+                    </template>
+    
+                    <template v-if="filter.mode=='one-of'">
+                        <div v-if="filterStyle['one-of'] == 'checkbox'">
+                            <div v-for="option in filter.field.options" class="form-check form-check-inline">
+                                <input v-model="filter.terms" class="form-check-input" type="checkbox" v-bind:id="'filter-'+filter.field.id+'-'+option" v-bind:value="{'name':option}">
+                                <label class="form-check-label" v-bind:for="'filter-'+filter.field.id+'-'+option">{{option}}</label>
+                            </div>
+                        </div>
+                        <div v-if="filterStyle['one-of'] == 'multiselect'">
+                            <multiselect v-model="filter.terms" :options="filter.field.multiselectOptions" :multiple="true" :close-on-select="true" :clear-on-select="false" :preserve-search="true" placeholder="Select (1 or more)" label="name" track-by="name" >
+                                <template slot="tag" slot-scope="{ option, remove }"><span class="custom__tag"><span>{{ option.name }}</span><span class="custom__remove" @click="remove(option)">❌</span></span></template>
+                            </multiselect>
+                        </div>
+                    </template>
+                </div>
+            </div>
+`;
+
+Vue.component("filter-field-enum", {
     props: ["filter"],
     computed: {
         // some of the filter modes for enum have an optional alternate style
@@ -88,15 +231,56 @@ template = "            <div class=\"form-row mb-1\">\n\n                <filter
 });
 
 
-// filter-field-freetext
-template = "            <div class=\"form-row mb-1\">\n                <filter-field-label v-bind:filter=\"filter\"><\/filter-field-label>\n                <div class=\"col-sm-10\">\n                    <debounced-input v-bind:type=\"'text'\" v-model.trim=\"filter.term\" class=\"form-control form-control-sm\" v-bind:id=\"'filter-'+filter.field.id\"><\/debounced-input>\n                <\/div>\n            <\/div>\n";Vue.component("filter-field-freetext", {
+
+/************************************************************
+ * filter-field-freetext
+ ************************************************************/
+
+template = `
+            <div class="form-row mb-1">
+                <filter-field-label v-bind:filter="filter"></filter-field-label>
+                <div class="col-sm-10">
+                    <debounced-input v-bind:type="'text'" v-model.trim="filter.term" class="form-control form-control-sm" v-bind:id="'filter-'+filter.field.id"></debounced-input>
+                </div>
+            </div>
+`;
+
+Vue.component("filter-field-freetext", {
     props: ["filter"],
     template: template
 });
 
 
-// filter-field-integer
-template = "            <div class=\"form-row mb-1\">\n                <filter-field-label v-bind:filter=\"filter\"><\/filter-field-label>\n                <div v-if=\"filter.change_filter_mode\" class=\"col-sm-2\">\n                    <select v-model.trim=\"filter.mode\" class=\"form-control form-control-sm\">\n                        <option value=\"is\">is<\/option>\n                        <option value=\"between\">is between<\/option>\n                        <option value=\"set\">is present<\/option>\n                        <option value=\"not-set\">is not present<\/option>\n                    <\/select>\n                <\/div>\n                <div v-bind:class=\"'col-sm-'+num_of_cols_for_main_search_area\">\n                    <template v-if=\"filter.mode=='is'\">\n                        <debounced-input v-bind:type=\"'number'\" v-bind:id=\"'filter-'+filter.field.id\" v-model.trim=\"filter.term\" v-bind:placeholder=\"filter.placeholder.is\" class=\"form-control form-control-sm\" v-bind:min=\"filter.field.min\" v-bind:max=\"filter.field.max\" v-bind:step=\"filter.field.step\"><\/debounced-input>\n                    <\/template>\n                    <template v-if=\"filter.mode=='between'\">\n                        <debounced-input v-bind:type=\"'number'\" v-bind:id=\"'filter-'+filter.field.id\" v-model.number=\"filter.term\" v-bind:placeholder=\"filter.placeholder.between[0]\" class=\"form-control form-control-sm between-number-filter\" v-bind:min=\"filter.field.min\" v-bind:max=\"filter.field.max\" v-bind:step=\"filter.field.step\"><\/debounced-input>\n                        and\n                        <debounced-input v-bind:type=\"'number'\" v-bind:id=\"'filter-'+filter.field.id\" v-model.number=\"filter.term2\" v-bind:placeholder=\"filter.placeholder.between[1]\"  class=\"form-control form-control-sm between-number-filter\" v-bind:min=\"filter.field.min\" v-bind:max=\"filter.field.max\" v-bind:step=\"filter.field.step\"><\/debounced-input> \n                    <\/template>\n                <\/div>\n            <\/div>\n";Vue.component("filter-field-integer", {
+
+/************************************************************
+ * filter-field-integer
+ ************************************************************/
+
+template = `
+            <div class="form-row mb-1">
+                <filter-field-label v-bind:filter="filter"></filter-field-label>
+                <div v-if="filter.change_filter_mode" class="col-sm-2">
+                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                        <option value="is">is</option>
+                        <option value="between">is between</option>
+                        <option value="set">is present</option>
+                        <option value="not-set">is not present</option>
+                    </select>
+                </div>
+                <div v-bind:class="'col-sm-'+num_of_cols_for_main_search_area">
+                    <template v-if="filter.mode=='is'">
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder.is" class="form-control form-control-sm" v-bind:min="filter.field.min" v-bind:max="filter.field.max" v-bind:step="filter.field.step"></debounced-input>
+                    </template>
+                    <template v-if="filter.mode=='between'">
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term" v-bind:placeholder="filter.placeholder.between[0]" class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max" v-bind:step="filter.field.step"></debounced-input>
+                        and
+                        <debounced-input v-bind:type="'number'" v-bind:id="'filter-'+filter.field.id" v-model.number="filter.term2" v-bind:placeholder="filter.placeholder.between[1]"  class="form-control form-control-sm between-number-filter" v-bind:min="filter.field.min" v-bind:max="filter.field.max" v-bind:step="filter.field.step"></debounced-input> 
+                    </template>
+                </div>
+            </div>
+`;
+
+Vue.component("filter-field-integer", {
     props: ["filter"],
     computed: {
         num_of_cols_for_main_search_area: function () {
@@ -108,14 +292,48 @@ template = "            <div class=\"form-row mb-1\">\n                <filter-f
 
 
 
-// filter-field-label
-template = "            <div class=\"col-sm-2 text-sm-right\">\n                <label v-if=\"filter.field.description != null\" data-toggle=\"tooltip\" v-bind:title=\"filter.field.description\" v-bind:for=\"'filter-'+filter.field.id\">{{filter.field.label}}<\/label>\n                <label v-else v-bind:for=\"'filter-'+filter.field.id\">{{filter.field.label}}<\/label>\n            <\/div>\n";Vue.component("filter-field-label", {
+
+/************************************************************
+ * filter-field-label
+ ************************************************************/
+
+template = `
+            <div class="col-sm-2 text-sm-right">
+                <label v-if="filter.field.description != null" data-toggle="tooltip" v-bind:title="filter.field.description" v-bind:for="'filter-'+filter.field.id">{{filter.field.label}}</label>
+                <label v-else v-bind:for="'filter-'+filter.field.id">{{filter.field.label}}</label>
+            </div>
+`;
+
+Vue.component("filter-field-label", {
     props: ["filter"],
     template: template
 });
 
-// filter-field-text
-template = "            <div class=\"form-row mb-1\">\n                <filter-field-label v-bind:filter=\"filter\"><\/filter-field-label>\n                <div v-if=\"filter.change_filter_mode\" class=\"col-sm-2\">\n                    <select v-model.trim=\"filter.mode\" class=\"form-control form-control-sm\">\n                        <option value=\"is\">is<\/option>\n                        <option value=\"contains\">contains<\/option>\n                        <option value=\"set\">is present<\/option>\n                        <option value=\"not-set\">is not present<\/option>\n                    <\/select>\n                <\/div>\n                <div v-bind:class=\"'col-sm-'+num_of_cols_for_main_search_area\">\n                    <template v-if=\"filter.mode=='is' || filter.mode=='contains'\">\n                        <debounced-input v-bind:type=\"'text'\" v-bind:id=\"'filter-'+filter.field.id\" v-model.trim=\"filter.term\" v-bind:placeholder=\"filter.placeholder[filter.mode]\" class=\"form-control form-control-sm\"><\/debounced-input>\n                    <\/template>\n                <\/div>\n            <\/div>\n";Vue.component("filter-field-text", {
+
+/************************************************************
+ * filter-field-text
+ ************************************************************/
+
+template = `
+            <div class="form-row mb-1">
+                <filter-field-label v-bind:filter="filter"></filter-field-label>
+                <div v-if="filter.change_filter_mode" class="col-sm-2">
+                    <select v-model.trim="filter.mode" class="form-control form-control-sm">
+                        <option value="is">is</option>
+                        <option value="contains">contains</option>
+                        <option value="set">is present</option>
+                        <option value="not-set">is not present</option>
+                    </select>
+                </div>
+                <div v-bind:class="'col-sm-'+num_of_cols_for_main_search_area">
+                    <template v-if="filter.mode=='is' || filter.mode=='contains'">
+                        <debounced-input v-bind:type="'text'" v-bind:id="'filter-'+filter.field.id" v-model.trim="filter.term" v-bind:placeholder="filter.placeholder[filter.mode]" class="form-control form-control-sm"></debounced-input>
+                    </template>
+                </div>
+            </div>
+`;
+
+Vue.component("filter-field-text", {
     props: ["filter"],
     computed: {
         num_of_cols_for_main_search_area: function () {
@@ -125,8 +343,30 @@ template = "            <div class=\"form-row mb-1\">\n                <filter-f
     template: template
 });
 
-// filter-form
-template = "    <div class='filter-form'>\n        <div v-for=\"filter in filters\" :key=\"filter.field.id\">\n            <filter-field-text          v-if=\"filter.field.type=='text'\"     v-bind:filter=\"filter\"><\/filter-field-text>\n            <filter-field-integer  v-else-if=\"filter.field.type=='integer'\"  v-bind:filter=\"filter\"><\/filter-field-integer>\n            <filter-field-date     v-else-if=\"filter.field.type=='date'\"     v-bind:filter=\"filter\"><\/filter-field-date>\n            <filter-field-enum     v-else-if=\"filter.field.type=='enum'\"     v-bind:filter=\"filter\"><\/filter-field-enum>\n            <filter-field-freetext v-else-if=\"filter.field.type=='freetext'\" v-bind:filter=\"filter\"><\/filter-field-freetext>\n            <template v-else>\n                <div class=\"col-sm-10\">\n                   Unknown filter type.\n                <\/div>\n            <\/template>\n        <\/div>\n    \n<\/div>\n";
+
+/************************************************************
+ * filter-form
+ ************************************************************/
+
+template = `
+    <div class='filter-form'>
+        <div v-for="filter in filters" :key="filter.field.id">
+            <filter-field-text          v-if="filter.field.type=='text'"     v-bind:filter="filter"></filter-field-text>
+            <filter-field-integer  v-else-if="filter.field.type=='integer'"  v-bind:filter="filter"></filter-field-integer>
+            <filter-field-date     v-else-if="filter.field.type=='date'"     v-bind:filter="filter"></filter-field-date>
+            <filter-field-enum     v-else-if="filter.field.type=='enum'"     v-bind:filter="filter"></filter-field-enum>
+            <filter-field-freetext v-else-if="filter.field.type=='freetext'" v-bind:filter="filter"></filter-field-freetext>
+            <template v-else>
+                <div class="col-sm-10">
+                   Unknown filter type.
+                </div>
+            </template>
+        </div>
+    
+</div>
+`;
+
+
 Vue.component("filter-form", {
     data: function () {
         return {filter: this.$root.defaultDataset.filter};
@@ -136,8 +376,61 @@ Vue.component("filter-form", {
 });
 
 
-// home-page
-template = "    <form v-on:keypress.enter.prevent=\"ignoreEnter\">\n        <intro \/> \n        <div class=\"row\">\n            <div class=\"col text-right\">\n                <div>\n                    <button v-on:click=\"resetFilters\" class=\"btn btn-sm btn-secondary \">New search<\/button>\n                <\/div>\n                <div class=\"switch switch-sm mb-3 mt-3\">\n                    <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                    <label for=\"show-all-filters-lower\">Advanced search<\/label>\n                <\/div>\n            <\/div>\n        <\/div>\n        <div class=\"row mb-1\">\n            <div class=\"col\">\n                <filter-form v-bind:filters=\"visible_filters\"><\/filter-form>\n            <\/div>\n        <\/div>\n\n        <template v-if=\"showResults\">\n           <div class=\"row mb-1 form-row\">\n              <div class=\"col-sm-2 text-sm-right\">\n                  Order results by \n              <\/div>\n              <div class=\"col-sm-4\">\n                  <select v-model=\"settings.sort_field\" style=\"width:auto; display: inline-block\" class=\"form-control form-control-sm\"><option v-for=\"field in settings.sort_fields\" v-bind:value=\"field.id\">{{field.label}}<\/option><\/select>\n                  <select v-model=\"settings.sort_dir\" style=\"width:auto; display: inline-block\" class=\"form-control form-control-sm\"><option value=\"asc\">Ascending<\/option><option value=\"desc\">Decending<\/option><\/select>\n              <\/div>\n              <div class=\"col-sm-6 text-sm-right\" v-if=\"settings.show_all_filters\">\n                  <div>\n                      <button v-on:click=\"resetFilters\" class=\"btn btn-sm btn-secondary \">New search<\/button>\n                  <\/div>\n                  <div class=\"switch switch-sm mb-3 mt-3\">\n                      <input v-model=\"settings.show_all_filters\" type=\"checkbox\" class=\"switch\" id=\"show-all-filters-lower\" \/>\n                      <label for=\"show-all-filters-lower\">Advanced search<\/label>\n                  <\/div>\n              <\/div>\n           <\/div>\n           <div class=\"row mb-1\">\n               <div class=\"col\">\n                   <results v-bind:options=\"settings\" v-bind:results=\"filteredAndSortedResults\"><\/results>\n               <\/div>\n           <\/div>\n        <\/template>\n        <div v-else class=\"row\"><div class=\"col\"><div class=\"card\"><div class=\"card-body\">Use the form above to search this dataset.<\/div><\/div><\/div><\/div>\n    <\/form>\n";
+
+/************************************************************
+ * home-page
+ ************************************************************/
+
+template = `
+    <form v-on:keypress.enter.prevent="ignoreEnter">
+        <intro /> 
+        <div class="row">
+            <div class="col text-right">
+                <div>
+                    <button v-on:click="resetFilters" class="btn btn-sm btn-secondary ">New search</button>
+                </div>
+                <div class="switch switch-sm mb-3 mt-3">
+                    <input v-model="settings.show_all_filters" type="checkbox" class="switch" id="show-all-filters-lower" />
+                    <label for="show-all-filters-lower">Advanced search</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col">
+                <filter-form v-bind:filters="visible_filters"></filter-form>
+            </div>
+        </div>
+
+        <template v-if="showResults">
+           <div class="row mb-1 form-row">
+              <div class="col-sm-2 text-sm-right">
+                  Order results by 
+              </div>
+              <div class="col-sm-4">
+                  <select v-model="settings.sort_field" style="width:auto; display: inline-block" class="form-control form-control-sm"><option v-for="field in settings.sort_fields" v-bind:value="field.id">{{field.label}}</option></select>
+                  <select v-model="settings.sort_dir" style="width:auto; display: inline-block" class="form-control form-control-sm"><option value="asc">Ascending</option><option value="desc">Decending</option></select>
+              </div>
+              <div class="col-sm-6 text-sm-right" v-if="settings.show_all_filters">
+                  <div>
+                      <button v-on:click="resetFilters" class="btn btn-sm btn-secondary ">New search</button>
+                  </div>
+                  <div class="switch switch-sm mb-3 mt-3">
+                      <input v-model="settings.show_all_filters" type="checkbox" class="switch" id="show-all-filters-lower" />
+                      <label for="show-all-filters-lower">Advanced search</label>
+                  </div>
+              </div>
+           </div>
+           <div class="row mb-1">
+               <div class="col">
+                   <results v-bind:options="settings" v-bind:results="filteredAndSortedResults"></results>
+               </div>
+           </div>
+        </template>
+        <div v-else class="row"><div class="col"><div class="card"><div class="card-body">Use the form above to search this dataset.</div></div></div></div>
+    </form>
+`;
+
+
 var currentSearchResults = null;
 
 var HomePage = Vue.component("home-page", {
@@ -292,8 +585,24 @@ var HomePage = Vue.component("home-page", {
 });
 
 
-// record-page
-template = "    <div>\n        <div class=\"row\">\n            <div class=\"col\">\n                <index-card v-if=\"dataset.records_by_id[ $route.params.id ]\"\n                            v-bind:record=\"dataset.records_by_id[ $route.params.id ]\"><\/index-card>\n                <no-record v-else><\/no-record>\n            <\/div>\n        <\/div>\n    <\/div>\n";var RecordPage = Vue.component("record-page", {
+
+/************************************************************
+ * record-page
+ ************************************************************/
+
+template = `
+    <div>
+        <div class="row">
+            <div class="col">
+                <index-card v-if="dataset.records_by_id[ $route.params.id ]"
+                            v-bind:record="dataset.records_by_id[ $route.params.id ]"></index-card>
+                <no-record v-else></no-record>
+            </div>
+        </div>
+    </div>
+`;
+
+var RecordPage = Vue.component("record-page", {
     data: function () {
         var data = {};
         data.dataset = this.$root.defaultDataset;
@@ -303,8 +612,33 @@ template = "    <div>\n        <div class=\"row\">\n            <div class=\"col
 });
 
 
-// results
-template = "\n    <div>\n        <div v-if=\"results.length == 0\" class=\"card mb-1\">\n            <div class=\"card-body\">No records match your filter terms.<\/div>\n        <\/div>\n\n        <div v-else>\n            <results-summary v-bind:results=\"results\" v-bind:options=\"options\" v-bind:visible_records_count=\"visible_records.length\"><\/results-summary>\n            <div v-for=\"record in visible_records\">\n                <summary-card v-bind:record=\"record\"><\/summary-card>\n            <\/div>\n            <div class=\"floating-summary\">\n                <results-summary v-bind:results=\"results\" v-bind:options=\"options\" v-bind:visible_records_count=\"visible_records.length\"><\/results-summary>\n            <\/div>\n        <\/div>\n\n    <\/div>\n\n";
+
+/************************************************************
+ * results
+ ************************************************************/
+
+template = `
+
+    <div>
+        <div v-if="results.length == 0" class="card mb-1">
+            <div class="card-body">No records match your filter terms.</div>
+        </div>
+
+        <div v-else>
+            <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
+            <div v-for="record in visible_records">
+                <summary-card v-bind:record="record"></summary-card>
+            </div>
+            <div class="floating-summary">
+                <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
+            </div>
+        </div>
+
+    </div>
+
+`;
+
+
 Vue.component("results", {
     template: template,
     props: ["results","options"],
@@ -320,16 +654,110 @@ Vue.component("results", {
 });
 
 
-// results-summary
-template = "\n    <div class=\"result-summary\">\n        <div class=\"card mb-1\">\n            <div class=\"card-body\">\n                <div>\n                    <div v-if=\"visible_records_count==results.length\" class=\"record-count\">Showing all {{ visible_records_count }} matching records.<\/div>\n                    <div v-else class=\"record-count\">Showing first {{ visible_records_count }} of {{ results.length }} matching records.<\/div>\n                    <div class=\"switch switch-sm\">\n                        <input v-model=\"options.show_all_results\" type=\"checkbox\" class=\"switch\" id=\"show-all-results\" \/>\n                        <label for=\"show-all-results\">Show all matches<\/label>\n                    <\/div>\n                <\/div>\n            <\/div>\n        <\/div>\n    <\/div>\n";
+
+/************************************************************
+ * results-summary
+ ************************************************************/
+
+template = `
+
+    <div class="result-summary">
+        <div class="card mb-1">
+            <div class="card-body">
+                <div>
+                    <div v-if="visible_records_count==results.length" class="record-count">Showing all {{ visible_records_count }} matching records.</div>
+                    <div v-else class="record-count">Showing first {{ visible_records_count }} of {{ results.length }} matching records.</div>
+                    <div class="switch switch-sm">
+                        <input v-model="options.show_all_results" type="checkbox" class="switch" id="show-all-results" />
+                        <label for="show-all-results">Show all matches</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+`;
+
+
 Vue.component("results-summary", {
     template: template,
     props: ["results", "visible_records_count", "options"],
 });
 
 
-// zz-app
-template = "<div id='app'>\n    <template v-if=\"app_status == 'test'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a testing instance of this service.             \n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'dev'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is a development instance of this service.             \n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"app_status == 'pprd'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-warning my-2\">\n          <div class=\"card-body text-center\">\n             This is the pre-production instance of this service.             \n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    \n    <template v-if=\"source_data.status == 'ERROR'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-error my-2\">\n          <div class=\"card-body text-center\">\n            <h2>Unable to load data<\/h2>\n            <p>An error has occurred. The error was: {{ source_data.error_message }}.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'LOADING'\">\n        <div class=\"row content\">\n        <div class=\"col\">\n        <div class=\"card bg-primary text-white my-2\">\n          <div class=\"card-body text-center\">\n            <div class=\"spinner-border\" role=\"status\">\n              <span class=\"sr-only\">Loading...<\/span>\n            <\/div>\n            <p>Please wait while the data loads.<\/p>\n          <\/div>\n        <\/div>\n        <\/div>\n        <\/div>\n    <\/template>\n    <template v-if=\"source_data.status == 'OK'\">\n        <dataset v-bind:dataset=\"defaultDataset\"><\/dataset>\n    <\/template>\n<\/div>\n";
+
+/************************************************************
+ * zz-app
+ ************************************************************/
+
+template = `
+<div id='app'>
+    <template v-if="app_status == 'test'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-warning my-2">
+          <div class="card-body text-center">
+             This is a testing instance of this service.             
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    <template v-if="app_status == 'dev'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-warning my-2">
+          <div class="card-body text-center">
+             This is a development instance of this service.             
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    <template v-if="app_status == 'pprd'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-warning my-2">
+          <div class="card-body text-center">
+             This is the pre-production instance of this service.             
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    
+    <template v-if="source_data.status == 'ERROR'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-error my-2">
+          <div class="card-body text-center">
+            <h2>Unable to load data</h2>
+            <p>An error has occurred. The error was: {{ source_data.error_message }}.</p>
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    <template v-if="source_data.status == 'LOADING'">
+        <div class="row content">
+        <div class="col">
+        <div class="card bg-primary text-white my-2">
+          <div class="card-body text-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <p>Please wait while the data loads.</p>
+          </div>
+        </div>
+        </div>
+        </div>
+    </template>
+    <template v-if="source_data.status == 'OK'">
+        <dataset v-bind:dataset="defaultDataset"></dataset>
+    </template>
+</div>
+`;
+
+
 var capeRouter = new VueRouter({
     routes: [
         {name: 'root', path: '/', component: HomePage},
