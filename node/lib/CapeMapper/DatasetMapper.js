@@ -61,7 +61,11 @@ class DatasetMapper {
             let record = {};
             // iterate over headings in first row
             for (let j = 0; j < table[0].length; ++j) {
-                record[table[0][j].trim()] = table[i][j];
+                // we might get some headings at the end that are undefined... 
+                // skip those columns
+                if( table[0][j] !== undefined ) {
+                    record[table[0][j].trim()] = table[i][j];
+                }
             }
             records.push(record);
         }
