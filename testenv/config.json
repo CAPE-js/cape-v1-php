@@ -108,6 +108,7 @@
 					"source_split":"\\s*;\\s*",
                 			"label":"Drinks label",
 					"quick_search":true,
+					"default_filter_mode":"is",
                 			"description":"Drinks description"
 				},
 				{

@@ -40,6 +40,9 @@ class FieldMapper {
 
             delete this.config["source_heading"];
         }
+
+        // Here is where we might want to validate that the default_filter_mode type is allowed for the field type
+
         if (this.config.hasOwnProperty('source_split')) {
             this.source_split = this.config['source_split']
             delete this.config['source_split']
