@@ -33,6 +33,12 @@ Additional properties ignored by the mapper, passed through to the site JSON
 * label - String. Required by CAPE but may be omitted for "ignore" fields in the mapper.
 * placeholder->{is} - String. used as a placeholder text in the input for the field in "is" mode.
 * placeholder->{between} - Array of exactly 2 strings for the placeholder for the minimum and maximum fields.
+* default - Array of one or more strings. 
+** On text filters the first value only is the default
+** On integer and date "is" filters then the first value in the array is the default
+** On integer and date "between" filters then the first and second values in the array are the defaults
+** On enum "is" filters, then the first value in the array is the default
+** On enum "one-of" filters, then all the values are the default
 * change_filter_mode - Boolean. Default true. If set to false then the filter mode can't be altered.
 * description - String. A longer description of the field used in mouse over or whatever the template wants.                
 * quick_search - Boolean. Default false. If true, this field will appear in the quick search in the UX. It is visible without selecting "advanced search".
