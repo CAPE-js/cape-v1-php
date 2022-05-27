@@ -7,7 +7,7 @@
                         "format":"csv",
 			"data_dir":"data",
 			"sort": [ "title", "date" ],
-			"result_mode" : "filter",
+			"result_mode" : "search",
 			"license": {
 				"url":"https://creativecommons.org/licenses/by/3.0/",
 				"name":"Creative Commons Attribution 3.0 Unported (CC BY 3.0)"
