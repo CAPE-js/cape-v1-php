@@ -3,6 +3,7 @@
   "required": [
     "datasets"
   ],
+  "additionalProperties": false,
   "properties": {
     "datasets": {
       "type": "array",
@@ -16,6 +17,7 @@
           "fields",
           "sort"
         ],
+        "additionalProperties": true,
         "properties": {
           "id": {
             "type": "string"
@@ -62,6 +64,7 @@
                 "id",
                 "type"
               ],
+              "additionalProperties": false,
               "properties": {
                 "id": {
                   "type": "string"
@@ -80,6 +83,7 @@
                 },
                 "placeholder": {
                   "type": "object",
+                  "additionalProperties": false,
                   "properties": {
                     "is": {
                       "type": "string"
@@ -118,6 +122,7 @@
                 },
                 "style": {
                   "type": "object",
+                  "additionalProperties": false,
                   "properties": {
                     "is": {
                       "enum": [
