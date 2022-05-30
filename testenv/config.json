@@ -23,7 +23,8 @@
 			"attribution": {
 				"text": "TotL Project",
 				"url": "http://example.org/totl/"
-			},	
+			},
+			"extra_pages": [ "foo", "bar" ],
         		"id_field":"record_number",
 			"fields":[
 				{
