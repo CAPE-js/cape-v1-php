@@ -494,34 +494,9 @@ FreeTextFilter.prototype.matchesRecord = function(record) {
 /*
  *  Vue Components
  */
-var DataPage = Vue.component("data-page", {
-    data: function () {
-        var data = {};
-        data.dataset = this.$root.defaultDataset;
-        return data;
-    },
-    template: "#templateData",
-    methods: {
-        downloadJSON: function() {
-            var filename = this.dataset.config.id+".json";
-            download( filename, JSON.stringify(this.dataset.raw_records), "application/json" );
-        },
-        downloadCSV: function() {
-            var table = records_to_table( this.dataset.config.fields, this.dataset.records );
-            var csv = table_to_csv( table );
-            var filename = this.dataset.config.id+".csv";
-            download( filename, csv, "text/csv;charset=utf-8" );
-        }
-    }
-});
 
 Vue.component("intro", {
     template: "#templateIntro"
-});
-
-Vue.component("dataset", {
-    template: "#templateDataset",
-    props: ["dataset"]
 });
 
 Vue.component("index-card", {

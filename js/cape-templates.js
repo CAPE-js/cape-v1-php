@@ -683,6 +683,20 @@ Vue.component("results-summary", {
     props: ["results", "visible_records_count", "options"],
 });
 
+/************************************************************
+ * dataset
+ ************************************************************/
+
+// don't define the real roots until the page is loaded
+var capeRouter = new VueRouter({
+    routes: [
+        {name: 'root', path: '/', component: HomePage}, 
+    ]
+});
+Vue.component("dataset", {
+    template: "#templateDataset",
+    router: capeRouter
+});
 
 
 /************************************************************
@@ -757,22 +771,6 @@ template = `
 </div>
 `;
 
-
-var capeRouter = new VueRouter({
-    routes: [
-        {name: 'root', path: '/', component: HomePage},
-        {name: 'data', path: '/data', component: DataPage},
-        {name: 'record', path: '/record/:id', component: RecordPage},
-        {name: 'browse', path: '/browse/:field/:value', component: HomePage},
-    ]
-});
-capeRouter.afterEach((to, from, next) => {
-    if( from.name !== null ) {
-        // coming from an existing route, rather than a first time page load
-        var content_vertical_offset = $("#app").offset().top;
-        $('html,body').scrollTop(content_vertical_offset);
-    }
-});
 
 // zz just so this loads after all the other templates
 new Vue({
@@ -963,9 +961,60 @@ new Vue({
                 }
             }
 
+            // Now recreate the Dataset component but with all the system and user defined routes
+            // This also generates components for the user pages and /data page 
+            let pages = [ 'data' ];
+            if( dataset.config.hasOwnProperty( 'extra_pages' ) ) {
+                pages = pages.concat( dataset.config['extra_pages'] );
+            }
+
+            let routes = [
+                {name: 'root',   path: '/',                     component: HomePage},
+                {name: 'record', path: '/record/:id',           component: RecordPage},
+                {name: 'browse', path: '/browse/:field/:value', component: HomePage},
+            ];
+
+            pages.forEach( pageId => {
+                let templateId = 'template' + pageId.charAt(0).toUpperCase() + pageId.slice(1);
+                let component = Vue.component( pageId + "-page", {
+                    template: "#"+templateId,
+                    data: function () {
+                        var data = {};
+                        data.dataset = this.$root.defaultDataset;
+                        return data;
+                    },
+                    methods: {
+                        downloadJSON: function() {
+                            var filename = this.dataset.config.id+".json";
+                            download( filename, JSON.stringify(this.dataset.raw_records), "application/json" );
+                        },
+                        downloadCSV: function() {
+                            var table = records_to_table( this.dataset.config.fields, this.dataset.records );
+                            var csv = table_to_csv( table );
+                            var filename = this.dataset.config.id+".csv";
+                            download( filename, csv, "text/csv;charset=utf-8" );
+                        }
+                    }
+                });
+                routes.push( { name: pageId, path: '/'+pageId, component: component } );
+            });
+                
+            var capeRouter = new VueRouter({ routes: routes });
+            capeRouter.afterEach((to, from, next) => {
+                if( from.name !== null ) {
+                    // coming from an existing route, rather than a first time page load
+                    var content_vertical_offset = $("#app").offset().top;
+                    $('html,body').scrollTop(content_vertical_offset);
+                }
+            });
+            Vue.component("dataset", {
+                template: "#templateDataset",
+                props: ["dataset"],
+                router: capeRouter
+            });
+            
             // do this once everything is ready to prevent race conditions
             this.source_data = response.body;
-
         }, function(response) {
             // error callback
             this.source_data.status = "ERROR"
@@ -974,9 +1023,8 @@ new Vue({
     },
 
     methods: {
-    },
+    }
 
-    router: capeRouter
 
 }); // end of app
 

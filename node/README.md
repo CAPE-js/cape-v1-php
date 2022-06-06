@@ -20,6 +20,7 @@ Properties in the dataset object
   * id_field - Required. String. The ID of a field that is to be used for the record IDs
   * sort - Required. Array of Strings. A list of the IDs one or more field that will be used to sort the dataset.
   * result_mode - Allowed values 'search', 'filter'. Default: 'filter.
+  * extra_pages - A list of strings of additional pages. eg. "foo","bar". For each page you must include a templateFoo template in index.html
 
 Properties in the field object:
 * id - String. Required. Must be unique within this dataset. 
