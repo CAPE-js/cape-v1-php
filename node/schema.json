@@ -156,6 +156,9 @@
                 "quick_search": {
                   "type": "boolean"
                 },
+                "search": {
+                  "type": "boolean"
+                },
                 "source_heading": {
                 },
                 "source_split": {

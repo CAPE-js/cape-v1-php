@@ -478,28 +478,32 @@ var HomePage = Vue.component("home-page", {
             this.setVisibleFilters();
         },
         setVisibleFilters: function() {
-            this.visible_filters = [];
+            this.visible_filters = this.visibleFilters();
+        },
+        visibleFilters: function() {
+            let visible_filters = [];
             for (var i = 0; i < this.settings.filters.length; i++) {
                 var filter = this.settings.filters[i];
+                if( filter.field.hasOwnProperty( 'search' ) && filter.field['search']===false ) {
+                    continue;
+                }
                 if (( this.settings.show_all_filters 
                    || filter.field.quick_search 
                    || ( this.browse!=null && filter.field.id==this.browse.field) )) {
-                    this.visible_filters.push( filter );
+                    visible_filters.push( filter );
                 }
             } 
+            return visible_filters;
         },
         activeFilters: function() {  
-            // build a list of filters to be applied
+            // build a list of filters to be applied. Which is all the visible filters that have a non-default value
+            // or a non-blank value
             var active_filters = [];
-            for (var i = 0; i < this.settings.filters.length; i++) {
-                // does the filter pass?
-                var filter = this.settings.filters[i];
-                if (filter.isSet() && ( this.settings.show_all_filters 
-                                     || filter.field.quick_search 
-                                     || ( this.browse!=null && filter.field.id==this.browse.field) )) {
+            this.visibleFilters().forEach( filter => {
+                if( filter.isActive() ) {
                     active_filters.push(filter);
                 }
-            }
+            } );
             return active_filters;
         },
         filterResults: function() {

@@ -38,6 +38,13 @@ function Filter( field ) {
     }
 }
 
+// return true if the field term is set (including a default setting)
+Filter.prototype.isActive = function() {
+    if( this.isSet() ) { return true; }
+    return (this.term != '' );
+}
+
+// return true if the field term is not the default setting.
 Filter.prototype.isSet = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != this.default_term);
@@ -206,6 +213,10 @@ IntegerFilter.prototype.isSet = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != this.default_term || (this.mode == "between" && this.term2 != this.default_term2));
 }
+Filter.prototype.isActive = function() {
+    if( this.isSet() ) { return true; }
+    return (this.term != '' || (this.mode == "between" && this.term2 != ''));
+}
 
 IntegerFilter.prototype.reset = function() {
     this.mode = this.default_mode;
@@ -289,6 +300,10 @@ DateFilter.prototype = Object.create(Filter.prototype);
 DateFilter.prototype.isSet = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != this.default_term || (this.mode == "between" && this.term2 != this.default_term2));
+}
+Filter.prototype.isActive = function() {
+    if( this.isSet() ) { return true; }
+    return (this.term != '' || (this.mode == "between" && this.term2 != ''));
 }
 
 DateFilter.prototype.reset = function() {
@@ -381,6 +396,14 @@ EnumFilter.prototype.isSet = function() {
         let current_terms_code = this.terms.map( item => item["name"] ).sort().join(":");
         let default_terms_code = this.default_terms.map( item => item["name"] ).sort().join(":");
         return current_terms_code != default_terms_code;
+    }
+}
+Filter.prototype.isActive = function() {
+    if( this.isSet() ) { return true; }
+    if (this.mode == "is") {
+        return this.term != '';
+    } else if (this.mode == "one-of") {
+        return this.terms.length > 0;
     }
 }
 

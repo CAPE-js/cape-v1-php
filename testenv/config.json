@@ -79,7 +79,8 @@
                 			"source_heading":"WEIGHT",
 					"step": 5,
                 			"label":"Weight label",
-                			"description":"Weight description"
+                			"description":"Weight description",
+					"search":false
 				},
 				{
 					"id":"likes",
