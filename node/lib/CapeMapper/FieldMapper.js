@@ -40,6 +40,26 @@ class FieldMapper {
 
             delete this.config["source_heading"];
         }
+
+        // check the default_filter_mode makes sense for the type. We can assume the type is a legal value
+        // as we've already done the basic schema validation
+        if( this.config.hasOwnProperty('default_filter_mode' ) ) {
+            let allowed_modes_by_type = {
+              'text':     ['set','not-set','is','contains'],
+              'freetext': ['set','not-set','is','contains'],
+              'integer':  ['set','not-set','is','between'],
+              'date':     ['set','not-set','is','between'],
+              'enum':     ['set','not-set','is','one-of'],
+              'ignore':   []
+            };
+            let allowed_modes = allowed_modes_by_type[this.config['type']];
+            if( ! allowed_modes.includes( this.config['default_filter_mode'] )) {
+                throw new ValidationError("Fields of type '"+this.config['type']+"' can't have a default_filter_mode of '"+this.config['default_filter_mode']+"' (allowed valiues are "+allowed_modes.join( ", ")+")");
+            }
+        }
+
+        // Here is where we might want to validate that the default_filter_mode type is allowed for the field type
+
         if (this.config.hasOwnProperty('source_split')) {
             this.source_split = this.config['source_split']
             delete this.config['source_split']

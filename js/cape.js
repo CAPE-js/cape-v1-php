@@ -27,9 +27,8 @@ function makeFilter( field ) {
  *  abstract base class, should not be instantiated directly
  */
 function Filter( field ) {
-    this.reset();
     this.field = field;
-    this.mode = "is";
+    this.reset();
     this.placeholder = { "is":"" };
     if( field["placeholder"] && field["placeholder"]["is"] ) {
         this.placeholder.is = field["placeholder"]["is"];
@@ -46,8 +45,7 @@ Filter.prototype.isSet = function() {
 }
 
 Filter.prototype.reset = function() {
-    this.term = "";
-    this.mode = "contains";
+    console.warn( "Filter.prototype.reset  should be overridden. Field info:", this.field );
 }
 
 Filter.prototype.matchesValuesIs = function(values) {
@@ -127,7 +125,6 @@ Filter.prototype.matchesValues = function(values) {
  */
 function TextFilter( field ) {
     Filter.call( this, field );
-    this.mode = "contains";
     if( field["placeholder"] && field.placeholder["contains"] ) {
         this.placeholder.contains = field.placeholder.contains;
     } else {
@@ -135,6 +132,16 @@ function TextFilter( field ) {
     }
 }
 TextFilter.prototype = Object.create(Filter.prototype);
+
+TextFilter.prototype.reset = function() {
+    this.term = '';
+    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.mode = this.field['default_filter_mode'];
+    } else {
+        this.mode = "contains";
+    }
+}
+
 TextFilter.prototype.matchesValues = function(values) {
     if( this.mode == "is" ) {
         return this.matchesValuesIs( values );
@@ -155,7 +162,6 @@ TextFilter.prototype.matchesValues = function(values) {
  */
 function IntegerFilter( field ) {
     Filter.call( this, field );
-    this.mode = "between";
     if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
         this.placeholder.between = field.placeholder.between;
     } else {
@@ -171,9 +177,13 @@ IntegerFilter.prototype.isSet = function() {
 }
 
 IntegerFilter.prototype.reset = function() {
-    this.mode = "between";
     this.term = "";
     this.term2 = "";
+    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.mode = this.field['default_filter_mode'];
+    } else {
+        this.mode = "between";
+    }
 }
 
 IntegerFilter.prototype.matchesValues = function(values) {
@@ -220,8 +230,6 @@ IntegerFilter.prototype.matchesValuesBetween = function(values) {
  */
 function DateFilter( field ) {
     Filter.call( this, field );
-    this.mode = "between";
-    this.term2 = "";
     if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
         this.placeholder.between = field.placeholder.between;
     } else {
@@ -236,9 +244,13 @@ DateFilter.prototype.isSet = function() {
 }
 
 DateFilter.prototype.reset = function() {
-    this.mode = "between";
     this.term = "";
     this.term2 = "";
+    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.mode = this.field['default_filter_mode'];
+    } else {
+        this.mode = "between";
+    }
 }
 
 DateFilter.prototype.matchesValues = function(values) {
@@ -289,7 +301,6 @@ DateFilter.prototype.matchesValuesBetween = function(values) {
  */
 function EnumFilter( field ) {
     Filter.call( this, field );
-    this.mode = "one-of";
     // prep options just the way multiselect likes them
     this.field.multiselectOptions = [];
     for( var i=0;i<field.options.length;i++ ) {
@@ -309,9 +320,13 @@ EnumFilter.prototype.isSet = function() {
 }
 
 EnumFilter.prototype.reset = function() {
-    this.mode = "one-of";
     this.term = "";
     this.terms = [];
+    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.mode = this.field['default_filter_mode'];
+    } else {
+        this.mode = "one-of";
+    }
 }
 
 EnumFilter.prototype.matchesValues = function(values) {
@@ -351,6 +366,16 @@ function FreeTextFilter( field ) {
     Filter.call( this, field );
 }
 FreeTextFilter.prototype = Object.create(Filter.prototype);
+
+FreeTextFilter.prototype.reset = function() {
+    this.term = '';
+    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.mode = this.field['default_filter_mode'];
+    } else {
+        this.mode = "contains";
+    }
+}
+
 FreeTextFilter.prototype.matchesRecord = function(record) {
     // check that all the terms are found in the record
     
