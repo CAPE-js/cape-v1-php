@@ -97,6 +97,13 @@
                     }
                   }
                 },
+                "default": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "change_filter_mode": {
                   "type": "boolean"
                 },

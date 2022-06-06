@@ -28,7 +28,6 @@ function makeFilter( field ) {
  */
 function Filter( field ) {
     this.field = field;
-    this.reset();
     this.placeholder = { "is":"" };
     if( field["placeholder"] && field["placeholder"]["is"] ) {
         this.placeholder.is = field["placeholder"]["is"];
@@ -41,7 +40,7 @@ function Filter( field ) {
 
 Filter.prototype.isSet = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
-    return (this.term != "");
+    return (this.term != this.default_term);
 }
 
 Filter.prototype.reset = function() {
@@ -125,21 +124,33 @@ Filter.prototype.matchesValues = function(values) {
  */
 function TextFilter( field ) {
     Filter.call( this, field );
+
+    if( field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.default_mode = field['default_filter_mode'];
+    } else {
+        this.default_mode = "contains";
+    }
+
+    if( field.hasOwnProperty( 'default' ) ) {
+        this.default_term  = field['default'][0];
+    } else {
+        this.default_term  = "";
+    }
+
     if( field["placeholder"] && field.placeholder["contains"] ) {
         this.placeholder.contains = field.placeholder.contains;
     } else {
         this.placeholder.contains = "";
     }
+
+    this.reset();
 }
 TextFilter.prototype = Object.create(Filter.prototype);
 
 TextFilter.prototype.reset = function() {
-    this.term = '';
-    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
-        this.mode = this.field['default_filter_mode'];
-    } else {
-        this.mode = "contains";
-    }
+
+    this.mode = this.default_mode;
+    this.term = this.default_term;
 }
 
 TextFilter.prototype.matchesValues = function(values) {
@@ -162,28 +173,45 @@ TextFilter.prototype.matchesValues = function(values) {
  */
 function IntegerFilter( field ) {
     Filter.call( this, field );
+
+    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.default_mode = this.field['default_filter_mode'];
+    } else {
+        this.default_mode = "between";
+    }
+
+    if( field.hasOwnProperty( 'default' ) ) {
+        this.default_term  = field['default'][0];
+        if( field['default'].length >= 2 ) {
+            this.default_term2 = field['default'][1];
+        } else {
+            this.default_term2 = "";
+        }
+    } else {
+        this.default_term  = "";
+        this.default_term2  = "";
+    }
+
     if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
         this.placeholder.between = field.placeholder.between;
     } else {
         this.placeholder.between = ["Minimum "+field.min,"Maximum "+field.max];
     }
+
+    this.reset();
 }
 
 IntegerFilter.prototype = Object.create(Filter.prototype);
 
 IntegerFilter.prototype.isSet = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
-    return (this.term != "" || (this.mode == "between" && this.term2 != ""));
+    return (this.term != this.default_term || (this.mode == "between" && this.term2 != this.default_term2));
 }
 
 IntegerFilter.prototype.reset = function() {
-    this.term = "";
-    this.term2 = "";
-    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
-        this.mode = this.field['default_filter_mode'];
-    } else {
-        this.mode = "between";
-    }
+    this.mode = this.default_mode;
+    this.term = this.default_term;
+    this.term2 = this.default_term2;
 }
 
 IntegerFilter.prototype.matchesValues = function(values) {
@@ -230,27 +258,44 @@ IntegerFilter.prototype.matchesValuesBetween = function(values) {
  */
 function DateFilter( field ) {
     Filter.call( this, field );
+
+    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.default_mode = this.field['default_filter_mode'];
+    } else {
+        this.default_mode = "between";
+    }
+
+    if( field.hasOwnProperty( 'default' ) ) {
+        this.default_term  = field['default'][0];
+        if( field['default'].length >= 2 ) {
+            this.default_term2 = field['default'][1];
+        } else {
+            this.default_term2 = "";
+        }
+    } else {
+        this.default_term  = "";
+        this.default_term2  = "";
+    }
+
     if( field["placeholder"] && field.placeholder["between"] && field.placeholder.between[0] && field.placeholder.between[1] ) {
         this.placeholder.between = field.placeholder.between;
     } else {
         this.placeholder.between = ["",""];
     }
+
+    this.reset();
 }
 DateFilter.prototype = Object.create(Filter.prototype);
 
 DateFilter.prototype.isSet = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
-    return (this.term != "" || (this.mode == "between" && this.term2 != ""));
+    return (this.term != this.default_term || (this.mode == "between" && this.term2 != this.default_term2));
 }
 
 DateFilter.prototype.reset = function() {
-    this.term = "";
-    this.term2 = "";
-    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
-        this.mode = this.field['default_filter_mode'];
-    } else {
-        this.mode = "between";
-    }
+    this.mode = this.default_mode;
+    this.term = this.default_term;
+    this.term2 = this.default_term2;
 }
 
 DateFilter.prototype.matchesValues = function(values) {
@@ -301,11 +346,29 @@ DateFilter.prototype.matchesValuesBetween = function(values) {
  */
 function EnumFilter( field ) {
     Filter.call( this, field );
+
+    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.default_mode = this.field['default_filter_mode'];
+    } else {
+        this.default_mode = "one-of";
+    }
+
+    if( field.hasOwnProperty( 'default' ) ) {
+        this.default_term  = field['default'][0];
+        this.default_terms = [];
+        field['default'].forEach( (term) => { this.default_terms.push( { 'name': term } ); } );
+    } else {
+        this.default_term  = "";
+        this.default_terms = [];
+    }
+
     // prep options just the way multiselect likes them
     this.field.multiselectOptions = [];
     for( var i=0;i<field.options.length;i++ ) {
         this.field.multiselectOptions.push( { name: field.options[i] } );
     }
+
+    this.reset();
 }
 
 EnumFilter.prototype = Object.create(Filter.prototype);
@@ -313,20 +376,20 @@ EnumFilter.prototype = Object.create(Filter.prototype);
 EnumFilter.prototype.isSet = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     if (this.mode == "is") {
-        return this.term != "";
+        return this.term != this.default_term;
     } else if (this.mode == "one-of") {
-        return this.terms.length != 0;
+        // this one is the pain. We need to compare the name properties of two unordered object lists
+        let current_terms_code = this.terms.map( item => item["name"] ).sort().join(":");
+        let default_terms_code = this.default_terms.map( item => item["name"] ).sort().join(":");
+        return current_terms_code != default_terms_code;
     }
 }
 
 EnumFilter.prototype.reset = function() {
-    this.term = "";
-    this.terms = [];
-    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
-        this.mode = this.field['default_filter_mode'];
-    } else {
-        this.mode = "one-of";
-    }
+    this.mode  = this.default_mode;
+    this.term  = this.default_term;
+    // need to ensure it's not the same actual list reference
+    this.terms = this.default_terms.map( item=>item );
 }
 
 EnumFilter.prototype.matchesValues = function(values) {
@@ -364,16 +427,26 @@ EnumFilter.prototype.matchesValues = function(values) {
  */
 function FreeTextFilter( field ) {
     Filter.call( this, field );
+
+    if( field.hasOwnProperty( 'default_filter_mode' ) ) {
+        this.default_mode = field['default_filter_mode'];
+    } else {
+        this.default_mode = "contains";
+    }
+
+    if( field.hasOwnProperty( 'default' ) ) {
+        this.default_term  = field['default'][0];
+    } else {
+        this.default_term  = "";
+    }
+
+    this.reset();
 }
 FreeTextFilter.prototype = Object.create(Filter.prototype);
 
 FreeTextFilter.prototype.reset = function() {
-    this.term = '';
-    if( this.field.hasOwnProperty( 'default_filter_mode' ) ) {
-        this.mode = this.field['default_filter_mode'];
-    } else {
-        this.mode = "contains";
-    }
+    this.mode = this.default_mode;
+    this.term = this.default_term;
 }
 
 FreeTextFilter.prototype.matchesRecord = function(record) {
