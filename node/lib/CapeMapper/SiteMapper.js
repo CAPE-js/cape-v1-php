@@ -2,7 +2,7 @@ import { DatasetMapper } from "./DatasetMapper.js";
 import { ValidationError } from "./ValidationError.js"
 
 import Ajv from 'ajv';
-let ajv = new Ajv({ allErrors:true, allowUnionTypes:true, removeAdditional:'all' })
+let ajv = new Ajv({ allErrors:true, allowUnionTypes:true });
 import { readFileSync } from 'fs';
 const rawJsonConfig = readFileSync(new URL("../../schema.json", import.meta.url));
 
