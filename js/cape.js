@@ -148,6 +148,7 @@ function TextFilter( field ) {
 TextFilter.prototype = Object.create(Filter.prototype);
 
 TextFilter.prototype.reset = function() {
+
     this.mode = this.default_mode;
     this.term = this.default_term;
 }
