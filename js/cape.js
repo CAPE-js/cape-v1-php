@@ -39,15 +39,15 @@ function Filter( field ) {
 }
 
 // return true if the field term is set (including a default setting)
-Filter.prototype.isActive = function() {
-    if( this.isSet() ) { return true; }
+Filter.prototype.isSet = function() {
+    if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != '' );
 }
 
 // return true if the field term is not the default setting.
-Filter.prototype.isSet = function() {
+Filter.prototype.isDefault = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
-    return (this.term != this.default_term);
+    return (this.term == this.default_term);
 }
 
 Filter.prototype.reset = function() {
@@ -209,12 +209,12 @@ function IntegerFilter( field ) {
 
 IntegerFilter.prototype = Object.create(Filter.prototype);
 
-IntegerFilter.prototype.isSet = function() {
+IntegerFilter.prototype.isDefault = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
-    return (this.term != this.default_term || (this.mode == "between" && this.term2 != this.default_term2));
+    return (this.term == this.default_term && (this.mode != "between" || this.term2 == this.default_term2));
 }
-Filter.prototype.isActive = function() {
-    if( this.isSet() ) { return true; }
+Filter.prototype.isSet = function() {
+    if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != '' || (this.mode == "between" && this.term2 != ''));
 }
 
@@ -297,12 +297,12 @@ function DateFilter( field ) {
 }
 DateFilter.prototype = Object.create(Filter.prototype);
 
-DateFilter.prototype.isSet = function() {
+DateFilter.prototype.isDefault = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
-    return (this.term != this.default_term || (this.mode == "between" && this.term2 != this.default_term2));
+    return (this.term == this.default_term && (this.mode != "between" || this.term2 == this.default_term2));
 }
-Filter.prototype.isActive = function() {
-    if( this.isSet() ) { return true; }
+Filter.prototype.isSet = function() {
+    if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     return (this.term != '' || (this.mode == "between" && this.term2 != ''));
 }
 
@@ -387,19 +387,19 @@ function EnumFilter( field ) {
 
 EnumFilter.prototype = Object.create(Filter.prototype);
 
-EnumFilter.prototype.isSet = function() {
+EnumFilter.prototype.isDefault = function() {
     if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     if (this.mode == "is") {
-        return this.term != this.default_term;
+        return this.term == this.default_term;
     } else if (this.mode == "one-of") {
         // this one is the pain. We need to compare the name properties of two unordered object lists
         let current_terms_code = this.terms.map( item => item["name"] ).sort().join(":");
         let default_terms_code = this.default_terms.map( item => item["name"] ).sort().join(":");
-        return current_terms_code != default_terms_code;
+        return current_terms_code == default_terms_code;
     }
 }
-Filter.prototype.isActive = function() {
-    if( this.isSet() ) { return true; }
+Filter.prototype.isSet = function() {
+    if( this.mode == "set" || this.mode == "not-set" ) { return true; }
     if (this.mode == "is") {
         return this.term != '';
     } else if (this.mode == "one-of") {

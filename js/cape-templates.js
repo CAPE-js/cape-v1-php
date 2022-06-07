@@ -495,19 +495,8 @@ var HomePage = Vue.component("home-page", {
             } 
             return visible_filters;
         },
-        activeFilters: function() {  
-            // build a list of filters to be applied. Which is all the visible filters that have a non-default value
-            // or a non-blank value
-            var active_filters = [];
-            this.visibleFilters().forEach( filter => {
-                if( filter.isActive() ) {
-                    active_filters.push(filter);
-                }
-            } );
-            return active_filters;
-        },
         filterResults: function() {
-            var active_filters = this.activeFilters();
+            var active_filters = this.visibleFilters().filter( filterField=>filterField.isSet() );
 
             // iterate over each record
             var records_to_show = [];
@@ -580,9 +569,10 @@ var HomePage = Vue.component("home-page", {
                 // filter mode starts showing everything
                 return true;
             }
-            // search mode only shows results once they start typing
-            var active_filters = this.activeFilters();
-            return( active_filters.length > 0 );
+            // work out a list of filters that don't have default settings
+            var non_default_filters = this.visibleFilters().filter( filterField=>!filterField.isDefault() );
+            // if it's empty then don't show the results while in "search" mode
+            return( non_default_filters.length > 0 );
         }
     },
     template: template
