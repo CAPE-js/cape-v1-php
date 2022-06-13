@@ -606,6 +606,26 @@ var RecordPage = Vue.component("record-page", {
 });
 
 
+/************************************************************
+ * results-list
+ ************************************************************/
+
+if( document.getElementById("templateResultsList" ) ) {
+    template = "#templateResultsList";
+} else {
+    template = `
+<div> 
+<div v-for="record in visible_records">
+<summary-card v-bind:record="record"></summary-card>
+</div>
+</div>`;
+}
+
+Vue.component("results-list", {
+    props: ["visible_records"],
+    template: template
+});
+
 
 /************************************************************
  * results
@@ -620,9 +640,7 @@ template = `
 
         <div v-else>
             <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
-            <div v-for="record in visible_records">
-                <summary-card v-bind:record="record"></summary-card>
-            </div>
+            <results-list v-bind:visible_records="visible_records" ></results-list>
             <div class="floating-summary">
                 <results-summary v-bind:results="results" v-bind:options="options" v-bind:visible_records_count="visible_records.length"></results-summary>
             </div>
@@ -646,7 +664,6 @@ Vue.component("results", {
         }
     }
 });
-
 
 
 /************************************************************
